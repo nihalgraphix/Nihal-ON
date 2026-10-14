@@ -36,13 +36,13 @@ export default function Services() {
 
   const getIcon = (iconName: string) => {
     switch (iconName) {
-      case 'Layout': return <Layout className="h-6 w-6 text-[#FF5A1F]" />;
-      case 'Monitor': return <Monitor className="h-6 w-6 text-[#FF5A1F]" />;
-      case 'Code': return <Code className="h-6 w-6 text-[#FF5A1F]" />;
-      case 'Sparkles': return <Sparkles className="h-6 w-6 text-[#FF5A1F]" />;
-      case 'Zap': return <Zap className="h-6 w-6 text-[#FF5A1F]" />;
-      case 'Bot': return <Bot className="h-6 w-6 text-[#FF5A1F]" />;
-      default: return <Sparkles className="h-6 w-6 text-[#FF5A1F]" />;
+      case 'Layout': return <Layout className="h-6 w-6 text-[#FF5A1F] group-hover:text-black transition-colors" />;
+      case 'Monitor': return <Monitor className="h-6 w-6 text-[#FF5A1F] group-hover:text-black transition-colors" />;
+      case 'Code': return <Code className="h-6 w-6 text-[#FF5A1F] group-hover:text-black transition-colors" />;
+      case 'Sparkles': return <Sparkles className="h-6 w-6 text-[#FF5A1F] group-hover:text-black transition-colors" />;
+      case 'Zap': return <Zap className="h-6 w-6 text-[#FF5A1F] group-hover:text-black transition-colors" />;
+      case 'Bot': return <Bot className="h-6 w-6 text-[#FF5A1F] group-hover:text-black transition-colors" />;
+      default: return <Sparkles className="h-6 w-6 text-[#FF5A1F] group-hover:text-black transition-colors" />;
     }
   };
 
