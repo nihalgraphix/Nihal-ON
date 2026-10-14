@@ -25,7 +25,7 @@ export default function Hero({ onOpenResumeModal }: HeroProps) {
   const isHeroModelVisible = heroModelEl?.visible !== false && heroImageUrl !== '' && heroImageUrl !== 'none';
 
   return (
-    <section id="home" className="relative pt-20 sm:pt-24 pb-10 sm:pb-14 lg:pb-16 bg-gradient-to-b from-[#FF5A1F] via-[#E84A10] to-[#C83600] w-full overflow-hidden rounded-b-[36px] sm:rounded-b-[48px] lg:rounded-b-[60px] shadow-2xl shadow-[#FF5A1F]/20 border-b border-white/10">
+    <section id="home" data-section="hero" className="relative pt-20 sm:pt-24 pb-10 sm:pb-14 lg:pb-16 bg-gradient-to-b from-[#FF5A1F] via-[#E84A10] to-[#C83600] w-full overflow-hidden rounded-b-[36px] sm:rounded-b-[48px] lg:rounded-b-[60px] shadow-2xl shadow-[#FF5A1F]/20 border-b border-white/10">
       {/* Full-width Hero Banner Frame matching the website's #FF5A1F color scheme with no black space at top */}
       <div className="relative w-full px-4 sm:px-8 lg:px-16 pb-4 overflow-hidden">
         
@@ -178,7 +178,12 @@ export default function Hero({ onOpenResumeModal }: HeroProps) {
                     href="#about"
                     className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-1.5 text-[11px] font-space font-bold text-black shadow-2xl hover:bg-neutral-100 transition-all cursor-pointer hover:scale-105 active:scale-95"
                   >
-                    <span>Scroll for more</span>
+                    <EditableText
+                      id="hero-scroll-pill-text"
+                      as="span"
+                      defaultText="Scroll for more"
+                      className="font-bold"
+                    />
                     <span className="flex h-4 w-4 items-center justify-center rounded-full bg-black text-white text-[10px]">
                       <ArrowDown className="h-2.5 w-2.5" />
                     </span>
@@ -261,7 +266,7 @@ export default function Hero({ onOpenResumeModal }: HeroProps) {
         {/* Large Semi-Transparent Background Watermark Text across bottom */}
         <div className="absolute bottom-6 left-0 right-0 pointer-events-none select-none overflow-hidden opacity-10 text-center">
           <span className="font-syne text-[100px] sm:text-[180px] lg:text-[220px] font-black text-white uppercase tracking-tighter leading-none block">
-            ActionAi
+            Nihal ON
           </span>
         </div>
 

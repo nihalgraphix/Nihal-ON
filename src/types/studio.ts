@@ -165,7 +165,39 @@ export interface SiteSettings {
   sectionsOrder?: string[];
   sectionStyles?: Record<string, any>;
   socialLinks?: Record<string, string> | any;
+  sectionSeo?: SectionSeoMap;
 }
+
+export interface SectionSeoMetadata {
+  metaTitle?: string;
+  metaDescription?: string;
+  ogTitle?: string;
+  ogDescription?: string;
+  ogImage?: string;
+  ogType?: 'website' | 'article' | 'profile';
+  twitterCard?: 'summary' | 'summary_large_image';
+  keywords?: string;
+  canonicalUrl?: string;
+  robots?: string;
+  structuredDataType?: 'WebApplication' | 'Person' | 'ItemList' | 'FAQPage' | 'CreativeWork';
+}
+
+export type SectionSeoMap = Record<string, SectionSeoMetadata>;
+
+
+export interface SkillItem {
+  name: string;
+  level: number;
+  icon: string;
+  experienceYears: string;
+  tag?: string;
+}
+
+export interface SkillCategory {
+  category: string;
+  items: SkillItem[];
+}
+
 
 export interface StudioData {
   siteSettings: SiteSettings;
@@ -175,7 +207,9 @@ export interface StudioData {
   blogPosts: BlogPost[];
   galleryItems: GalleryItem[];
   galleryCategories?: string[];
+  skillCategories?: SkillCategory[];
 }
+
 
 export interface StudioRevision {
   id: string;

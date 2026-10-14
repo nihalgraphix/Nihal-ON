@@ -83,28 +83,44 @@ export default function Blog() {
   const handleLikePost = async (e: React.MouseEvent, postId: string) => {
     e.stopPropagation();
 
-    // Restrict: user can only like one time per post
-    if (userLikedPosts.includes(postId)) {
-      setCopiedToast(true);
-      setTimeout(() => setCopiedToast(false), 2400);
-      return;
-    }
+    const isAlreadyLiked = userLikedPosts.includes(postId);
 
-    const updatedUserLiked = [...userLikedPosts, postId];
-    setUserLikedPosts(updatedUserLiked);
-    localStorage.setItem('nihal_blog_user_liked', JSON.stringify(updatedUserLiked));
+    if (isAlreadyLiked) {
+      // Toggle off / unlike: user clicked like twice, so like disappears
+      const updatedUserLiked = userLikedPosts.filter(id => id !== postId);
+      setUserLikedPosts(updatedUserLiked);
+      localStorage.setItem('nihal_blog_user_liked', JSON.stringify(updatedUserLiked));
 
-    setLikesMap(prev => {
-      const current = prev[postId] || 0;
-      const updated = { ...prev, [postId]: current + 1 };
-      localStorage.setItem('nihal_blog_likes', JSON.stringify(updated));
-      return updated;
-    });
+      setLikesMap(prev => {
+        const current = prev[postId] || 0;
+        const updated = { ...prev, [postId]: Math.max(0, current - 1) };
+        localStorage.setItem('nihal_blog_likes', JSON.stringify(updated));
+        return updated;
+      });
 
-    try {
-      await fetch(`/api/blog/${postId}/like`, { method: 'POST' });
-    } catch (err) {
-      console.error(err);
+      try {
+        await fetch(`/api/blog/${postId}/unlike`, { method: 'POST' });
+      } catch (err) {
+        console.error(err);
+      }
+    } else {
+      // First click: add like
+      const updatedUserLiked = [...userLikedPosts, postId];
+      setUserLikedPosts(updatedUserLiked);
+      localStorage.setItem('nihal_blog_user_liked', JSON.stringify(updatedUserLiked));
+
+      setLikesMap(prev => {
+        const current = prev[postId] || 0;
+        const updated = { ...prev, [postId]: current + 1 };
+        localStorage.setItem('nihal_blog_likes', JSON.stringify(updated));
+        return updated;
+      });
+
+      try {
+        await fetch(`/api/blog/${postId}/like`, { method: 'POST' });
+      } catch (err) {
+        console.error(err);
+      }
     }
   };
 
@@ -539,10 +555,14 @@ export default function Blog() {
                       <div className="flex items-center gap-1.5">
                         <button
                           onClick={(e) => handleLikePost(e, post.id)}
-                          className="flex items-center gap-1 text-[11px] font-space text-white/90 hover:text-[#FF5A1F] bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10 transition-colors cursor-pointer active:scale-90"
-                          title="Like post"
+                          className={`flex items-center gap-1 text-[11px] font-space px-2.5 py-1 rounded-full border transition-all cursor-pointer active:scale-90 ${
+                            userLikedPosts.includes(post.id)
+                              ? 'bg-[#FF5A1F] text-black border-[#FF5A1F] font-bold shadow-md shadow-[#FF5A1F]/30'
+                              : 'text-white/90 hover:text-[#FF5A1F] bg-black/60 backdrop-blur-md border-white/10'
+                          }`}
+                          title={userLikedPosts.includes(post.id) ? "Liked! Click again to remove like" : "Like post"}
                         >
-                          <Heart className="h-3 w-3 fill-current text-[#FF5A1F]" />
+                          <Heart className={`h-3 w-3 ${userLikedPosts.includes(post.id) ? 'fill-current text-black' : 'text-[#FF5A1F]'}`} />
                           <span>{(post.likes || 18) + (likesMap[post.id] || 0)}</span>
                         </button>
 
@@ -651,10 +671,14 @@ export default function Blog() {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={(e) => handleLikePost(e, selectedPost.id)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#FF5A1F]/20 hover:bg-[#FF5A1F] text-[#FF5A1F] hover:text-black border border-[#FF5A1F]/30 transition-all cursor-pointer font-bold active:scale-90"
-                    title="Like article"
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border transition-all cursor-pointer font-bold active:scale-90 ${
+                      userLikedPosts.includes(selectedPost.id)
+                        ? 'bg-[#FF5A1F] text-black border-[#FF5A1F] shadow-md shadow-[#FF5A1F]/30'
+                        : 'bg-[#FF5A1F]/20 hover:bg-[#FF5A1F] text-[#FF5A1F] hover:text-black border-[#FF5A1F]/30'
+                    }`}
+                    title={userLikedPosts.includes(selectedPost.id) ? "Liked! Click again to remove like" : "Like article"}
                   >
-                    <Heart className="w-3.5 h-3.5 fill-current" />
+                    <Heart className={`w-3.5 h-3.5 ${userLikedPosts.includes(selectedPost.id) ? 'fill-current text-black' : 'fill-current'}`} />
                     <span>{(selectedPost.likes || 0) + (likesMap[selectedPost.id] || 0)}</span>
                   </button>
 

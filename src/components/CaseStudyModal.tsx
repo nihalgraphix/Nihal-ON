@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   X,
@@ -10,7 +11,8 @@ import {
   CheckCircle2,
   Quote,
   Clock,
-  UserCheck
+  UserCheck,
+  Heart
 } from 'lucide-react';
 import { Project } from '../types';
 import { PROJECTS } from '../data/portfolioData';
@@ -26,7 +28,65 @@ export default function CaseStudyModal({
   onClose,
   onSelectNextProject
 }: CaseStudyModalProps) {
+  const [userLikedProjects, setUserLikedProjects] = useState<string[]>(() => {
+    try {
+      return JSON.parse(localStorage.getItem('nihal_project_user_liked') || '[]');
+    } catch {
+      return [];
+    }
+  });
+
+  const [likesMap, setLikesMap] = useState<Record<string, number>>(() => {
+    try {
+      return JSON.parse(localStorage.getItem('nihal_project_likes') || '{}');
+    } catch {
+      return {};
+    }
+  });
+
+  useEffect(() => {
+    const handleStorage = () => {
+      try {
+        setUserLikedProjects(JSON.parse(localStorage.getItem('nihal_project_user_liked') || '[]'));
+        setLikesMap(JSON.parse(localStorage.getItem('nihal_project_likes') || '{}'));
+      } catch {}
+    };
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
+  }, []);
+
   if (!project) return null;
+
+  const isLiked = userLikedProjects.includes(project.id);
+  const baseLikes = (project as any).likes || 24;
+  const currentLikes = baseLikes + (likesMap[project.id] || 0);
+
+  const handleToggleLike = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (isLiked) {
+      // Toggle off / unlike (disappears on second click)
+      const updated = userLikedProjects.filter(id => id !== project.id);
+      setUserLikedProjects(updated);
+      localStorage.setItem('nihal_project_user_liked', JSON.stringify(updated));
+
+      setLikesMap(prev => {
+        const next = { ...prev, [project.id]: Math.max(0, (prev[project.id] || 0) - 1) };
+        localStorage.setItem('nihal_project_likes', JSON.stringify(next));
+        return next;
+      });
+    } else {
+      // Like for the first time
+      const updated = [...userLikedProjects, project.id];
+      setUserLikedProjects(updated);
+      localStorage.setItem('nihal_project_user_liked', JSON.stringify(updated));
+
+      setLikesMap(prev => {
+        const next = { ...prev, [project.id]: (prev[project.id] || 0) + 1 };
+        localStorage.setItem('nihal_project_likes', JSON.stringify(next));
+        return next;
+      });
+    }
+  };
 
   // Find next project in array
   const currentIndex = PROJECTS.findIndex(p => p.id === project.id);
@@ -49,12 +109,26 @@ export default function CaseStudyModal({
                 Case Study Breakdown // {project.year}
               </span>
             </div>
-            <button
-              onClick={onClose}
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white hover:bg-[#FF5A1F] hover:text-black transition-all"
-            >
-              <X className="h-5 w-5" />
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={handleToggleLike}
+                className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-space font-bold border transition-all cursor-pointer active:scale-95 ${
+                  isLiked
+                    ? 'bg-[#FF5A1F] text-black border-[#FF5A1F] shadow-lg shadow-[#FF5A1F]/30'
+                    : 'bg-white/10 hover:bg-[#FF5A1F] text-[#FF5A1F] hover:text-black border-white/10'
+                }`}
+                title={isLiked ? "Liked! Click again to remove like" : "Appreciate this project"}
+              >
+                <Heart className={`h-3.5 w-3.5 ${isLiked ? 'fill-current text-black' : 'fill-current'}`} />
+                <span>{currentLikes} {currentLikes === 1 ? 'Like' : 'Likes'}</span>
+              </button>
+              <button
+                onClick={onClose}
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white hover:bg-[#FF5A1F] hover:text-black transition-all cursor-pointer"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
           </div>
 
           {/* Hero Banner */}

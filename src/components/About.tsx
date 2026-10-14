@@ -306,14 +306,34 @@ export default function About({ onOpenResumeModal }: AboutProps) {
                   }}
                   className="absolute inset-0 h-full w-full object-cover object-center grayscale-[0.15] transition-transform duration-700 group-hover:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent" />
                 <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full border border-white/15 bg-black/40 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white backdrop-blur-md">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> Available for projects
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shrink-0" />
+                  <EditableText
+                    id="about-portrait-availability"
+                    as="span"
+                    defaultText="Available for projects"
+                    className="text-[10px] uppercase font-bold"
+                  />
                 </div>
                 <div className="absolute bottom-5 left-5 right-5">
-                  <p className="mb-1 text-[10px] uppercase tracking-[0.2em] text-neutral-400">Creative technologist</p>
-                  <h3 className="font-syne text-3xl font-bold text-white">Nihal . ON</h3>
-                  <p className="mt-1 text-sm text-neutral-300">Kochi, Kerala / working worldwide</p>
+                  <EditableText
+                    id="about-portrait-role"
+                    as="p"
+                    className="mb-1 text-[10px] uppercase tracking-[0.2em] text-neutral-400 font-medium"
+                    defaultText="Creative technologist"
+                  />
+                  <EditableText
+                    id="about-portrait-name"
+                    as="h3"
+                    className="font-syne text-3xl font-bold text-white"
+                    defaultText="Nihal . ON"
+                  />
+                  <EditableText
+                    id="about-portrait-location"
+                    as="p"
+                    className="mt-1 text-sm text-neutral-300"
+                    defaultText="Kochi, Kerala / working worldwide"
+                  />
                 </div>
               </motion.article>
             )}

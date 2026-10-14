@@ -11,7 +11,7 @@ export default function Experience() {
   const elements = activeData?.elements || {};
 
   return (
-    <section id="experience" className="relative py-28 bg-[#090909] overflow-hidden">
+    <section id="experience" data-section="experience" className="relative py-28 bg-[#090909] overflow-hidden">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Section Header */}
         <motion.div
@@ -104,11 +104,19 @@ export default function Experience() {
                     <div className="flex flex-wrap items-center gap-4 text-xs font-space text-neutral-400">
                       <span className="flex items-center gap-1">
                         <Calendar className="h-3.5 w-3.5 text-[#FF5A1F]" />
-                        {exp.period}
+                        <EditableText
+                          id={`exp-period-${exp.id}`}
+                          as="span"
+                          defaultText={exp.period}
+                        />
                       </span>
                       <span className="flex items-center gap-1">
                         <MapPin className="h-3.5 w-3.5 text-neutral-500" />
-                        {exp.location}
+                        <EditableText
+                          id={`exp-location-${exp.id}`}
+                          as="span"
+                          defaultText={exp.location}
+                        />
                       </span>
                     </div>
                   </div>
@@ -128,7 +136,11 @@ export default function Experience() {
                   {exp.achievements.map((ach, i) => (
                     <div key={i} className="flex items-start gap-2.5 text-xs text-neutral-300">
                       <CheckCircle2 className="h-4 w-4 text-[#FF5A1F] flex-shrink-0 mt-0.5" />
-                      <span>{ach}</span>
+                      <EditableText
+                        id={`exp-ach-${exp.id}-${i}`}
+                        as="span"
+                        defaultText={ach}
+                      />
                     </div>
                   ))}
                 </div>
@@ -136,12 +148,13 @@ export default function Experience() {
                 {/* Tech Stack Tags */}
                 <div className="flex flex-wrap gap-2 pt-4 border-t border-white/10">
                   {exp.technologies.map((tech, i) => (
-                    <span
+                    <EditableText
                       key={i}
+                      id={`exp-tech-${exp.id}-${i}`}
+                      as="span"
                       className="rounded-full bg-white/5 border border-white/10 px-3 py-1 text-[10px] font-space text-neutral-300"
-                    >
-                      {tech}
-                    </span>
+                      defaultText={tech}
+                    />
                   ))}
                 </div>
               </div>

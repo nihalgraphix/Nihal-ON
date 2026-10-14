@@ -12,6 +12,9 @@ import AnalyticsView from './AnalyticsView';
 import ContactInbox from './ContactInbox';
 import DesignSystemView from './DesignSystemView';
 import SiteSettingsView from './SiteSettingsView';
+import SkillsManager from './SkillsManager';
+import TextContentManager from './TextContentManager';
+import SeoManager from './SeoManager';
 
 export default function StudioShell() {
   const { isStudioOpen, activeTab } = useStudio();
@@ -21,28 +24,11 @@ export default function StudioShell() {
     if (isStudioOpen) {
       const scrollY = window.scrollY;
       const originalBodyOverflow = document.body.style.overflow;
-      const originalBodyPosition = document.body.style.position;
-      const originalBodyTop = document.body.style.top;
-      const originalBodyWidth = document.body.style.width;
-      const originalBodyTouch = document.body.style.touchAction;
-      const originalHtmlOverflow = document.documentElement.style.overflow;
 
       document.body.style.overflow = 'hidden';
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${scrollY}px`;
-      document.body.style.left = '0px';
-      document.body.style.width = '100%';
-      document.body.style.touchAction = 'none';
-      document.documentElement.style.overflow = 'hidden';
 
       return () => {
         document.body.style.overflow = originalBodyOverflow;
-        document.body.style.position = originalBodyPosition;
-        document.body.style.top = originalBodyTop;
-        document.body.style.left = '';
-        document.body.style.width = originalBodyWidth;
-        document.body.style.touchAction = originalBodyTouch;
-        document.documentElement.style.overflow = originalHtmlOverflow;
         window.scrollTo(0, scrollY);
       };
     }
@@ -51,7 +37,10 @@ export default function StudioShell() {
   if (!isStudioOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[99990] bg-[#111214] text-[#F4F4F5] font-sans antialiased flex flex-col overflow-y-auto h-screen w-screen isolate overscroll-none touch-none">
+    <div 
+      data-lenis-prevent="true"
+      className="fixed inset-0 z-[99990] bg-[#111214] text-[#F4F4F5] font-sans antialiased flex flex-col overflow-hidden h-screen w-screen isolate"
+    >
       {/* Top Bar matching screenshot */}
       <TopBar />
 
@@ -62,16 +51,22 @@ export default function StudioShell() {
           onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
         />
 
-        <main className="flex-1 flex flex-col overflow-y-auto bg-[#111214] min-h-0 h-full w-full relative overscroll-contain touch-auto">
+        <main 
+          data-lenis-prevent="true"
+          className="flex-1 flex flex-col overflow-y-auto bg-[#111214] min-h-0 h-full w-full relative overscroll-contain touch-auto"
+        >
           {activeTab === 'editor' && <VisualEditorView />}
           {activeTab === 'overview' && <OverviewView />}
           {activeTab === 'projects' && <ProjectsManager />}
           {activeTab === 'blog' && <BlogManager />}
           {activeTab === 'gallery' && <GalleryManager />}
+          {activeTab === 'skills' && <SkillsManager />}
+          {activeTab === 'text' && <TextContentManager />}
           {activeTab === 'media' && <MediaLibrary />}
           {activeTab === 'analytics' && <AnalyticsView />}
           {activeTab === 'inbox' && <ContactInbox />}
           {activeTab === 'design-system' && <DesignSystemView />}
+          {activeTab === 'seo' && <SeoManager />}
           {activeTab === 'settings' && <SiteSettingsView />}
         </main>
       </div>

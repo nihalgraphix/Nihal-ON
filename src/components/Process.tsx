@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { PROCESS_STEPS } from '../data/portfolioData';
 import { CheckCircle2, ChevronRight, Sparkles, Layers } from 'lucide-react';
 import { useStudio } from '../context/StudioContext';
+import EditableText from './EditableText';
 
 export default function Process() {
   const { publishedData, draftData, isStudioOpen } = useStudio();
@@ -29,14 +30,20 @@ export default function Process() {
         >
           <div className="inline-flex items-center gap-2 text-xs font-space uppercase tracking-widest text-[#FF5A1F] mb-3">
             <span className="h-2 w-2 rounded-full bg-[#FF5A1F]" />
-            <span>Methodology</span>
+            <EditableText id="process-tag" as="span" defaultText="Methodology" />
           </div>
-          <h2 className="font-syne text-3xl sm:text-5xl font-extrabold text-white tracking-tight">
-            {headingEl?.content?.text || 'An 8-Step Blueprint For Digital Excellence'}
-          </h2>
-          <p className="text-neutral-400 text-sm font-sans mt-3">
-            A transparent, predictable process refined over 150+ successful deployments worldwide.
-          </p>
+          <EditableText
+            id="process-heading-title"
+            as="h2"
+            className="font-syne text-3xl sm:text-5xl font-extrabold text-white tracking-tight"
+            defaultText="An 8-Step Blueprint For Digital Excellence"
+          />
+          <EditableText
+            id="process-heading-subtitle"
+            as="p"
+            className="text-neutral-400 text-sm font-sans mt-3"
+            defaultText="A transparent, predictable process refined over 150+ successful deployments worldwide."
+          />
         </motion.div>
 
         {/* Horizontal / Grid Step Selectors with staggered scroll reveal */}
@@ -96,33 +103,52 @@ export default function Process() {
             <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
               <div className="space-y-4 max-w-xl">
                 <div className="flex items-center gap-3">
-                  <span className="font-syne text-4xl font-extrabold text-[#FF5A1F]">
-                    {selectedStepObj.step}
-                  </span>
+                  <EditableText
+                    id={`process-num-${selectedStepObj.step}`}
+                    as="span"
+                    className="font-syne text-4xl font-extrabold text-[#FF5A1F]"
+                    defaultText={selectedStepObj.step}
+                  />
                   <div>
-                    <h3 className="font-syne text-2xl font-bold text-white">
-                      {selectedStepObj.title}
-                    </h3>
-                    <span className="text-xs font-space text-neutral-400">
-                      Phase Horizon: {selectedStepObj.duration}
-                    </span>
+                    <EditableText
+                      id={`process-title-${selectedStepObj.step}`}
+                      as="h3"
+                      className="font-syne text-2xl font-bold text-white"
+                      defaultText={selectedStepObj.title}
+                    />
+                    <EditableText
+                      id={`process-[#FF5A1F]time-${selectedStepObj.step}`}
+                      as="span"
+                      className="text-xs font-space text-neutral-400 block mt-0.5"
+                      defaultText={`Phase Horizon: ${selectedStepObj.duration}`}
+                    />
                   </div>
                 </div>
 
-                <p className="text-base text-neutral-200 font-sans leading-relaxed">
-                  {selectedStepObj.summary}
-                </p>
+                <EditableText
+                  id={`process-desc-${selectedStepObj.step}`}
+                  as="p"
+                  className="text-base text-neutral-200 font-sans leading-relaxed"
+                  defaultText={selectedStepObj.summary}
+                />
               </div>
 
               {/* Details Checklist */}
               <div className="p-6 rounded-2xl bg-[#111111] border border-white/10 min-w-[300px] space-y-3">
-                <span className="text-xs uppercase font-space text-[#FF5A1F] font-bold block">
-                  Phase Milestone Deliverables
-                </span>
+                <EditableText
+                  id={`process-deliv-title-${selectedStepObj.step}`}
+                  as="span"
+                  className="text-xs uppercase font-space text-[#FF5A1F] font-bold block"
+                  defaultText="Phase Milestone Deliverables"
+                />
                 {selectedStepObj.details.map((detail, idx) => (
                   <div key={idx} className="flex items-start gap-2.5 text-xs text-neutral-300">
                     <CheckCircle2 className="h-4 w-4 text-[#FF5A1F] flex-shrink-0 mt-0.5" />
-                    <span>{detail}</span>
+                    <EditableText
+                      id={`process-deliv-${selectedStepObj.step}-${idx}`}
+                      as="span"
+                      defaultText={detail}
+                    />
                   </div>
                 ))}
               </div>

@@ -11,7 +11,7 @@ export default function Marquee() {
   const brandsEl = elements['marquee-brands'];
 
   return (
-    <section className="relative py-12 border-y border-white/10 bg-[#090909] overflow-hidden">
+    <section id="marquee" className="relative py-12 border-y border-white/10 bg-[#090909] overflow-hidden">
       {/* Brands Ticker */}
       <div 
         data-editable-id="marquee-headline"

@@ -792,7 +792,41 @@ export const CustomizationProvider: React.FC<{ children: React.ReactNode }> = ({
 export const useCustomization = () => {
   const context = useContext(CustomizationContext);
   if (!context) {
-    throw new Error('useCustomization must be used within a CustomizationProvider');
+    console.warn('useCustomization was called outside CustomizationProvider; returning default fallback context.');
+    return {
+      settings: DEFAULT_SITE_SETTINGS,
+      updateSettings: async () => {},
+      projects: INITIAL_PROJECTS,
+      blogPosts: INITIAL_BLOG_POSTS,
+      galleryItems: INITIAL_GALLERY_ITEMS,
+      contactMessages: [],
+      addProject: async () => {},
+      updateProject: async () => {},
+      deleteProject: async () => {},
+      addBlogPost: async () => {},
+      updateBlogPost: async () => {},
+      deleteBlogPost: async () => {},
+      addGalleryItem: async () => {},
+      deleteGalleryItem: async () => {},
+      addContactMessage: async () => {},
+      markMessageAsRead: async () => {},
+      deleteContactMessage: async () => {},
+      resetToDefaults: async () => {},
+      clearFirebaseExceptDefaults: async () => {},
+      resetLayoutOnly: async () => {},
+      resetThemeOnly: async () => {},
+      resetContentOnly: async () => {},
+      resetAnalyticsData: async () => {},
+      isSaving: false,
+      lastSavedTime: null,
+      firestoreConnected: false,
+      updateSectionVisibility: async () => {},
+      updateSectionsOrder: async () => {},
+      updateSectionStyles: async () => {},
+      updateComponentStyle: async () => {},
+      getComponentStyles: () => ({}),
+      getSectionStyles: () => ({}),
+    } as any;
   }
   return context;
 };

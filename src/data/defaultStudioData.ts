@@ -1,5 +1,6 @@
 import { StudioData, EditableElement } from '../types/studio';
-import { PROJECTS, BLOG_POSTS, GALLERY_ITEMS, PERSONAL_INFO, aboutPortrait } from './portfolioData';
+import { PROJECTS, BLOG_POSTS, GALLERY_ITEMS, PERSONAL_INFO, aboutPortrait, SKILL_CATEGORIES } from './portfolioData';
+import { DEFAULT_SECTION_SEO } from './defaultSeoData';
 import aiSprintLeaderImage from '../components/image/3ebaca72-c048-4ad3-ace0-649046417171.png';
 
 export const INITIAL_ELEMENTS: Record<string, EditableElement> = {
@@ -962,6 +963,7 @@ export const DEFAULT_STUDIO_DATA: StudioData = {
     adminButtonLabel: "Admin",
     adminButtonPosition: "bottom-left",
     ogImage: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop",
+    sectionSeo: DEFAULT_SECTION_SEO,
   },
   designTokens: {
     primaryAccent: "#FF5A1F",
@@ -978,4 +980,6 @@ export const DEFAULT_STUDIO_DATA: StudioData = {
   projects: PROJECTS,
   blogPosts: BLOG_POSTS,
   galleryItems: GALLERY_ITEMS,
+  skillCategories: SKILL_CATEGORIES,
 };
+

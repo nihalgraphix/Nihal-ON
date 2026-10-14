@@ -176,7 +176,11 @@ export default function Services() {
                     {service.deliverables.map((item, idx) => (
                       <div key={idx} className="flex items-center gap-2 text-xs text-neutral-300">
                         <CheckCircle2 className="h-3.5 w-3.5 text-[#FF5A1F] flex-shrink-0" />
-                        <span>{item}</span>
+                        <EditableText
+                          id={`service-deliv-${service.id}-${idx}`}
+                          as="span"
+                          defaultText={item}
+                        />
                       </div>
                     ))}
                   </div>
@@ -186,9 +190,13 @@ export default function Services() {
                 <div className="pt-6 border-t border-white/10 flex items-center justify-between">
                   <div className="flex flex-wrap gap-1 max-w-[180px]">
                     {service.tools.slice(0, 3).map((tool, i) => (
-                      <span key={i} className="text-[10px] font-space text-neutral-400 bg-white/5 px-2 py-0.5 rounded-md">
-                        {tool}
-                      </span>
+                      <EditableText
+                        key={i}
+                        id={`service-tool-${service.id}-${i}`}
+                        as="span"
+                        className="text-[10px] font-space text-neutral-400 bg-white/5 px-2 py-0.5 rounded-md"
+                        defaultText={tool}
+                      />
                     ))}
                   </div>
 

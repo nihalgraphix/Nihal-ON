@@ -1,11 +1,12 @@
 import React, { createContext, useContext, useState, useEffect, useCallback, useTransition } from 'react';
 import { User, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { auth, googleSignIn, logoutGoogle } from '../lib/firebaseAuth';
-import { StudioData, EditableElement, ElementTypography, ElementAppearance, ElementSpacing, ElementDimensions, SiteSettings, DesignTokens } from '../types/studio';
+import { StudioData, EditableElement, ElementTypography, ElementAppearance, ElementSpacing, ElementDimensions, SiteSettings, DesignTokens, SectionSeoMap, SectionSeoMetadata } from '../types/studio';
 import { DEFAULT_STUDIO_DATA } from '../data/defaultStudioData';
+import { DEFAULT_SECTION_SEO } from '../data/defaultSeoData';
 import { PROJECTS } from '../data/portfolioData';
 import { persistStudioData, fetchStudioData, deleteFirestoreDocument, setFirestoreDocument, fetchFirestoreCollection } from '../lib/firebaseStore';
-import { Project, BlogPost, GalleryItem } from '../types';
+import { Project, BlogPost, GalleryItem, SkillCategory } from '../types';
 
 export type StudioTab = 
   | 'overview' 
@@ -13,11 +14,16 @@ export type StudioTab =
   | 'projects' 
   | 'blog' 
   | 'gallery' 
+  | 'skills'
+  | 'text'
+  | 'seo'
   | 'media' 
   | 'analytics' 
   | 'inbox' 
   | 'design-system' 
   | 'settings';
+
+
 
 export type PreviewDevice = 'desktop' | 'tablet' | 'mobile';
 
@@ -86,6 +92,9 @@ interface StudioContextType {
   reorderGalleryItem: (fromIndex: number, toIndex: number) => void;
   addGalleryCategory: (category: string) => void;
   deleteGalleryCategory: (category: string) => void;
+  updateSkillCategories: (categories: SkillCategory[]) => void;
+  updateSectionSeo: (sectionKey: string, seo: Partial<SectionSeoMetadata>) => Promise<void>;
+  saveAllSectionSeo: (seoMap: SectionSeoMap) => Promise<void>;
 
   // Auth
   loginEmail: (email: string, pass: string) => Promise<{ success: boolean; error?: string }>;
@@ -182,13 +191,14 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
 
     async function loadData() {
       try {
-        const [pubRes, draftRes, textNodesRes, projectsRes, blogRes, galleryRes] = await Promise.allSettled([
+        const [pubRes, draftRes, textNodesRes, projectsRes, blogRes, galleryRes, settingsRes] = await Promise.allSettled([
           fetchStudioData(false),
           fetchStudioData(true),
           fetchFirestoreCollection<{ id: string; text: string }>('textNodes'),
           fetchFirestoreCollection<Project>('projects'),
           fetchFirestoreCollection<BlogPost>('blogPosts'),
           fetchFirestoreCollection<GalleryItem>('galleryItems'),
+          fetchFirestoreCollection('settings'),
         ]);
 
         if (!isMounted) return;
@@ -255,6 +265,37 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
           if (galleryList.length > 0) {
             baseDraft = { ...baseDraft, galleryItems: galleryList };
             basePub = { ...basePub, galleryItems: galleryList };
+          }
+        }
+
+        // Merge SEO metadata if available directly from Firestore
+        if (settingsRes.status === 'fulfilled' && settingsRes.value && typeof settingsRes.value === 'object') {
+          const seoDoc = settingsRes.value['seo_metadata'] as any;
+          const siteConfigDoc = settingsRes.value['site_config'] as any;
+          const mergedSeo = seoDoc?.sections || siteConfigDoc?.sectionSeo;
+          if (mergedSeo && typeof mergedSeo === 'object') {
+            baseDraft = {
+              ...baseDraft,
+              siteSettings: {
+                ...baseDraft.siteSettings,
+                sectionSeo: {
+                  ...DEFAULT_SECTION_SEO,
+                  ...(baseDraft.siteSettings?.sectionSeo || {}),
+                  ...mergedSeo,
+                },
+              },
+            };
+            basePub = {
+              ...basePub,
+              siteSettings: {
+                ...basePub.siteSettings,
+                sectionSeo: {
+                  ...DEFAULT_SECTION_SEO,
+                  ...(basePub.siteSettings?.sectionSeo || {}),
+                  ...mergedSeo,
+                },
+              },
+            };
           }
         }
 
@@ -800,6 +841,19 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
     setIsDirty(true);
   }, [pushUndoState]);
 
+  const updateSkillCategories = useCallback((categories: SkillCategory[]) => {
+    setDraftData(prev => {
+      pushUndoState(prev);
+      const updated = {
+        ...prev,
+        skillCategories: categories,
+      };
+      setFirestoreDocument('settings', 'skill_categories', { categories }).catch(() => {});
+      return updated;
+    });
+    setIsDirty(true);
+  }, [pushUndoState]);
+
   const addGalleryCategory = useCallback((category: string) => {
     if (!category.trim()) return;
     setDraftData(prev => {
@@ -819,6 +873,69 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
     });
     setIsDirty(true);
   }, [pushUndoState]);
+
+  // Section SEO operations
+  const updateSectionSeo = useCallback(async (sectionKey: string, seo: Partial<SectionSeoMetadata>) => {
+    setDraftData(prev => {
+      pushUndoState(prev);
+      const currentSeoMap = {
+        ...DEFAULT_SECTION_SEO,
+        ...(prev.siteSettings.sectionSeo || {}),
+      };
+      const updatedSection = {
+        ...(currentSeoMap[sectionKey] || DEFAULT_SECTION_SEO[sectionKey] || {}),
+        ...seo,
+      };
+      const updatedMap = {
+        ...currentSeoMap,
+        [sectionKey]: updatedSection,
+      };
+
+      setFirestoreDocument('settings', 'seo_metadata', { sections: updatedMap }).catch(() => {});
+      setFirestoreDocument('settings', 'site_config', { sectionSeo: updatedMap }).catch(() => {});
+
+      return {
+        ...prev,
+        siteSettings: {
+          ...prev.siteSettings,
+          sectionSeo: updatedMap,
+        },
+      };
+    });
+    setIsDirty(true);
+  }, [pushUndoState]);
+
+  const saveAllSectionSeo = useCallback(async (seoMap: SectionSeoMap) => {
+    setDraftData(prev => {
+      pushUndoState(prev);
+      return {
+        ...prev,
+        siteSettings: {
+          ...prev.siteSettings,
+          sectionSeo: seoMap,
+        },
+      };
+    });
+    setPublishedData(prev => ({
+      ...prev,
+      siteSettings: {
+        ...prev.siteSettings,
+        sectionSeo: seoMap,
+      },
+    }));
+
+    await setFirestoreDocument('settings', 'seo_metadata', { sections: seoMap });
+    await setFirestoreDocument('settings', 'site_config', { sectionSeo: seoMap });
+    await persistStudioData({
+      ...draftData,
+      siteSettings: {
+        ...draftData.siteSettings,
+        sectionSeo: seoMap,
+      },
+    }, true);
+
+    setIsDirty(false);
+  }, [pushUndoState, draftData]);
 
   // Auth operations
   const loginEmail = useCallback(async (email: string, pass: string): Promise<{ success: boolean; error?: string }> => {
@@ -951,6 +1068,9 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
         reorderGalleryItem,
         addGalleryCategory,
         deleteGalleryCategory,
+        updateSkillCategories,
+        updateSectionSeo,
+        saveAllSectionSeo,
         loginEmail,
         loginWithGoogle,
         logout,

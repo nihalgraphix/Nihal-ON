@@ -344,6 +344,16 @@ async function startServer() {
     res.json({ success: true });
   });
 
+  // Reset Analytics endpoint
+  app.post("/api/studio/analytics/reset", (_req, res) => {
+    try {
+      writeJsonFile(STUDIO_ANALYTICS_FILE, []);
+      res.json({ success: true, message: "Analytics history reset to zero" });
+    } catch (err: any) {
+      res.status(500).json({ error: err.message || "Failed to reset analytics" });
+    }
+  });
+
   app.get("/api/studio/analytics", (_req, res) => {
     const events: AnalyticsEvent[] = readJsonFile(STUDIO_ANALYTICS_FILE, []);
     const now = new Date();

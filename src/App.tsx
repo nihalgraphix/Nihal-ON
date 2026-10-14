@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Lenis from 'lenis';
 import { motion, useScroll, useSpring } from 'motion/react';
 import { PROJECTS } from './data/portfolioData';
@@ -24,8 +24,11 @@ import AiAssistantModal from './components/AiAssistantModal';
 import ResumeModal from './components/ResumeModal';
 import GalleryFullscreenModal from './components/GalleryFullscreenModal';
 import { StudioProvider, useStudio } from './context/StudioContext';
+import { CustomizationProvider } from './context/CustomizationContext';
 import StudioShell from './components/studio/StudioShell';
 import AdminFloatingButton from './components/studio/AdminFloatingButton';
+import AdminDashboard from './components/AdminDashboard';
+import SeoHeadSync from './components/SeoHeadSync';
 
 function PortfolioMain() {
   const { publishedData, trackEvent, isStudioOpen } = useStudio();
@@ -47,18 +50,20 @@ function PortfolioMain() {
     trackEvent('pageview');
   }, [trackEvent]);
 
+  const lenisRef = useRef<Lenis | null>(null);
+
   // Initialize Lenis Smooth Scrolling safely
   useEffect(() => {
-    let lenis: Lenis | null = null;
     let animationFrameId: number;
 
     try {
-      lenis = new Lenis({
+      const lenis = new Lenis({
         duration: 1.2,
         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
         smoothWheel: true,
         touchMultiplier: 1.5,
       });
+      lenisRef.current = lenis;
 
       function raf(time: number) {
         if (lenis) lenis.raf(time);
@@ -72,9 +77,21 @@ function PortfolioMain() {
 
     return () => {
       if (animationFrameId) cancelAnimationFrame(animationFrameId);
-      if (lenis) lenis.destroy();
+      if (lenisRef.current) lenisRef.current.destroy();
+      lenisRef.current = null;
     };
   }, []);
+
+  // Pause Lenis when Studio is open so mouse wheel scrolling works inside studio and panels
+  useEffect(() => {
+    if (lenisRef.current) {
+      if (isStudioOpen) {
+        lenisRef.current.stop();
+      } else {
+        lenisRef.current.start();
+      }
+    }
+  }, [isStudioOpen]);
 
   // Top Progress Bar
   const { scrollYProgress } = useScroll();
@@ -140,6 +157,9 @@ function PortfolioMain() {
 
   return (
     <div className="relative min-h-screen bg-[#060606] text-[#E0E0E0] selection:bg-[#FF5A1F] selection:text-black font-sans antialiased">
+      {/* Real-time Dynamic Section SEO & OpenGraph Head Synchronizer */}
+      <SeoHeadSync />
+
       {/* Top Scroll Progress Indicator */}
       <motion.div
         className="fixed top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-[#FF5A1F] via-[#FF8A00] to-[#FF5A1F] z-[100] origin-left shadow-[0_0_12px_#FF5A1F]"
@@ -326,14 +346,19 @@ function PortfolioMain() {
 
       {/* Full Portfolio Admin Studio Shell */}
       <StudioShell />
+
+      {/* Admin Dashboard / Live Div Mover Modal */}
+      <AdminDashboard />
     </div>
   );
 }
 
 export default function App() {
   return (
-    <StudioProvider>
-      <PortfolioMain />
-    </StudioProvider>
+    <CustomizationProvider>
+      <StudioProvider>
+        <PortfolioMain />
+      </StudioProvider>
+    </CustomizationProvider>
   );
 }

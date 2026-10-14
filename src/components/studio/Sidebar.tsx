@@ -14,7 +14,9 @@ import {
   LogOut,
   ExternalLink,
   ChevronLeft,
-  ChevronRight
+  ChevronRight,
+  BarChart3,
+  Share2
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -103,6 +105,7 @@ export default function Sidebar({ isCollapsed = false, onToggleCollapse }: Sideb
             {navItem('projects', 'Projects', <Folder className="w-4 h-4" />)}
             {navItem('blog', 'Blog', <FileText className="w-4 h-4" />)}
             {navItem('gallery', 'Gallery', <Image className="w-4 h-4" />)}
+            {navItem('skills', 'Skills & Graph', <BarChart3 className="w-4 h-4" />)}
             {navItem('analytics', 'Analytics', <TrendingUp className="w-4 h-4" />)}
           </div>
         </div>
@@ -128,6 +131,7 @@ export default function Sidebar({ isCollapsed = false, onToggleCollapse }: Sideb
             </h4>
           )}
           <div className="space-y-0.5">
+            {navItem('seo', 'SEO & OpenGraph', <Share2 className="w-4 h-4" />)}
             {navItem('design-system', 'Design System', <Palette className="w-4 h-4" />)}
             {navItem('settings', 'Site Settings', <Settings className="w-4 h-4" />)}
           </div>

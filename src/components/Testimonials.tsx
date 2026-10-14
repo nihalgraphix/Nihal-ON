@@ -64,9 +64,12 @@ export default function Testimonials() {
                   <Quote className="h-6 w-6 text-white/20" />
                 </div>
 
-                <p className="text-xs sm:text-sm text-neutral-200 font-sans leading-relaxed italic">
-                  "{t.quote}"
-                </p>
+                <EditableText
+                  id={`testimonial-quote-${t.id}`}
+                  as="p"
+                  className="text-xs sm:text-sm text-neutral-200 font-sans leading-relaxed italic"
+                  defaultText={`"${t.quote}"`}
+                />
               </div>
 
               {/* Author Footer */}
@@ -78,10 +81,18 @@ export default function Testimonials() {
                   className="h-11 w-11 rounded-full object-cover border border-[#FF5A1F]"
                 />
                 <div>
-                  <h4 className="font-syne font-bold text-white text-sm">{t.author}</h4>
-                  <p className="text-[11px] text-neutral-400 font-space">
-                    {t.role} // <span className="text-[#FF5A1F]">{t.company}</span>
-                  </p>
+                  <EditableText
+                    id={`testimonial-author-${t.id}`}
+                    as="h4"
+                    className="font-syne font-bold text-white text-sm"
+                    defaultText={t.author}
+                  />
+                  <EditableText
+                    id={`testimonial-role-${t.id}`}
+                    as="p"
+                    className="text-[11px] text-neutral-400 font-space"
+                    defaultText={`${t.role} // ${t.company}`}
+                  />
                 </div>
               </div>
             </div>

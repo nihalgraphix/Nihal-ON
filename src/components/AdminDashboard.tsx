@@ -47,6 +47,7 @@ import {
 import { useCustomization, DEFAULT_SECTIONS_ORDER } from '../context/CustomizationContext';
 import { Project, BlogPost, GalleryItem, SectionsVisibility, SectionId, SectionStyleConfig } from '../types';
 import { SECTION_DEFAULTS_META, getSectionEffectiveContent } from '../lib/sectionDefaults';
+import { resetAnalyticsData } from '../lib/firebaseStore';
 import LiveLayoutPreview from './LiveLayoutPreview';
 
 export default function AdminDashboard() {
@@ -603,7 +604,11 @@ export default function AdminDashboard() {
               </div>
 
               {/* Main Content Pane */}
-              <div data-lenis-prevent="true" className="flex-1 overflow-y-auto p-6 md:p-8 bg-[#060608]">
+              <div 
+                data-lenis-prevent="true" 
+                onWheel={(e) => e.stopPropagation()} 
+                className="flex-1 overflow-y-auto p-6 md:p-8 bg-[#060608] overscroll-contain touch-auto"
+              >
                 {saveStatus && (
                   <div className="mb-6 flex items-center gap-2 p-3.5 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-space">
                     <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
@@ -622,8 +627,26 @@ export default function AdminDashboard() {
                         </p>
                       </div>
 
-                      {/* Date Range Selector */}
-                      <div className="flex items-center gap-1 bg-[#121217] p-1 rounded-xl border border-white/10 shrink-0">
+                      <div className="flex flex-wrap items-center gap-2">
+                        {/* Reset Analytics Action */}
+                        <button
+                          type="button"
+                          onClick={async () => {
+                            if (window.confirm('Reset all analytics, pageview logs, and traffic data in Firebase and local storage to zero?')) {
+                              await resetAnalyticsData();
+                              alert('Analytics data reset to zero successfully.');
+                              window.location.reload();
+                            }
+                          }}
+                          className="px-3 py-1.5 rounded-xl text-xs font-mono font-medium bg-[#EF4444]/10 hover:bg-[#EF4444]/20 text-[#EF4444] border border-[#EF4444]/30 flex items-center gap-1.5 transition-colors cursor-pointer"
+                          title="Reset analytics history"
+                        >
+                          <RotateCcw className="w-3.5 h-3.5" />
+                          <span>Reset Analytics</span>
+                        </button>
+
+                        {/* Date Range Selector */}
+                        <div className="flex items-center gap-1 bg-[#121217] p-1 rounded-xl border border-white/10 shrink-0">
                         {[
                           { id: 'today', label: 'Today' },
                           { id: '7d', label: '7 Days' },
@@ -645,8 +668,9 @@ export default function AdminDashboard() {
                         ))}
                       </div>
                     </div>
+                  </div>
 
-                    {/* Summary KPI Cards */}
+                  {/* Summary KPI Cards */}
                     <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
                       <div className="p-4 rounded-2xl bg-[#101015] border border-white/10 space-y-1">
                         <div className="flex items-center justify-between text-neutral-500">

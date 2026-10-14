@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { PROJECTS } from '../data/portfolioData';
-import { ChevronLeft, ChevronRight, ArrowUpRight, Sparkles, Circle, Crosshair } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ArrowUpRight, Sparkles, Circle, Crosshair, Heart } from 'lucide-react';
 import { useStudio } from '../context/StudioContext';
 import EditableText from './EditableText';
 
@@ -20,6 +20,62 @@ export default function Projects({ onSelectProject }: ProjectsProps) {
   const { publishedData } = useStudio();
   const currentProjects = publishedData?.projects && publishedData.projects.length > 0 ? publishedData.projects : [];
   const [currentPage, setCurrentPage] = useState<number>(0);
+
+  const [userLikedProjects, setUserLikedProjects] = useState<string[]>(() => {
+    try {
+      return JSON.parse(localStorage.getItem('nihal_project_user_liked') || '[]');
+    } catch {
+      return [];
+    }
+  });
+
+  const [likesMap, setLikesMap] = useState<Record<string, number>>(() => {
+    try {
+      return JSON.parse(localStorage.getItem('nihal_project_likes') || '{}');
+    } catch {
+      return {};
+    }
+  });
+
+  useEffect(() => {
+    const handleStorage = () => {
+      try {
+        setUserLikedProjects(JSON.parse(localStorage.getItem('nihal_project_user_liked') || '[]'));
+        setLikesMap(JSON.parse(localStorage.getItem('nihal_project_likes') || '{}'));
+      } catch {}
+    };
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
+  }, []);
+
+  const handleToggleLike = (e: React.MouseEvent, projectId: string) => {
+    e.stopPropagation();
+    const isAlreadyLiked = userLikedProjects.includes(projectId);
+
+    if (isAlreadyLiked) {
+      // User clicked like twice -> like disappears
+      const updated = userLikedProjects.filter(id => id !== projectId);
+      setUserLikedProjects(updated);
+      localStorage.setItem('nihal_project_user_liked', JSON.stringify(updated));
+
+      setLikesMap(prev => {
+        const next = { ...prev, [projectId]: Math.max(0, (prev[projectId] || 0) - 1) };
+        localStorage.setItem('nihal_project_likes', JSON.stringify(next));
+        return next;
+      });
+    } else {
+      // First click: add like
+      const updated = [...userLikedProjects, projectId];
+      setUserLikedProjects(updated);
+      localStorage.setItem('nihal_project_user_liked', JSON.stringify(updated));
+
+      setLikesMap(prev => {
+        const next = { ...prev, [projectId]: (prev[projectId] || 0) + 1 };
+        localStorage.setItem('nihal_project_likes', JSON.stringify(next));
+        return next;
+      });
+    }
+  };
 
   const fallbackImages = [projSunglasses1, projSilhouette2, projChain3, projModel4, projEyewear5, projManShades6];
   const cardTypes = ["sunglasses-1", "silhouette-2", "chain-3", "model-4", "eyewear-5", "man-shades-6"];
@@ -146,6 +202,20 @@ export default function Projects({ onSelectProject }: ProjectsProps) {
                   {/* Subtle Gradient Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/40 group-hover:opacity-60 transition-opacity" />
 
+                  {/* Card Like Button (Top Right, z-40) */}
+                  <button
+                    onClick={(e) => handleToggleLike(e, card.projectRef.id)}
+                    className={`absolute top-4 right-4 z-40 flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-space font-bold border transition-all cursor-pointer backdrop-blur-md active:scale-90 ${
+                      userLikedProjects.includes(card.projectRef.id)
+                        ? 'bg-[#FF5A1F] text-black border-[#FF5A1F] shadow-lg shadow-[#FF5A1F]/30'
+                        : 'bg-black/60 text-white/90 hover:text-[#FF5A1F] border-white/15'
+                    }`}
+                    title={userLikedProjects.includes(card.projectRef.id) ? "Liked! Click again to remove like" : "Appreciate this project"}
+                  >
+                    <Heart className={`h-3 w-3 ${userLikedProjects.includes(card.projectRef.id) ? 'fill-current text-black' : 'text-[#FF5A1F]'}`} />
+                    <span>{((card.projectRef as any).likes || 24) + (likesMap[card.projectRef.id] || 0)}</span>
+                  </button>
+
                   {/* Hover Action Highlight Pill */}
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-black/40 backdrop-blur-[2px] z-30">
                     <span className="inline-flex items-center gap-2 rounded-full bg-[#FF5A1F] px-5 py-2.5 text-xs font-bold font-syne text-black shadow-xl transform scale-90 group-hover:scale-100 transition-transform">
@@ -157,13 +227,28 @@ export default function Projects({ onSelectProject }: ProjectsProps) {
                   {/* CARD 1 OVERLAY (Top Left) */}
                   {card.cardType === "sunglasses-1" && (
                     <>
-                      <div className="relative z-10 flex items-center justify-between text-neutral-300 font-mono text-[10px] tracking-wider uppercase">
+                      <div className="relative z-10 flex items-center justify-between text-neutral-300 font-mono text-[10px] tracking-wider uppercase pr-14">
                         <span className="flex h-5 w-5 items-center justify-center rounded-full border border-white/30 text-[9px]">⦿</span>
-                        <span>SUNGLASSES</span>
+                        <EditableText
+                          id="proj-card1-tag"
+                          as="span"
+                          defaultText="SUNGLASSES"
+                          className="font-mono text-[10px]"
+                        />
                       </div>
                       <div className="relative z-10 pt-4 border-t border-white/10">
-                        <span className="text-[10px] font-mono text-neutral-400 block uppercase">Project // 01</span>
-                        <h4 className="font-syne text-lg font-extrabold text-white group-hover:text-[#FF5A1F] transition-colors">{card.title}</h4>
+                        <EditableText
+                          id={`proj-card1-num-${card.id}`}
+                          as="span"
+                          className="text-[10px] font-mono text-neutral-400 block uppercase"
+                          defaultText="Project // 01"
+                        />
+                        <EditableText
+                          id={`proj-title-${card.id}`}
+                          as="h4"
+                          className="font-syne text-lg font-extrabold text-white group-hover:text-[#FF5A1F] transition-colors"
+                          defaultText={card.title}
+                        />
                       </div>
                     </>
                   )}
@@ -171,28 +256,33 @@ export default function Projects({ onSelectProject }: ProjectsProps) {
                   {/* CARD 2 OVERLAY (Top Middle) */}
                   {card.cardType === "silhouette-2" && (
                     <>
-                      <div className="relative z-10 flex items-center justify-between text-neutral-200 font-mono text-[10px] tracking-wider uppercase">
+                      <div className="relative z-10 flex items-center justify-between text-neutral-200 font-mono text-[10px] tracking-wider uppercase pr-14">
                         <span className="flex h-5 w-5 items-center justify-center rounded-full border border-white/30 text-[9px]">⦿</span>
-                        <span>SUNGLASSES</span>
+                        <EditableText
+                          id="proj-card2-tag"
+                          as="span"
+                          defaultText="SUNGLASSES"
+                          className="font-mono text-[10px]"
+                        />
                       </div>
 
                       {/* HUD Technical Crosshair Callouts */}
                       <div className="relative z-10 my-auto space-y-4 px-2">
                         <div className="flex items-center gap-2 text-[9px] font-mono text-white/80">
                           <span className="h-1.5 w-1.5 rounded-full bg-[#FF5A1F]" />
-                          <span>+ ARTWORK</span>
+                          <EditableText id="proj-card2-artwork" as="span" defaultText="+ ARTWORK" />
                           <span className="h-[1px] flex-grow bg-white/20" />
                         </div>
                         <div className="flex items-center gap-2 text-[9px] font-mono text-white/80 justify-end">
                           <span className="h-[1px] flex-grow bg-white/20" />
-                          <span>+ SPECS</span>
+                          <EditableText id="proj-card2-specs" as="span" defaultText="+ SPECS" />
                           <span className="h-1.5 w-1.5 rounded-full bg-white" />
                         </div>
                       </div>
 
                       <div className="relative z-10 flex items-center justify-between text-[9px] font-mono text-neutral-300 tracking-widest uppercase border-t border-white/10 pt-3">
-                        <span>PHOTO BY</span>
-                        <span className="font-bold text-white">DEAN GIFFIN</span>
+                        <EditableText id="proj-card2-photoby" as="span" defaultText="PHOTO BY" />
+                        <EditableText id="proj-card2-author" as="span" className="font-bold text-white" defaultText="DEAN GIFFIN" />
                       </div>
                     </>
                   )}
@@ -200,19 +290,25 @@ export default function Projects({ onSelectProject }: ProjectsProps) {
                   {/* CARD 3 OVERLAY (Top Right) */}
                   {card.cardType === "chain-3" && (
                     <>
-                      <div className="relative z-10 text-center pt-2">
-                        <span className="font-syne text-sm font-extrabold tracking-widest text-white uppercase block">
-                          NEW ACCESSORIES
-                        </span>
+                      <div className="relative z-10 text-center pt-2 pr-12">
+                        <EditableText
+                          id="proj-card3-title"
+                          as="span"
+                          className="font-syne text-sm font-extrabold tracking-widest text-white uppercase block"
+                          defaultText="NEW ACCESSORIES"
+                        />
                       </div>
 
                       <div className="relative z-10 text-center space-y-2 pb-2">
                         <div className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/30 text-[#FF5A1F] mx-auto bg-black/30 backdrop-blur-md">
                           ✦
                         </div>
-                        <span className="font-mono text-[10px] font-bold tracking-widest text-white uppercase block">
-                          COMING SOON
-                        </span>
+                        <EditableText
+                          id="proj-card3-badge"
+                          as="span"
+                          className="font-mono text-[10px] font-bold tracking-widest text-white uppercase block"
+                          defaultText="COMING SOON"
+                        />
                       </div>
                     </>
                   )}
@@ -222,11 +318,11 @@ export default function Projects({ onSelectProject }: ProjectsProps) {
                     <>
                       {/* Left Side Vertical Text */}
                       <div className="absolute left-4 top-1/2 -translate-y-1/2 z-10 transform -rotate-90 origin-left text-[10px] font-mono tracking-widest text-neutral-300 uppercase whitespace-nowrap">
-                        NEW COLLECTION // 13.03
+                        <EditableText id="proj-card4-tag" as="div" defaultText="NEW COLLECTION // 13.03" />
                       </div>
 
-                      <div className="relative z-10 flex items-center justify-between text-neutral-300 font-mono text-[10px] tracking-wider uppercase">
-                        <span className="ml-auto">26</span>
+                      <div className="relative z-10 flex items-center justify-between text-neutral-300 font-mono text-[10px] tracking-wider uppercase pr-14">
+                        <EditableText id="proj-card4-num" as="span" className="ml-auto" defaultText="26" />
                       </div>
 
                       <div className="relative z-10">
@@ -238,21 +334,27 @@ export default function Projects({ onSelectProject }: ProjectsProps) {
                   {/* CARD 5 OVERLAY (Bottom Middle) */}
                   {card.cardType === "eyewear-5" && (
                     <>
-                      <div className="relative z-10 flex items-center justify-between text-neutral-300 font-mono text-[10px] tracking-wider uppercase">
+                      <div className="relative z-10 flex items-center justify-between text-neutral-300 font-mono text-[10px] tracking-wider uppercase pr-14">
                         <span className="flex h-5 w-5 items-center justify-center rounded-full border border-white/30 text-[9px]">⦿</span>
-                        <span>SUNGLASSES</span>
+                        <EditableText id="proj-card5-tag" as="span" defaultText="SUNGLASSES" />
                       </div>
 
                       <div className="relative z-10 space-y-3">
-                        <h3 className="font-syne text-xl font-black uppercase text-white leading-tight">
-                          SUN'S OUT,<br />SHADES ON
-                        </h3>
+                        <EditableText
+                          id="proj-card5-headline"
+                          as="h3"
+                          className="font-syne text-xl font-black uppercase text-white leading-tight"
+                          defaultText={"SUN'S OUT,\nSHADES ON"}
+                        />
                       </div>
 
                       <div className="relative z-10 border-t border-white/10 pt-3">
-                        <p className="font-sans text-[10px] text-neutral-300 leading-relaxed uppercase tracking-wider font-medium">
-                          DISCOVER OUR PERMANENT COLLECTION IN OUR STORES AND ON OUBA.COM
-                        </p>
+                        <EditableText
+                          id="proj-card5-subtext"
+                          as="p"
+                          className="font-sans text-[10px] text-neutral-300 leading-relaxed uppercase tracking-wider font-medium"
+                          defaultText="DISCOVER OUR PERMANENT COLLECTION IN OUR STORES AND ON OUBA.COM"
+                        />
                       </div>
                     </>
                   )}
@@ -260,23 +362,29 @@ export default function Projects({ onSelectProject }: ProjectsProps) {
                   {/* CARD 6 OVERLAY (Bottom Right) */}
                   {card.cardType === "man-shades-6" && (
                     <>
-                      <div className="relative z-10 flex items-center justify-between text-neutral-300 font-mono text-[10px] tracking-wider uppercase">
+                      <div className="relative z-10 flex items-center justify-between text-neutral-300 font-mono text-[10px] tracking-wider uppercase pr-14">
                         <span className="flex h-5 w-5 items-center justify-center rounded-full border border-white/30 text-[9px]">⦿</span>
-                        <span>SUNGLASSES</span>
+                        <EditableText id="proj-card6-tag" as="span" defaultText="SUNGLASSES" />
                       </div>
 
                       <div className="relative z-10 space-y-2 mt-auto pb-4">
-                        <h3 className="font-syne text-xl font-black uppercase text-white tracking-wide">
-                          FOWLER 4
-                        </h3>
-                        <p className="font-sans text-[10px] text-neutral-300 leading-normal max-w-[220px]">
-                          Sunglasses in monochrome orange acetate. Cat eye shape. Brown gradient tint 2-base lenses with anti-reflective treatment.
-                        </p>
+                        <EditableText
+                          id="proj-card6-title"
+                          as="h3"
+                          className="font-syne text-xl font-black uppercase text-white tracking-wide"
+                          defaultText="FOWLER 4"
+                        />
+                        <EditableText
+                          id="proj-card6-desc"
+                          as="p"
+                          className="font-sans text-[10px] text-neutral-300 leading-normal max-w-[220px]"
+                          defaultText="Sunglasses in monochrome orange acetate. Cat eye shape. Brown gradient tint 2-base lenses with anti-reflective treatment."
+                        />
                       </div>
 
                       <div className="relative z-10 flex items-center justify-between border-t border-white/10 pt-2 font-mono text-[10px] text-neutral-400">
-                        <span>FW 26</span>
-                        <span className="text-white font-bold">HANDMADE</span>
+                        <EditableText id="proj-card6-season" as="span" defaultText="FW 26" />
+                        <EditableText id="proj-card6-badge" as="span" className="text-white font-bold" defaultText="HANDMADE" />
                       </div>
                     </>
                   )}

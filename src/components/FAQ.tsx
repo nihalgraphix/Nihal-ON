@@ -83,7 +83,11 @@ export default function FAQ() {
                 >
                   <span className="flex items-center gap-3">
                     <span className="text-xs font-space text-[#FF5A1F]">0{idx + 1}</span>
-                    <span>{faq.question}</span>
+                    <EditableText
+                      id={`faq-question-${idx}`}
+                      as="span"
+                      defaultText={faq.question}
+                    />
                   </span>
                   <ChevronDown
                     className={`h-5 w-5 text-[#FF5A1F] transition-transform duration-300 ${
@@ -102,7 +106,11 @@ export default function FAQ() {
                       className="overflow-hidden"
                     >
                       <div className="p-6 pt-0 text-xs sm:text-sm text-neutral-300 font-sans leading-relaxed border-t border-white/5">
-                        {faq.answer}
+                        <EditableText
+                          id={`faq-answer-${idx}`}
+                          as="div"
+                          defaultText={faq.answer}
+                        />
                       </div>
                     </motion.div>
                   )}
@@ -121,15 +129,29 @@ export default function FAQ() {
           className="mt-12 text-center p-8 rounded-3xl glass-card border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4"
         >
           <div className="text-left">
-            <h4 className="font-syne font-bold text-white text-lg">Have a specific question about your project?</h4>
-            <p className="text-xs text-neutral-400 font-sans">Let's discuss your timeline, tech stack requirements, and custom scope.</p>
+            <EditableText
+              id="faq-cta-title"
+              as="h4"
+              className="font-syne font-bold text-white text-lg"
+              defaultText="Have a specific question about your project?"
+            />
+            <EditableText
+              id="faq-cta-desc"
+              as="p"
+              className="text-xs text-neutral-400 font-sans mt-0.5"
+              defaultText="Let's discuss your timeline, tech stack requirements, and custom scope."
+            />
           </div>
           <button
             onClick={() => document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })}
             className="flex-shrink-0 flex items-center gap-2 rounded-full bg-[#FF5A1F] px-6 py-3 text-xs font-bold text-black hover:bg-orange-500 transition-colors"
           >
             <MessageSquare className="h-4 w-4" />
-            <span>Ask Nihal Directly</span>
+            <EditableText
+              id="faq-cta-btn"
+              as="span"
+              defaultText="Ask Nihal Directly"
+            />
           </button>
         </motion.div>
       </div>

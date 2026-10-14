@@ -27,7 +27,8 @@ import {
   Link as LinkIcon,
   Plus,
   Trash2,
-  Copy
+  Copy,
+  Briefcase
 } from 'lucide-react';
 import Hero from '../Hero';
 import Marquee from '../Marquee';
@@ -190,6 +191,73 @@ export default function CanvasPreview({ onToggleFloatLeft, onToggleFloatRight }:
     };
   }, [updateTargetBox]);
 
+  // Live synchronization of edited element properties directly to DOM
+  useEffect(() => {
+    if (!canvasFrameRef.current) return;
+    Object.entries(elements).forEach(([elId, elData]) => {
+      const dom = canvasFrameRef.current?.querySelector(`[data-editable-id="${elId}"]`) as HTMLElement;
+      if (dom) {
+        if (elData.content?.text !== undefined && !dom.querySelector('textarea')) {
+          if (dom.children.length === 0 || dom.getAttribute('data-is-text-leaf') === 'true') {
+            dom.innerText = elData.content.text;
+          } else {
+            const leaf = dom.querySelector('span, p, h1, h2, h3, h4, h5, h6') as HTMLElement;
+            if (leaf) {
+              leaf.innerText = elData.content.text;
+            } else {
+              dom.innerText = elData.content.text;
+            }
+          }
+        }
+        if (elData.typography?.textColor) {
+          dom.style.color = elData.typography.textColor;
+        }
+        if (elData.typography?.fontSize) {
+          dom.style.fontSize = elData.typography.fontSize;
+        }
+        if (elData.typography?.fontWeight) {
+          dom.style.fontWeight = elData.typography.fontWeight;
+        }
+        if (elData.typography?.fontFamily) {
+          dom.style.fontFamily = elData.typography.fontFamily;
+        }
+        if (elData.typography?.fontStyle) {
+          dom.style.fontStyle = elData.typography.fontStyle;
+        }
+        if (elData.typography?.textDecoration) {
+          dom.style.textDecoration = elData.typography.textDecoration;
+        }
+        if (elData.typography?.textTransform) {
+          dom.style.textTransform = elData.typography.textTransform;
+        }
+        if (elData.typography?.letterSpacing) {
+          dom.style.letterSpacing = elData.typography.letterSpacing;
+        }
+        if (elData.typography?.lineHeight) {
+          dom.style.lineHeight = elData.typography.lineHeight;
+        }
+        if (elData.typography?.textShadow) {
+          dom.style.textShadow = elData.typography.textShadow;
+        }
+        if (elData.appearance?.backgroundColor) {
+          dom.style.backgroundColor = elData.appearance.backgroundColor;
+        }
+        if (elData.appearance?.borderRadius) {
+          dom.style.borderRadius = elData.appearance.borderRadius;
+        }
+        if (elData.appearance?.opacity !== undefined) {
+          dom.style.opacity = String(elData.appearance.opacity);
+        }
+        if (elData.dimensions?.width) {
+          dom.style.width = elData.dimensions.width;
+        }
+        if (elData.dimensions?.height) {
+          dom.style.height = elData.dimensions.height;
+        }
+      }
+    });
+  }, [elements]);
+
   // Handle Photo File Upload
   const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>, targetElementId: string) => {
     const file = e.target.files?.[0];
@@ -308,13 +376,87 @@ export default function CanvasPreview({ onToggleFloatLeft, onToggleFloatRight }:
     selectedElement.id.includes('portrait')
   );
 
+  // Smooth and guaranteed section jumping in live canvas & blueprint mode
+  const handleJumpToSection = (sec: string) => {
+    setBlueprintSection(sec);
+    if (editorMode !== 'full-web') {
+      setEditorMode('full-web');
+    }
+
+    const doJump = () => {
+      let el: HTMLElement | null = null;
+      if (canvasFrameRef.current) {
+        el = (canvasFrameRef.current.querySelector(`#${sec}`) as HTMLElement) ||
+             (canvasFrameRef.current.querySelector(`[data-section="${sec}"]`) as HTMLElement) ||
+             (canvasFrameRef.current.querySelector(`section#${sec}`) as HTMLElement) ||
+             (canvasFrameRef.current.querySelector(`[data-editable-id^="${sec}"]`) as HTMLElement) ||
+             (sec === 'hero' ? (canvasFrameRef.current.querySelector('#home') as HTMLElement) : null) ||
+             (sec === 'footer' ? (canvasFrameRef.current.querySelector('footer') as HTMLElement) : null);
+      }
+      if (!el) {
+        el = document.getElementById(sec) ||
+             (document.querySelector(`[data-section="${sec}"]`) as HTMLElement) ||
+             (sec === 'hero' ? document.getElementById('home') : null);
+      }
+
+      if (el) {
+        // Direct native scroll
+        try {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } catch {}
+
+        // Container scroll calculation
+        if (scrollContainerRef.current) {
+          const containerRect = scrollContainerRef.current.getBoundingClientRect();
+          const elRect = el.getBoundingClientRect();
+          const targetScrollTop = scrollContainerRef.current.scrollTop + (elRect.top - containerRect.top) - 15;
+          scrollContainerRef.current.scrollTo({
+            top: targetScrollTop,
+            behavior: 'smooth'
+          });
+        }
+
+        // Visual feedback highlight
+        el.style.transition = 'outline 0.3s ease, box-shadow 0.3s ease';
+        el.style.outline = '3px solid #FF5A1F';
+        el.style.boxShadow = '0 0 35px rgba(255, 90, 31, 0.6)';
+        setTimeout(() => {
+          if (el) {
+            el.style.outline = '';
+            el.style.boxShadow = '';
+          }
+        }, 2500);
+
+        // Select the heading in Properties Inspector for immediate text editing
+        if (sec === 'experience') {
+          const expKeys = ['experience-heading-title', 'experience-heading', 'experience-tag', 'exp-role-1', 'experience-1'];
+          for (const k of expKeys) {
+            if (elements[k]) {
+              selectElement(k);
+              break;
+            }
+          }
+        } else {
+          const firstEl = Object.values(elements).find(e => e.section === sec);
+          if (firstEl) {
+            selectElement(firstEl.id);
+          }
+        }
+      }
+    };
+
+    doJump();
+    setTimeout(doJump, 80);
+    setTimeout(doJump, 250);
+  };
+
   return (
     <div className="flex-1 flex flex-col bg-[#111214] overflow-hidden min-h-0">
       {/* Top Breadcrumb & Canvas Controls Bar */}
-      <div className="h-11 px-4 flex items-center justify-between border-b border-[#2C2E34] bg-[#141518] text-xs shrink-0">
+      <div className="h-11 px-4 flex items-center justify-between border-b border-[#2C2E34] bg-[#141518] text-xs shrink-0 gap-2">
         {/* Left: View Mode Switcher */}
-        <div className="flex items-center gap-2">
-          <div className="flex items-center bg-[#1A1C20] p-0.5 rounded-md border border-[#2C2E34]">
+        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+          <div className="flex items-center bg-[#1A1C20] p-0.5 rounded-md border border-[#2C2E34] shrink-0">
             <button
               onClick={() => setEditorMode('full-web')}
               className={`px-2.5 py-1 rounded text-[11px] font-mono transition-colors cursor-pointer flex items-center gap-1.5 ${
@@ -342,7 +484,7 @@ export default function CanvasPreview({ onToggleFloatLeft, onToggleFloatRight }:
           {/* 100% Full View Web Canvas Toggle */}
           <button
             onClick={() => setIsFullViewMode(!isFullViewMode)}
-            className={`px-2.5 py-1 rounded text-[11px] font-mono transition-all cursor-pointer flex items-center gap-1.5 border ${
+            className={`px-2.5 py-1 rounded text-[11px] font-mono transition-all cursor-pointer flex items-center gap-1.5 border shrink-0 ${
               isFullViewMode
                 ? 'bg-[#FF5A1F] text-black border-[#FF5A1F] font-bold shadow-sm'
                 : 'bg-[#1A1C20] text-[#A1A1AA] border-[#2C2E34] hover:text-white'
@@ -350,7 +492,18 @@ export default function CanvasPreview({ onToggleFloatLeft, onToggleFloatRight }:
             title="Toggle 100% Edge-to-Edge Full View Web Canvas without gutters"
           >
             <Maximize2 className="w-3 h-3" />
-            <span>{isFullViewMode ? '100% Full View Web' : 'Frame View'}</span>
+            <span>{isFullViewMode ? '100% Full View' : 'Frame View'}</span>
+          </button>
+
+          {/* Quick Jump Direct Button for Experience Timeline */}
+          <button
+            type="button"
+            onClick={() => handleJumpToSection('experience')}
+            className="px-2.5 py-1 rounded text-[11px] font-mono cursor-pointer flex items-center gap-1.5 bg-[#FF5A1F]/15 hover:bg-[#FF5A1F]/25 text-[#FF5A1F] border border-[#FF5A1F]/40 font-semibold transition-colors shrink-0 shadow-xs"
+            title="Jump directly to Career Experience Timeline section"
+          >
+            <Briefcase className="w-3 h-3" />
+            <span>Jump to: Experience Timeline</span>
           </button>
 
           {/* Section Jump Dropdown */}
@@ -358,17 +511,13 @@ export default function CanvasPreview({ onToggleFloatLeft, onToggleFloatRight }:
             value={blueprintSection}
             onChange={(e) => {
               const sec = e.target.value;
-              setBlueprintSection(sec);
-              if (editorMode === 'full-web' && canvasFrameRef.current) {
-                const el = canvasFrameRef.current.querySelector(`#${sec}`);
-                if (el) el.scrollIntoView({ behavior: 'smooth' });
-              }
+              if (sec) handleJumpToSection(sec);
             }}
-            className="bg-[#1A1C20] border border-[#2C2E34] text-[#F4F4F5] text-[11px] font-mono rounded px-2 py-1 focus:outline-none focus:border-[#FF5A1F]"
+            className="bg-[#1A1C20] border border-[#2C2E34] text-[#F4F4F5] text-[11px] font-mono rounded px-2.5 py-1 focus:outline-none focus:border-[#FF5A1F] cursor-pointer shrink-0"
           >
             {sectionsList.map(s => (
               <option key={s.id} value={s.id}>
-                Section: {s.name}
+                Jump to: {s.name}
               </option>
             ))}
           </select>
@@ -422,7 +571,8 @@ export default function CanvasPreview({ onToggleFloatLeft, onToggleFloatRight }:
       {/* Main Canvas Scroll Area */}
       <div
         ref={scrollContainerRef}
-        className={`flex-1 overflow-y-auto bg-[#0C0D0F] flex flex-col items-center justify-start min-h-0 ${
+        data-lenis-prevent="true"
+        className={`flex-1 overflow-y-auto bg-[#0C0D0F] flex flex-col items-center justify-start min-h-0 overscroll-contain touch-auto ${
           isFullViewMode ? 'p-0 w-full' : 'p-4 sm:p-6'
         }`}
       >
@@ -457,60 +607,75 @@ export default function CanvasPreview({ onToggleFloatLeft, onToggleFloatRight }:
               className="relative w-full min-h-screen text-[#E0E0E0] font-sans antialiased selection:bg-[#FF5A1F] selection:text-black overflow-x-hidden"
               onClickCapture={(e) => {
                 const target = e.target as HTMLElement;
+                if (target.closest('a')) {
+                  e.preventDefault();
+                }
+
                 const editableEl = target.closest('[data-editable-id]') as HTMLElement;
                 if (editableEl) {
-                  e.preventDefault();
-                  e.stopPropagation();
                   const elId = editableEl.getAttribute('data-editable-id');
-                  if (elId) selectElement(elId);
-                } else {
-                  // Fallback: detect if user clicked any heading, paragraph, button, div, or image
-                  const tagName = target.tagName.toLowerCase();
-                  const closestSection = target.closest('section') as HTMLElement;
-                  const secId = closestSection?.id || 'home';
-
-                  if (tagName === 'img') {
-                    if (secId === 'home' || secId === 'hero') {
-                      selectElement('hero-model-image');
-                      return;
-                    }
-                    if (secId === 'about') {
-                      selectElement('about-portrait-image');
-                      return;
-                    }
-                  }
-
-                  const text = target.innerText?.trim();
-                  // Check existing elements
-                  const foundId = Object.keys(elements).find(k => {
-                    const el = elements[k];
-                    return el.section === secId && (
-                      (el.content?.text && text && el.content.text.includes(text.slice(0, 20))) ||
-                      (tagName.startsWith('h') && el.type === 'heading') ||
-                      ((tagName === 'p' || tagName === 'span') && el.type === 'text')
-                    );
-                  });
-
-                  if (foundId) {
-                    selectElement(foundId);
-                  } else if (text && text.length > 1 && text.length < 500) {
-                    // Create dynamic editable element on the fly
-                    const customId = `${secId}-${tagName}-${Date.now().toString(36)}`;
-                    addElement({
-                      id: customId,
-                      label: `${secId.toUpperCase()} ${tagName.toUpperCase()}: ${text.slice(0, 24)}`,
-                      section: secId,
-                      type: tagName.startsWith('h') ? 'heading' : tagName === 'button' || tagName === 'a' ? 'button' : 'text',
-                      content: { text },
-                      dimensions: { width: `${target.offsetWidth}px`, height: `${target.offsetHeight}px` },
-                      visible: true,
-                      isCustom: true,
-                    });
-                    selectElement(customId);
-                  } else if (closestSection?.id) {
-                    selectElement(`${closestSection.id}-heading`);
+                  if (elId) {
+                    selectElement(elId);
+                    return;
                   }
                 }
+
+                // If user clicked any element without data-editable-id: div, p, span, h*, button, a, img, etc.
+                const tagName = target.tagName.toLowerCase();
+                const closestSection = (target.closest('section') as HTMLElement) || (target.closest('footer') as HTMLElement);
+                const secId = closestSection?.id || 'general';
+
+                if (tagName === 'img') {
+                  if (secId === 'home' || secId === 'hero') {
+                    selectElement('hero-model-image');
+                    return;
+                  }
+                  if (secId === 'about') {
+                    selectElement('about-portrait-image');
+                    return;
+                  }
+                }
+
+                // Generate or retrieve persistent dynamic id on the element
+                let dynamicId = target.getAttribute('data-dynamic-id');
+                if (!dynamicId) {
+                  dynamicId = `${secId}-${tagName}-${Math.random().toString(36).substring(2, 7)}`;
+                  target.setAttribute('data-dynamic-id', dynamicId);
+                  target.setAttribute('data-editable-id', dynamicId);
+                }
+
+                const computedStyle = window.getComputedStyle(target);
+                const textVal = target.innerText?.trim() || '';
+
+                if (!elements[dynamicId]) {
+                  addElement({
+                    id: dynamicId,
+                    label: `${secId.toUpperCase()} ${tagName.toUpperCase()}: ${textVal ? textVal.slice(0, 24) : 'Div Element'}`,
+                    section: secId,
+                    type: tagName.startsWith('h') ? 'heading' : (tagName === 'button' || tagName === 'a') ? 'button' : tagName === 'img' ? 'image' : 'text',
+                    content: { text: textVal },
+                    typography: {
+                      fontSize: computedStyle.fontSize,
+                      fontWeight: computedStyle.fontWeight,
+                      textColor: computedStyle.color,
+                      fontFamily: computedStyle.fontFamily,
+                      lineHeight: computedStyle.lineHeight !== 'normal' ? computedStyle.lineHeight : undefined,
+                      letterSpacing: computedStyle.letterSpacing !== 'normal' ? computedStyle.letterSpacing : undefined,
+                    },
+                    appearance: {
+                      backgroundColor: computedStyle.backgroundColor !== 'rgba(0, 0, 0, 0)' ? computedStyle.backgroundColor : undefined,
+                      borderRadius: computedStyle.borderRadius !== '0px' ? computedStyle.borderRadius : undefined,
+                      opacity: computedStyle.opacity ? parseFloat(computedStyle.opacity) : 1,
+                    },
+                    dimensions: {
+                      width: `${target.offsetWidth}px`,
+                      height: `${target.offsetHeight}px`,
+                    },
+                    visible: true,
+                    isCustom: true,
+                  });
+                }
+                selectElement(dynamicId);
               }}
             >
               {/* CLEAN SELECTION INDICATOR OVER SELECTED ELEMENT FOR TEXT EDITING */}

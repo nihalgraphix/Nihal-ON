@@ -69,3 +69,17 @@ export interface ContactMessage {
   createdAt: string;
   read?: boolean;
 }
+
+export interface SkillItem {
+  name: string;
+  level: number;
+  icon: string;
+  experienceYears: string;
+  tag: string;
+}
+
+export interface SkillCategory {
+  category: string;
+  items: SkillItem[];
+}
+

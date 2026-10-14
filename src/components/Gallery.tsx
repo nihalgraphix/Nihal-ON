@@ -52,26 +52,44 @@ export default function Gallery({ onOpenGalleryPage }: GalleryProps = {}) {
   const handleLike = async (e: React.MouseEvent, itemId: string) => {
     e.stopPropagation();
 
-    // Restrict: user can only like one time
-    if (userLikedItems.includes(itemId)) {
-      return;
-    }
+    const isAlreadyLiked = userLikedItems.includes(itemId);
 
-    const updatedUserLiked = [...userLikedItems, itemId];
-    setUserLikedItems(updatedUserLiked);
-    localStorage.setItem('nihal_gallery_user_liked', JSON.stringify(updatedUserLiked));
+    if (isAlreadyLiked) {
+      // Toggle off / unlike: user clicked like twice, so like disappears
+      const updatedUserLiked = userLikedItems.filter(id => id !== itemId);
+      setUserLikedItems(updatedUserLiked);
+      localStorage.setItem('nihal_gallery_user_liked', JSON.stringify(updatedUserLiked));
 
-    setLikesMap(prev => {
-      const current = prev[itemId] || 0;
-      const updated = { ...prev, [itemId]: current + 1 };
-      localStorage.setItem('nihal_gallery_likes', JSON.stringify(updated));
-      return updated;
-    });
+      setLikesMap(prev => {
+        const current = prev[itemId] || 0;
+        const updated = { ...prev, [itemId]: Math.max(0, current - 1) };
+        localStorage.setItem('nihal_gallery_likes', JSON.stringify(updated));
+        return updated;
+      });
 
-    try {
-      await fetch(`/api/gallery/${itemId}/like`, { method: 'POST' });
-    } catch (err) {
-      console.error(err);
+      try {
+        await fetch(`/api/gallery/${itemId}/unlike`, { method: 'POST' });
+      } catch (err) {
+        console.error(err);
+      }
+    } else {
+      // First click: add like
+      const updatedUserLiked = [...userLikedItems, itemId];
+      setUserLikedItems(updatedUserLiked);
+      localStorage.setItem('nihal_gallery_user_liked', JSON.stringify(updatedUserLiked));
+
+      setLikesMap(prev => {
+        const current = prev[itemId] || 0;
+        const updated = { ...prev, [itemId]: current + 1 };
+        localStorage.setItem('nihal_gallery_likes', JSON.stringify(updated));
+        return updated;
+      });
+
+      try {
+        await fetch(`/api/gallery/${itemId}/like`, { method: 'POST' });
+      } catch (err) {
+        console.error(err);
+      }
     }
   };
 
@@ -239,10 +257,14 @@ export default function Gallery({ onOpenGalleryPage }: GalleryProps = {}) {
                       <span>{item.date} Archive</span>
                       <button
                         onClick={(e) => handleLike(e, item.id)}
-                        className="flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-white/10 hover:bg-[#FF5A1F] text-[#FF5A1F] hover:text-black transition-all cursor-pointer border border-white/10 active:scale-95 group/like"
-                        title="Like this photo"
+                        className={`flex items-center gap-1.5 px-2.5 py-0.5 rounded-full transition-all cursor-pointer border active:scale-95 group/like ${
+                          userLikedItems.includes(item.id)
+                            ? 'bg-[#FF5A1F] text-black border-[#FF5A1F] shadow-sm font-bold'
+                            : 'bg-white/10 hover:bg-[#FF5A1F] text-[#FF5A1F] hover:text-black border-white/10'
+                        }`}
+                        title={userLikedItems.includes(item.id) ? "Liked! Click again to remove like" : "Like this photo"}
                       >
-                        <Heart className="h-3 w-3 fill-current group-hover/like:scale-125 transition-transform" />
+                        <Heart className={`h-3 w-3 ${userLikedItems.includes(item.id) ? 'fill-current text-black' : 'fill-current group-hover/like:scale-125 transition-transform'}`} />
                         <span className="font-bold">{(item.likes || 0) + (likesMap[item.id] || 0)}</span>
                       </button>
                     </div>
@@ -410,10 +432,14 @@ export default function Gallery({ onOpenGalleryPage }: GalleryProps = {}) {
                 </div>
                 <button
                   onClick={(e) => handleLike(e, lightboxItem.id)}
-                  className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 hover:bg-[#FF5A1F] text-[#FF5A1F] hover:text-black transition-all cursor-pointer border border-white/10 active:scale-95 group/like text-xs font-space"
-                  title="Like this photo"
+                  className={`flex items-center gap-2 px-3.5 py-1.5 rounded-full transition-all cursor-pointer border active:scale-95 group/like text-xs font-space ${
+                    userLikedItems.includes(lightboxItem.id)
+                      ? 'bg-[#FF5A1F] text-black border-[#FF5A1F] shadow-md font-bold'
+                      : 'bg-white/10 hover:bg-[#FF5A1F] text-[#FF5A1F] hover:text-black border-white/10'
+                  }`}
+                  title={userLikedItems.includes(lightboxItem.id) ? "Liked! Click again to remove like" : "Like this photo"}
                 >
-                  <Heart className="h-4 w-4 fill-current group-hover/like:scale-125 transition-transform" />
+                  <Heart className={`h-4 w-4 ${userLikedItems.includes(lightboxItem.id) ? 'fill-current text-black' : 'fill-current group-hover/like:scale-125 transition-transform'}`} />
                   <span>{(lightboxItem.likes || 0) + (likesMap[lightboxItem.id] || 0)} appreciations</span>
                 </button>
               </div>

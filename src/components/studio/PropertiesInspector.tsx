@@ -217,144 +217,247 @@ export default function PropertiesInspector() {
           </div>
         )}
 
-        {/* 2. CONTENT & TEXT */}
-        {content && (
-          <div className="space-y-2">
-            <button
-              onClick={() => toggleSection('content')}
-              className="w-full flex items-center justify-between text-xs font-semibold text-[#A1A1AA] hover:text-[#F4F4F5] cursor-pointer"
-            >
+        {/* 2. CONTENT & TEXT - Accessible for all kinds of texts and divs */}
+        <div className="space-y-2">
+          <button
+            onClick={() => toggleSection('content')}
+            className="w-full flex items-center justify-between text-xs font-semibold text-[#A1A1AA] hover:text-[#F4F4F5] cursor-pointer"
+          >
+            <span className="flex items-center gap-1.5">
+              <Type className="w-3.5 h-3.5 text-[#FF5A1F]" />
               <span>Content & Text</span>
-              {openSections.content ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronRight className="w-3.5 h-3.5" />}
-            </button>
+            </span>
+            {openSections.content ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronRight className="w-3.5 h-3.5" />}
+          </button>
 
-            {openSections.content && (
-              <div className="space-y-2">
-                {content.text !== undefined && (
-                  <div className="bg-[#202126] p-2.5 rounded-md border border-[#2C2E34]">
-                    <label className="block text-[10px] text-[#71717A] mb-1 uppercase font-mono">
-                      Text Value
-                    </label>
-                    <textarea
-                      rows={2}
-                      value={content.text || ''}
-                      onChange={(e) => updateElementContent(id, { text: e.target.value })}
-                      className="w-full bg-[#111214] border border-[#2C2E34] rounded px-2 py-1 text-xs text-[#F4F4F5] focus:outline-none focus:border-[#FF5A1F] resize-none"
-                    />
-                  </div>
-                )}
-
-                {content.subtext !== undefined && (
-                  <div className="bg-[#202126] p-2.5 rounded-md border border-[#2C2E34]">
-                    <label className="block text-[10px] text-[#71717A] mb-1 uppercase font-mono">
-                      Subtext / Caption
-                    </label>
-                    <textarea
-                      rows={2}
-                      value={content.subtext || ''}
-                      onChange={(e) => updateElementContent(id, { subtext: e.target.value })}
-                      className="w-full bg-[#111214] border border-[#2C2E34] rounded px-2 py-1 text-xs text-[#F4F4F5] focus:outline-none focus:border-[#FF5A1F] resize-none"
-                    />
-                  </div>
-                )}
-
-                {content.link !== undefined && (
-                  <div className="bg-[#202126] p-2.5 rounded-md border border-[#2C2E34]">
-                    <label className="block text-[10px] text-[#71717A] mb-1 uppercase font-mono">
-                      Button Link / Action Destination
-                    </label>
-                    <input
-                      type="text"
-                      value={content.link || ''}
-                      onChange={(e) => updateElementContent(id, { link: e.target.value })}
-                      placeholder="#services, #contact, https://..."
-                      className="w-full bg-[#111214] border border-[#2C2E34] rounded px-2 py-1 text-xs text-[#F4F4F5] focus:outline-none focus:border-[#FF5A1F]"
-                    />
-                  </div>
-                )}
+          {openSections.content && (
+            <div className="space-y-2.5 bg-[#202126] p-3 rounded-lg border border-[#2C2E34]">
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="text-[10px] text-[#A1A1AA] uppercase font-mono">
+                    Text Content / Copy
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const cur = content?.text || '';
+                      updateElementContent(id, { text: cur + '\n\n' });
+                    }}
+                    className="text-[10px] text-[#FF5A1F] hover:underline font-mono cursor-pointer"
+                  >
+                    + Add Break (↵)
+                  </button>
+                </div>
+                <textarea
+                  rows={3}
+                  value={content?.text ?? ''}
+                  onChange={(e) => updateElementContent(id, { text: e.target.value })}
+                  placeholder="Type any text or copy here..."
+                  className="w-full bg-[#111214] border border-[#2C2E34] rounded px-2.5 py-1.5 text-xs text-[#F4F4F5] focus:outline-none focus:border-[#FF5A1F] resize-y whitespace-pre-line"
+                />
               </div>
-            )}
-          </div>
-        )}
 
+              {content?.subtext !== undefined && (
+                <div>
+                  <label className="block text-[10px] text-[#71717A] mb-1 uppercase font-mono">
+                    Subtext / Caption
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={content.subtext || ''}
+                    onChange={(e) => updateElementContent(id, { subtext: e.target.value })}
+                    className="w-full bg-[#111214] border border-[#2C2E34] rounded px-2 py-1 text-xs text-[#F4F4F5] focus:outline-none focus:border-[#FF5A1F] resize-none"
+                  />
+                </div>
+              )}
 
+              {content?.link !== undefined && (
+                <div>
+                  <label className="block text-[10px] text-[#71717A] mb-1 uppercase font-mono">
+                    Button Link / Destination
+                  </label>
+                  <input
+                    type="text"
+                    value={content.link || ''}
+                    onChange={(e) => updateElementContent(id, { link: e.target.value })}
+                    placeholder="#experience, #projects, https://..."
+                    className="w-full bg-[#111214] border border-[#2C2E34] rounded px-2 py-1 text-xs text-[#F4F4F5] focus:outline-none focus:border-[#FF5A1F]"
+                  />
+                </div>
+              )}
+            </div>
+          )}
+        </div>
 
-        {/* 4. TYPOGRAPHY & TEXT STYLES */}
+        {/* 3. TYPOGRAPHY & TEXT PROPERTIES FOR ALL TEXTS */}
         <div className="space-y-2">
           <button
             onClick={() => toggleSection('typography')}
             className="w-full flex items-center justify-between text-xs font-semibold text-[#A1A1AA] hover:text-[#F4F4F5] cursor-pointer"
           >
             <span className="flex items-center gap-1.5">
-              <Type className="w-3.5 h-3.5 text-[#FF5A1F]" />
-              <span>Typography & Styling</span>
+              <Sliders className="w-3.5 h-3.5 text-[#FF5A1F]" />
+              <span>Text Properties & Typography</span>
             </span>
             {openSections.typography ? <ChevronDown className="w-3.5 h-3.5" /> : <ChevronRight className="w-3.5 h-3.5" />}
           </button>
 
           {openSections.typography && (
-            <div className="space-y-2">
+            <div className="space-y-2.5">
+              {/* Text Color with Swatches + Picker */}
+              <div className="bg-[#202126] p-2.5 rounded-md border border-[#2C2E34] space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-[10px] text-[#A1A1AA] font-mono uppercase">Text Color</label>
+                  <div className="flex items-center gap-1.5">
+                    <input
+                      type="color"
+                      value={typography?.textColor?.startsWith('#') ? typography.textColor.slice(0, 7) : '#FFFFFF'}
+                      onChange={(e) => updateElementTypography(id, { textColor: e.target.value })}
+                      className="w-5 h-5 rounded cursor-pointer border border-[#2C2E34] bg-transparent p-0"
+                    />
+                    <input
+                      type="text"
+                      value={typography?.textColor || '#FFFFFF'}
+                      onChange={(e) => updateElementTypography(id, { textColor: e.target.value })}
+                      className="w-20 bg-[#111214] border border-[#2C2E34] rounded px-1.5 py-0.5 text-[11px] text-[#F4F4F5] font-mono text-center"
+                    />
+                  </div>
+                </div>
+
+                {/* Color Preset Palette */}
+                <div className="flex items-center gap-1.5 pt-1">
+                  {[
+                    { color: '#FF5A1F', label: 'Brand Flame' },
+                    { color: '#FFFFFF', label: 'White' },
+                    { color: '#A1A1AA', label: 'Muted Gray' },
+                    { color: '#06B6D4', label: 'Cyber Cyan' },
+                    { color: '#10B981', label: 'Emerald' },
+                    { color: '#A855F7', label: 'Neon Purple' },
+                    { color: '#F59E0B', label: 'Amber Gold' },
+                    { color: '#EF4444', label: 'Crimson' },
+                  ].map((swatch) => (
+                    <button
+                      key={swatch.color}
+                      type="button"
+                      onClick={() => updateElementTypography(id, { textColor: swatch.color })}
+                      title={swatch.label}
+                      style={{ backgroundColor: swatch.color }}
+                      className={`w-5 h-5 rounded-full border transition-transform cursor-pointer hover:scale-110 ${
+                        (typography?.textColor || '#FFFFFF').toLowerCase() === swatch.color.toLowerCase()
+                          ? 'border-white scale-110 ring-1 ring-white/50'
+                          : 'border-[#2C2E34]'
+                      }`}
+                    />
+                  ))}
+                </div>
+              </div>
+
               {/* Font Family */}
               <div className="bg-[#202126] p-2.5 rounded-md border border-[#2C2E34]">
-                <label className="block text-[11px] text-[#A1A1AA] mb-1 font-mono uppercase text-[10px]">Font Family</label>
+                <label className="block text-[10px] text-[#A1A1AA] mb-1 font-mono uppercase">Font Family</label>
                 <select
                   value={typography?.fontFamily || "'Plus Jakarta Sans', sans-serif"}
                   onChange={(e) => updateElementTypography(id, { fontFamily: e.target.value })}
                   className="w-full bg-[#111214] border border-[#2C2E34] rounded px-2.5 py-1 text-xs text-[#F4F4F5] font-mono focus:outline-none focus:border-[#FF5A1F]"
                 >
                   <option value="'Syne', sans-serif">Syne (Display Bold)</option>
-                  <option value="'Space Grotesk', sans-serif">Space Grotesk (Tech)</option>
+                  <option value="'Space Grotesk', sans-serif">Space Grotesk (Tech Monospace)</option>
                   <option value="'Inter', sans-serif">Inter (Clean Sans)</option>
                   <option value="'Plus Jakarta Sans', sans-serif">Plus Jakarta Sans</option>
-                  <option value="'Outfit', sans-serif">Outfit (Modern)</option>
-                  <option value="'Playfair Display', serif">Playfair Display (Serif)</option>
-                  <option value="'Fira Code', monospace">Fira Code (Code Mono)</option>
-                  <option value="'Montserrat', sans-serif">Montserrat (Punchy)</option>
+                  <option value="'Outfit', sans-serif">Outfit (Modern Geometric)</option>
+                  <option value="'Playfair Display', serif">Playfair Display (Editorial Serif)</option>
+                  <option value="'Fira Code', monospace">Fira Code (Developer Mono)</option>
+                  <option value="'Montserrat', sans-serif">Montserrat (Punchy Sans)</option>
                 </select>
               </div>
 
-              {/* Font Size & Weight */}
-              <div className="grid grid-cols-2 gap-2">
-                <div className="bg-[#202126] p-2.5 rounded-md border border-[#2C2E34]">
-                  <label className="block text-[10px] text-[#A1A1AA] mb-1 font-mono uppercase">Font Size</label>
+              {/* Font Size with Preset Pills + Input */}
+              <div className="bg-[#202126] p-2.5 rounded-md border border-[#2C2E34] space-y-2">
+                <div className="flex items-center justify-between">
+                  <label className="text-[10px] text-[#A1A1AA] font-mono uppercase">Font Size</label>
                   <input
                     type="text"
-                    value={typography?.fontSize || '32px'}
+                    value={typography?.fontSize || '24px'}
                     onChange={(e) => updateElementTypography(id, { fontSize: e.target.value })}
-                    placeholder="e.g. 48px, 2.5rem"
-                    className="w-full bg-[#111214] border border-[#2C2E34] rounded px-2 py-1 text-xs text-[#F4F4F5] font-mono focus:outline-none focus:border-[#FF5A1F]"
+                    placeholder="24px, 2rem"
+                    className="w-20 bg-[#111214] border border-[#2C2E34] rounded px-2 py-0.5 text-xs text-[#F4F4F5] font-mono text-center focus:outline-none focus:border-[#FF5A1F]"
                   />
                 </div>
+                {/* Size Presets */}
+                <div className="flex flex-wrap gap-1">
+                  {['12px', '14px', '16px', '18px', '24px', '32px', '48px', '60px'].map((sz) => (
+                    <button
+                      key={sz}
+                      type="button"
+                      onClick={() => updateElementTypography(id, { fontSize: sz })}
+                      className={`px-2 py-0.5 rounded text-[10px] font-mono cursor-pointer transition-colors ${
+                        (typography?.fontSize || '').trim() === sz
+                          ? 'bg-[#FF5A1F] text-black font-bold'
+                          : 'bg-[#111214] text-[#A1A1AA] hover:text-white'
+                      }`}
+                    >
+                      {sz}
+                    </button>
+                  ))}
+                </div>
+              </div>
 
-                <div className="bg-[#202126] p-2.5 rounded-md border border-[#2C2E34]">
-                  <label className="block text-[10px] text-[#A1A1AA] mb-1 font-mono uppercase">Font Weight</label>
-                  <select
-                    value={typography?.fontWeight || '700'}
-                    onChange={(e) => updateElementTypography(id, { fontWeight: e.target.value })}
-                    className="w-full bg-[#111214] border border-[#2C2E34] rounded px-2 py-1 text-xs text-[#F4F4F5] font-mono focus:outline-none focus:border-[#FF5A1F]"
-                  >
-                    <option value="300">300 Light</option>
-                    <option value="400">400 Regular</option>
-                    <option value="500">500 Medium</option>
-                    <option value="600">600 Semibold</option>
-                    <option value="700">700 Bold</option>
-                    <option value="800">800 Extrabold</option>
-                    <option value="900">900 Black</option>
-                  </select>
+              {/* Font Weight */}
+              <div className="bg-[#202126] p-2.5 rounded-md border border-[#2C2E34]">
+                <label className="block text-[10px] text-[#A1A1AA] mb-1 font-mono uppercase">Font Weight</label>
+                <select
+                  value={typography?.fontWeight || '700'}
+                  onChange={(e) => updateElementTypography(id, { fontWeight: e.target.value })}
+                  className="w-full bg-[#111214] border border-[#2C2E34] rounded px-2 py-1 text-xs text-[#F4F4F5] font-mono focus:outline-none focus:border-[#FF5A1F]"
+                >
+                  <option value="300">300 Light</option>
+                  <option value="400">400 Regular</option>
+                  <option value="500">500 Medium</option>
+                  <option value="600">600 Semibold</option>
+                  <option value="700">700 Bold</option>
+                  <option value="800">800 Extrabold</option>
+                  <option value="900">900 Black</option>
+                </select>
+              </div>
+
+              {/* Text Alignment */}
+              <div className="bg-[#202126] p-2.5 rounded-md border border-[#2C2E34]">
+                <label className="block text-[10px] text-[#A1A1AA] mb-1.5 font-mono uppercase">Text Alignment</label>
+                <div className="grid grid-cols-4 gap-1">
+                  {[
+                    { align: 'left', icon: <AlignLeft className="w-3.5 h-3.5" /> },
+                    { align: 'center', icon: <AlignCenter className="w-3.5 h-3.5" /> },
+                    { align: 'right', icon: <AlignRight className="w-3.5 h-3.5" /> },
+                    { align: 'justify', icon: <AlignJustify className="w-3.5 h-3.5" /> },
+                  ].map(({ align, icon }) => (
+                    <button
+                      key={align}
+                      type="button"
+                      onClick={() => updateElementAlignment(id, { textAlign: align as any })}
+                      className={`py-1.5 flex items-center justify-center rounded cursor-pointer transition-colors ${
+                        (alignment?.textAlign || 'left') === align
+                          ? 'bg-[#FF5A1F] text-black font-bold shadow-xs'
+                          : 'bg-[#111214] text-[#A1A1AA] hover:text-white'
+                      }`}
+                    >
+                      {icon}
+                    </button>
+                  ))}
                 </div>
               </div>
 
               {/* Format Toggles: Bold, Italic, Underline, Strikethrough */}
               <div className="bg-[#202126] p-2.5 rounded-md border border-[#2C2E34]">
-                <label className="block text-[10px] text-[#A1A1AA] mb-1 font-mono uppercase">Font Style & Decoration</label>
+                <label className="block text-[10px] text-[#A1A1AA] mb-1 font-mono uppercase">Style & Decoration</label>
                 <div className="grid grid-cols-4 gap-1">
                   <button
+                    type="button"
                     onClick={() => updateElementTypography(id, {
-                      fontWeight: typography?.fontWeight === '700' ? '400' : '700'
+                      fontWeight: (typography?.fontWeight === '700' || typography?.fontWeight === '800' || typography?.fontWeight === '900') ? '400' : '700'
                     })}
-                    className={`py-1 rounded text-xs font-bold ${
+                    className={`py-1 rounded text-xs font-bold cursor-pointer ${
                       typography?.fontWeight === '700' || typography?.fontWeight === '800' || typography?.fontWeight === '900'
-                        ? 'bg-[#FF5A1F] text-white'
+                        ? 'bg-[#FF5A1F] text-black font-bold'
                         : 'bg-[#111214] text-[#A1A1AA] hover:text-white'
                     }`}
                     title="Bold"
@@ -362,12 +465,13 @@ export default function PropertiesInspector() {
                     B
                   </button>
                   <button
+                    type="button"
                     onClick={() => updateElementTypography(id, {
                       fontStyle: typography?.fontStyle === 'italic' ? 'normal' : 'italic'
                     })}
-                    className={`py-1 rounded text-xs italic ${
+                    className={`py-1 rounded text-xs italic cursor-pointer ${
                       typography?.fontStyle === 'italic'
-                        ? 'bg-[#FF5A1F] text-white'
+                        ? 'bg-[#FF5A1F] text-black font-bold'
                         : 'bg-[#111214] text-[#A1A1AA] hover:text-white'
                     }`}
                     title="Italic"
@@ -375,12 +479,13 @@ export default function PropertiesInspector() {
                     I
                   </button>
                   <button
+                    type="button"
                     onClick={() => updateElementTypography(id, {
                       textDecoration: typography?.textDecoration === 'underline' ? 'none' : 'underline'
                     })}
-                    className={`py-1 rounded text-xs underline ${
+                    className={`py-1 rounded text-xs underline cursor-pointer ${
                       typography?.textDecoration === 'underline'
-                        ? 'bg-[#FF5A1F] text-white'
+                        ? 'bg-[#FF5A1F] text-black font-bold'
                         : 'bg-[#111214] text-[#A1A1AA] hover:text-white'
                     }`}
                     title="Underline"
@@ -388,12 +493,13 @@ export default function PropertiesInspector() {
                     U
                   </button>
                   <button
+                    type="button"
                     onClick={() => updateElementTypography(id, {
                       textDecoration: typography?.textDecoration === 'line-through' ? 'none' : 'line-through'
                     })}
-                    className={`py-1 rounded text-xs line-through ${
+                    className={`py-1 rounded text-xs line-through cursor-pointer ${
                       typography?.textDecoration === 'line-through'
-                        ? 'bg-[#FF5A1F] text-white'
+                        ? 'bg-[#FF5A1F] text-black font-bold'
                         : 'bg-[#111214] text-[#A1A1AA] hover:text-white'
                     }`}
                     title="Strikethrough"
@@ -410,10 +516,11 @@ export default function PropertiesInspector() {
                   {(['none', 'uppercase', 'lowercase', 'capitalize'] as const).map(tf => (
                     <button
                       key={tf}
+                      type="button"
                       onClick={() => updateElementTypography(id, { textTransform: tf })}
-                      className={`py-1 rounded text-[10px] font-mono capitalize ${
+                      className={`py-1 rounded text-[10px] font-mono capitalize cursor-pointer ${
                         (typography?.textTransform || 'none') === tf
-                          ? 'bg-[#FF5A1F] text-white font-medium'
+                          ? 'bg-[#FF5A1F] text-black font-bold'
                           : 'bg-[#111214] text-[#A1A1AA] hover:text-white'
                       }`}
                     >
@@ -452,27 +559,8 @@ export default function PropertiesInspector() {
                     <option value="1.4">Normal (1.4)</option>
                     <option value="1.6">Relaxed (1.6)</option>
                     <option value="1.8">Loose (1.8)</option>
-                    <option value="2.2">Double Space (2.2)</option>
+                    <option value="2.2">Double (2.2)</option>
                   </select>
-                </div>
-              </div>
-
-              {/* Enter & Paragraph Spacing */}
-              <div className="bg-[#202126] p-2.5 rounded-md border border-[#2C2E34]">
-                <div className="flex items-center justify-between mb-1">
-                  <label className="block text-[10px] text-[#A1A1AA] font-mono uppercase">Enter / Paragraph Spacing</label>
-                  <span className="text-[10px] text-[#FF5A1F] font-mono font-bold">Line Breaks Allowed</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => {
-                      const currentText = selectedElement?.content?.text || '';
-                      updateElementContent(id, { text: currentText + '\n\n' });
-                    }}
-                    className="w-full bg-[#111214] hover:bg-[#18191E] border border-[#2C2E34] hover:border-[#FF5A1F] text-[#F4F4F5] py-1 px-2 rounded text-[11px] font-mono flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
-                  >
-                    <span>↵ Add Paragraph Break (\n)</span>
-                  </button>
                 </div>
               </div>
 
@@ -489,6 +577,7 @@ export default function PropertiesInspector() {
                   <option value="0 0 15px rgba(255,90,31,0.7)">Flame Glow Orange</option>
                   <option value="0 0 12px rgba(255,255,255,0.8)">Soft White Glow</option>
                   <option value="0 0 15px rgba(6,182,212,0.8)">Cyber Cyan Glow</option>
+                  <option value="0 0 15px rgba(168,85,247,0.8)">Neon Violet Glow</option>
                 </select>
               </div>
 

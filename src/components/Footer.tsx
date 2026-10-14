@@ -46,7 +46,7 @@ export default function Footer({
   ];
 
   return (
-    <footer className="relative bg-[#080808] text-white w-full py-8 sm:py-10 lg:py-12 px-4 sm:px-8 lg:px-12 rounded-t-[28px] sm:rounded-t-[36px] overflow-hidden border-t border-white/10">
+    <footer id="footer" className="relative bg-[#080808] text-white w-full py-8 sm:py-10 lg:py-12 px-4 sm:px-8 lg:px-12 rounded-t-[28px] sm:rounded-t-[36px] overflow-hidden border-t border-white/10">
       {/* Inner Footer Content Container */}
       <div className="mx-auto max-w-7xl relative">
         

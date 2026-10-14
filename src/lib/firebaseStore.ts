@@ -139,6 +139,54 @@ export async function persistStudioData(data: StudioData, isPublish: boolean = f
   return firestoreSuccess || serverSuccess;
 }
 
+// Reset Analytics in both Firestore and Server
+export async function resetAnalyticsData(): Promise<boolean> {
+  let firestoreSuccess = false;
+  let serverSuccess = false;
+
+  // 1. Reset in Firestore
+  try {
+    await withTimeout(setDoc(doc(db, 'portfolio_studio', 'analytics'), {
+      events: [],
+      resetAt: serverTimestamp(),
+      summary: {
+        totalEvents: 0,
+        totalPageViews: 0,
+        todayPageViews: 0,
+        sevenDaysPageViews: 0,
+        thirtyDaysPageViews: 0,
+        contactSubmissions: 0,
+        cvDownloads: 0
+      }
+    }), 3000);
+    firestoreSuccess = true;
+  } catch (err) {
+    console.warn('Firestore analytics reset note:', err);
+  }
+
+  // 2. Reset on Server
+  try {
+    const res = await fetch('/api/studio/analytics/reset', { method: 'POST' });
+    if (res.ok) {
+      serverSuccess = true;
+    }
+  } catch (err) {
+    console.error('Server analytics reset error:', err);
+  }
+
+  // Also clear local storage likes or analytics caches
+  try {
+    localStorage.removeItem('nihal_project_likes');
+    localStorage.removeItem('nihal_blog_likes');
+    localStorage.removeItem('nihal_gallery_likes');
+    localStorage.removeItem('nihal_project_user_liked');
+    localStorage.removeItem('nihal_blog_user_liked');
+    localStorage.removeItem('nihal_gallery_user_liked');
+  } catch {}
+
+  return firestoreSuccess || serverSuccess;
+}
+
 // Load Studio Data (fetches published or draft)
 export async function fetchStudioData(isDraft: boolean = false): Promise<StudioData | null> {
   // 1. Try server first (fastest local response)
