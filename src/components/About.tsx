@@ -70,54 +70,124 @@ const tabs: { id: AboutTab; label: string }[] = [
 const tabContent = {
   story: (
     <div className="space-y-3">
-      <h3 className="font-syne text-xl font-bold text-white">From visual craft to useful code.</h3>
-      <p className="text-sm leading-relaxed text-neutral-300">
+      <EditableText
+        id="about-story-title"
+        as="h3"
+        className="font-syne text-xl font-bold text-white cursor-pointer"
+        defaultText="From visual craft to useful code."
+      >
+        From visual craft to useful code.
+      </EditableText>
+      <EditableText
+        id="about-story-p1"
+        as="p"
+        className="text-sm leading-relaxed text-neutral-300 cursor-pointer"
+        defaultText="I am a creative technologist based in Kochi, combining editorial instincts with modern full-stack engineering."
+      >
         I am a creative technologist based in Kochi, combining editorial instincts with modern full-stack engineering.
-      </p>
-      <p className="text-sm leading-relaxed text-neutral-400">
+      </EditableText>
+      <EditableText
+        id="about-story-p2"
+        as="p"
+        className="text-sm leading-relaxed text-neutral-400 cursor-pointer"
+        defaultText="Every project is shaped around less friction, stronger storytelling, and a product people want to return to."
+      >
         Every project is shaped around less friction, stronger storytelling, and a product people want to return to.
-      </p>
+      </EditableText>
     </div>
   ),
   mission: (
     <div className="space-y-4">
       <div>
         <h3 className="mb-1 flex items-center gap-2 font-syne text-lg font-bold text-white">
-          <Target className="h-4 w-4 text-[#FF5A1F]" /> My mission
+          <Target className="h-4 w-4 text-[#FF5A1F]" />
+          <EditableText
+            id="about-mission-title"
+            as="span"
+            className="cursor-pointer"
+            defaultText="My mission"
+          >
+            My mission
+          </EditableText>
         </h3>
-        <p className="text-sm leading-relaxed text-neutral-300">
+        <EditableText
+          id="about-mission-desc"
+          as="p"
+          className="text-sm leading-relaxed text-neutral-300 cursor-pointer"
+          defaultText="Bridge sharp artistic direction with dependable engineering so digital products feel as clear as they are beautiful."
+        >
           Bridge sharp artistic direction with dependable engineering so digital products feel as clear as they are beautiful.
-        </p>
+        </EditableText>
       </div>
       <div className="border-t border-white/10 pt-4">
         <h3 className="mb-1 flex items-center gap-2 font-syne text-lg font-bold text-white">
-          <Eye className="h-4 w-4 text-[#FF5A1F]" /> My vision
+          <Eye className="h-4 w-4 text-[#FF5A1F]" />
+          <EditableText
+            id="about-vision-title"
+            as="span"
+            className="cursor-pointer"
+            defaultText="My vision"
+          >
+            My vision
+          </EditableText>
         </h3>
-        <p className="text-sm leading-relaxed text-neutral-300">
+        <EditableText
+          id="about-vision-desc"
+          as="p"
+          className="text-sm leading-relaxed text-neutral-300 cursor-pointer"
+          defaultText="Make thoughtful motion, intelligent AI, and accessible interfaces feel standard across every digital touchpoint."
+        >
           Make thoughtful motion, intelligent AI, and accessible interfaces feel standard across every digital touchpoint.
-        </p>
+        </EditableText>
       </div>
     </div>
   ),
   manifesto: (
     <div className="space-y-2.5">
       {[
-        { title: 'Clarity first', content: 'Great systems feel obvious, not overloaded.' },
-        { title: 'Intentional motion', content: 'Animation should guide attention without distraction.' },
-        { title: 'Crafted precision', content: 'Beautiful work still needs dependable performance and clean logic.' },
+        { id: 'manifesto-1', title: 'Clarity first', content: 'Great systems feel obvious, not overloaded.' },
+        { id: 'manifesto-2', title: 'Intentional motion', content: 'Animation should guide attention without distraction.' },
+        { id: 'manifesto-3', title: 'Crafted precision', content: 'Beautiful work still needs dependable performance and clean logic.' },
       ].map((item) => (
-        <div key={item.title} className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
-          <h3 className="mb-1 text-xs font-bold text-[#FF5A1F]">{item.title}</h3>
-          <p className="text-xs leading-relaxed text-neutral-300">{item.content}</p>
+        <div key={item.id} className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
+          <EditableText
+            id={`${item.id}-title`}
+            as="h3"
+            className="mb-1 text-xs font-bold text-[#FF5A1F] cursor-pointer"
+            defaultText={item.title}
+          >
+            {item.title}
+          </EditableText>
+          <EditableText
+            id={`${item.id}-content`}
+            as="p"
+            className="text-xs leading-relaxed text-neutral-300 cursor-pointer"
+            defaultText={item.content}
+          >
+            {item.content}
+          </EditableText>
         </div>
       ))}
     </div>
   ),
   values: (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-      {['Bespoke precision', '60fps motion', 'Type-safe systems', 'Direct collaboration'].map((value) => (
-        <div key={value} className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] p-3 text-sm text-neutral-200">
-          <Check className="h-4 w-4 shrink-0 text-[#FF5A1F]" /> {value}
+      {[
+        { id: 'val-1', text: 'Bespoke precision' },
+        { id: 'val-2', text: '60fps motion' },
+        { id: 'val-3', text: 'Type-safe systems' },
+        { id: 'val-4', text: 'Direct collaboration' },
+      ].map((val) => (
+        <div key={val.id} className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] p-3 text-sm text-neutral-200">
+          <Check className="h-4 w-4 shrink-0 text-[#FF5A1F]" />
+          <EditableText
+            id={`${val.id}-text`}
+            as="span"
+            className="cursor-pointer"
+            defaultText={val.text}
+          >
+            {val.text}
+          </EditableText>
         </div>
       ))}
     </div>

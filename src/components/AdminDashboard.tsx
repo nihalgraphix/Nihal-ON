@@ -1766,15 +1766,42 @@ export default function AdminDashboard() {
                       </div>
 
                       <div>
-                        <label className="text-xs font-space text-neutral-300 block mb-1">
-                          About Portrait Image URL
-                        </label>
-                        <input
-                          type="text"
-                          value={tempSettings.aboutImage}
-                          onChange={(e) => setTempSettings({ ...tempSettings, aboutImage: e.target.value })}
-                          className="w-full px-4 py-2.5 rounded-xl bg-black/50 border border-white/15 text-white text-xs font-mono"
-                        />
+                        <div className="flex items-center justify-between mb-1">
+                          <label className="text-xs font-space text-neutral-300 block">
+                            About Portrait Image (URL or Fast Upload)
+                          </label>
+                          <label className="text-[11px] font-space text-[#FF5A1F] hover:underline cursor-pointer flex items-center gap-1">
+                            <span>Upload New Photo</span>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              onChange={async (e) => {
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                  const compressed = await compressImageFile(file);
+                                  setTempSettings({ ...tempSettings, aboutImage: compressed });
+                                }
+                              }}
+                            />
+                          </label>
+                        </div>
+                        <div className="flex gap-3 items-center">
+                          {tempSettings.aboutImage && (
+                            <img
+                              src={tempSettings.aboutImage}
+                              alt="About Portrait Preview"
+                              className="h-12 w-12 rounded-xl object-cover border border-white/20 shrink-0"
+                            />
+                          )}
+                          <input
+                            type="text"
+                            value={tempSettings.aboutImage}
+                            onChange={(e) => setTempSettings({ ...tempSettings, aboutImage: e.target.value })}
+                            placeholder="Paste image URL or upload photo file..."
+                            className="w-full px-4 py-2.5 rounded-xl bg-black/50 border border-white/15 text-white text-xs font-mono"
+                          />
+                        </div>
                       </div>
                     </div>
 
