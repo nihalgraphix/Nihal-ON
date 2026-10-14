@@ -187,9 +187,36 @@ export const CustomizationProvider: React.FC<{ children: React.ReactNode }> = ({
     }
     return DEFAULT_SITE_SETTINGS;
   });
-  const [projects, setProjects] = useState<Project[]>(INITIAL_PROJECTS);
-  const [blogPosts, setBlogPosts] = useState<BlogPost[]>(INITIAL_BLOG_POSTS);
-  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>(INITIAL_GALLERY_ITEMS);
+  const [projects, setProjects] = useState<Project[]>(() => {
+    try {
+      const cached = localStorage.getItem('portfolio_projects');
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch {}
+    return INITIAL_PROJECTS;
+  });
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>(() => {
+    try {
+      const cached = localStorage.getItem('portfolio_blog_posts');
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch {}
+    return INITIAL_BLOG_POSTS;
+  });
+  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>(() => {
+    try {
+      const cached = localStorage.getItem('portfolio_gallery_items');
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch {}
+    return INITIAL_GALLERY_ITEMS;
+  });
   const [contactMessages, setContactMessages] = useState<ContactMessage[]>([]);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
   const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
@@ -293,8 +320,8 @@ export const CustomizationProvider: React.FC<{ children: React.ReactNode }> = ({
           snapshot.forEach((doc) => {
             loadedProjects.push({ ...doc.data(), id: doc.id } as Project);
           });
-          // Sort by order if present or default
           setProjects(loadedProjects);
+          try { localStorage.setItem('portfolio_projects', JSON.stringify(loadedProjects)); } catch {}
         }
       },
       (error) => {
@@ -312,6 +339,7 @@ export const CustomizationProvider: React.FC<{ children: React.ReactNode }> = ({
             loadedPosts.push({ ...doc.data(), id: doc.id } as BlogPost);
           });
           setBlogPosts(loadedPosts);
+          try { localStorage.setItem('portfolio_blog_posts', JSON.stringify(loadedPosts)); } catch {}
         }
       },
       (error) => {
@@ -329,6 +357,7 @@ export const CustomizationProvider: React.FC<{ children: React.ReactNode }> = ({
             loadedItems.push({ ...doc.data(), id: doc.id } as GalleryItem);
           });
           setGalleryItems(loadedItems);
+          try { localStorage.setItem('portfolio_gallery_items', JSON.stringify(loadedItems)); } catch {}
         }
       },
       (error) => {

@@ -195,6 +195,8 @@ export default function Projects({ onSelectProject }: ProjectsProps) {
                   <img
                     src={card.image}
                     alt={card.title}
+                    loading="lazy"
+                    decoding="async"
                     referrerPolicy="no-referrer"
                     className="absolute inset-0 h-full w-full object-cover object-center filter brightness-95 contrast-105 group-hover:scale-105 transition-transform duration-700 ease-out"
                   />

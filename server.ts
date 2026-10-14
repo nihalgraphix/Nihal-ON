@@ -203,12 +203,14 @@ async function startServer() {
 
   // Get Published Studio Data
   app.get("/api/studio/data", (_req, res) => {
+    res.setHeader("Cache-Control", "public, max-age=10, stale-while-revalidate=60");
     const data = readJsonFile(STUDIO_PUBLISHED_FILE, null);
     res.json({ success: true, data });
   });
 
   // Get Working Draft
   app.get("/api/studio/draft", (_req, res) => {
+    res.setHeader("Cache-Control", "public, max-age=10, stale-while-revalidate=60");
     let draft = readJsonFile(STUDIO_DRAFT_FILE, null);
     if (!draft) {
       draft = readJsonFile(STUDIO_PUBLISHED_FILE, null);
