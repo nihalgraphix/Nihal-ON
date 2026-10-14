@@ -6,6 +6,10 @@ service cloud.firestore {
       allow read, write: if true;
     }
 
+    match /test/{document=**} {
+      allow read, write: if true;
+    }
+
     match /projects/{projectId} {
       allow read, write: if true;
     }
@@ -14,7 +18,15 @@ service cloud.firestore {
       allow read, write: if true;
     }
 
+    match /blog_posts/{postId} {
+      allow read, write: if true;
+    }
+
     match /galleryItems/{itemId} {
+      allow read, write: if true;
+    }
+
+    match /gallery_items/{itemId} {
       allow read, write: if true;
     }
 
@@ -23,6 +35,10 @@ service cloud.firestore {
     }
 
     match /contactMessages/{messageId} {
+      allow read, write, create, update, delete: if true;
+    }
+
+    match /contact_messages/{messageId} {
       allow read, write, create, update, delete: if true;
     }
 
