@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://nihalon.vercel.app/sitemap.xml
+Sitemap: https://nihal-on.vercel.app/sitemap.xml

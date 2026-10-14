@@ -96,7 +96,7 @@ export const DEFAULT_SECTION_SEO: SectionSeoMap = {
     ogImage: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop",
     ogType: "website",
     twitterCard: "summary_large_image",
-    keywords: "Nihal ON, Creative Developer, UX Architect, React 19, Next.js, Three.js, Portfolio, AI Engineer",
+    keywords: "Nihal on, muhaammed nihalon, nihal, on, nihal chakkaraparambu, nihal, othalakuzhy, nihal2010, nihal on 2010, nihaldeveloper, nihal.graphix, Creative Developer, UX Architect, React 19, Next.js, Three.js, Portfolio, AI Engineer",
     canonicalUrl: "https://nihal-on.vercel.app/",
     structuredDataType: "WebApplication"
   },
