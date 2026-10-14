@@ -1,0 +1,146 @@
+{
+  "entities": {
+    "SiteSettings": {
+      "title": "SiteSettings",
+      "description": "Global website layout, colors, personal info, and section customization",
+      "type": "object",
+      "properties": {
+        "accentColor": { "type": "string" },
+        "secondaryColor": { "type": "string" },
+        "themeMode": { "type": "string", "enum": ["dark", "luxury-black", "cyber-neon"] },
+        "siteTitle": { "type": "string" },
+        "heroHeading": { "type": "string" },
+        "heroSubheading": { "type": "string" },
+        "heroTagline": { "type": "string" },
+        "availabilityStatus": { "type": "string" },
+        "aboutHeading": { "type": "string" },
+        "aboutBio": { "type": "string" },
+        "aboutYearsExperience": { "type": "string" },
+        "aboutProjectsCount": { "type": "string" },
+        "aboutClientSatisfaction": { "type": "string" },
+        "aboutImage": { "type": "string" },
+        "resumeUrl": { "type": "string" },
+        "sectionsVisibility": {
+          "type": "object",
+          "properties": {
+            "hero": { "type": "boolean" },
+            "marquee": { "type": "boolean" },
+            "about": { "type": "boolean" },
+            "projects": { "type": "boolean" },
+            "services": { "type": "boolean" },
+            "process": { "type": "boolean" },
+            "skills": { "type": "boolean" },
+            "experience": { "type": "boolean" },
+            "testimonials": { "type": "boolean" },
+            "blog": { "type": "boolean" },
+            "gallery": { "type": "boolean" },
+            "stats": { "type": "boolean" },
+            "faq": { "type": "boolean" },
+            "contact": { "type": "boolean" }
+          }
+        },
+        "updatedAt": { "type": "string" }
+      }
+    },
+    "Project": {
+      "title": "Project",
+      "description": "Portfolio showcase case study",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "subtitle": { "type": "string" },
+        "category": { "type": "string" },
+        "year": { "type": "string" },
+        "client": { "type": "string" },
+        "role": { "type": "string" },
+        "duration": { "type": "string" },
+        "featured": { "type": "boolean" },
+        "coverImage": { "type": "string" },
+        "heroImage": { "type": "string" },
+        "description": { "type": "string" },
+        "challenge": { "type": "string" },
+        "solution": { "type": "string" },
+        "liveUrl": { "type": "string" },
+        "githubUrl": { "type": "string" },
+        "order": { "type": "number" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["title", "category", "coverImage"]
+    },
+    "BlogPost": {
+      "title": "BlogPost",
+      "description": "Editorial article or thought piece",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "excerpt": { "type": "string" },
+        "content": { "type": "string" },
+        "category": { "type": "string" },
+        "readTime": { "type": "string" },
+        "date": { "type": "string" },
+        "author": { "type": "string" },
+        "image": { "type": "string" },
+        "tags": { "type": "array" },
+        "order": { "type": "number" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["title", "content", "category", "image"]
+    },
+    "GalleryItem": {
+      "title": "GalleryItem",
+      "description": "Curated visual gallery showcase image",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "category": { "type": "string" },
+        "image": { "type": "string" },
+        "aspectRatio": { "type": "string" },
+        "date": { "type": "string" },
+        "likes": { "type": "number" },
+        "order": { "type": "number" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["title", "image", "category"]
+    },
+    "ContactMessage": {
+      "title": "ContactMessage",
+      "description": "Client inquiry sent through contact form",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "projectType": { "type": "string" },
+        "budget": { "type": "string" },
+        "message": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "read": { "type": "boolean" }
+      },
+      "required": ["name", "email", "message"]
+    }
+  },
+  "firestore": {
+    "/settings/{settingId}": {
+      "schema": "SiteSettings",
+      "description": "Customizable theme colors, section layouts, and biography"
+    },
+    "/projects/{projectId}": {
+      "schema": "Project",
+      "description": "Portfolio work showcase"
+    },
+    "/blog_posts/{blogId}": {
+      "schema": "BlogPost",
+      "description": "Editorial journal articles"
+    },
+    "/gallery_items/{galleryId}": {
+      "schema": "GalleryItem",
+      "description": "Visual gallery photos"
+    },
+    "/contact_messages/{messageId}": {
+      "schema": "ContactMessage",
+      "description": "Inbound client contact messages"
+    }
+  }
+}

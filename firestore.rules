@@ -1,0 +1,41 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Public website and admin dashboard can read and write all portfolio collections seamlessly
+    match /portfolio_studio/{document=**} {
+      allow read, write: if true;
+    }
+
+    match /projects/{projectId} {
+      allow read, write: if true;
+    }
+
+    match /blogPosts/{postId} {
+      allow read, write: if true;
+    }
+
+    match /galleryItems/{itemId} {
+      allow read, write: if true;
+    }
+
+    match /mediaAssets/{assetId} {
+      allow read, write: if true;
+    }
+
+    match /contactMessages/{messageId} {
+      allow read, write, create, update, delete: if true;
+    }
+
+    match /siteRevisions/{revisionId} {
+      allow read, write: if true;
+    }
+
+    match /analyticsEvents/{eventId} {
+      allow read, write, create: if true;
+    }
+
+    match /settings/{settingId} {
+      allow read, write: if true;
+    }
+  }
+}
