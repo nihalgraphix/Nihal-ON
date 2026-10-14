@@ -10,8 +10,9 @@ const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 export const auth = getAuth(app);
 
 // Initialize Firestore with specific database ID if configured
-export const db = firebaseConfig.firestoreDatabaseId && firebaseConfig.firestoreDatabaseId !== '(default)'
-  ? getFirestore(app, firebaseConfig.firestoreDatabaseId)
+const configWithDbId = firebaseConfig as { firestoreDatabaseId?: string };
+export const db = configWithDbId.firestoreDatabaseId && configWithDbId.firestoreDatabaseId !== '(default)'
+  ? getFirestore(app, configWithDbId.firestoreDatabaseId)
   : getFirestore(app);
 
 // Validate Connection to Firestore on startup

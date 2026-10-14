@@ -47,7 +47,7 @@ import {
 import { useCustomization, DEFAULT_SECTIONS_ORDER } from '../context/CustomizationContext';
 import { Project, BlogPost, GalleryItem, SectionsVisibility, SectionId, SectionStyleConfig } from '../types';
 import { SECTION_DEFAULTS_META, getSectionEffectiveContent } from '../lib/sectionDefaults';
-import { resetAnalyticsData } from '../lib/firebaseStore';
+import { resetAnalyticsData, compressImageDataUrlTo200KB, uploadMediaAsset } from '../lib/firebaseStore';
 import LiveLayoutPreview from './LiveLayoutPreview';
 
 export default function AdminDashboard() {
@@ -175,31 +175,17 @@ export default function AdminDashboard() {
     }
   };
 
-  const compressImageFile = (file: File): Promise<string> => {
+  const compressImageFile = async (file: File): Promise<string> => {
     return new Promise((resolve) => {
       const reader = new FileReader();
-      reader.onload = (e) => {
-        const img = new Image();
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          let width = img.width;
-          let height = img.height;
-          const maxWidth = 1200;
-          if (width > maxWidth) {
-            height = Math.round((height * maxWidth) / width);
-            width = maxWidth;
-          }
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          if (ctx) {
-            ctx.drawImage(img, 0, 0, width, height);
-            resolve(canvas.toDataURL('image/jpeg', 0.82));
-          } else {
-            resolve(e.target?.result as string || '');
-          }
-        };
-        img.src = e.target?.result as string;
+      reader.onload = async (e) => {
+        const rawUrl = (e.target?.result as string) || '';
+        try {
+          const compressed = await compressImageDataUrlTo200KB(rawUrl, 1200, 200);
+          resolve(compressed);
+        } catch {
+          resolve(rawUrl);
+        }
       };
       reader.readAsDataURL(file);
     });
@@ -210,6 +196,9 @@ export default function AdminDashboard() {
     if (file) {
       const compressed = await compressImageFile(file);
       setGalleryUploadPreview(compressed);
+      try {
+        await uploadMediaAsset(compressed, file.name, file.name.split('.')[0], 'Admin Photo');
+      } catch {}
     }
   };
 
