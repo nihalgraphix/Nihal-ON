@@ -21,7 +21,7 @@ export default function Hero({ onOpenResumeModal }: HeroProps) {
   const btn2El = elements['hero-btn-secondary'];
 
   const heroModelEl = elements['hero-model-image'];
-  const heroImageUrl = heroModelEl?.content?.imageUrl;
+  const heroImageUrl = heroModelEl?.content?.imageUrl || aiSprintLeaderImage;
   const isHeroModelVisible = heroModelEl?.visible !== false && heroImageUrl !== '' && heroImageUrl !== 'none';
 
   return (
@@ -75,9 +75,9 @@ export default function Hero({ onOpenResumeModal }: HeroProps) {
                 style={{
                   color: headlineEl?.typography?.textColor || '#FFFFFF',
                   fontSize: headlineEl?.typography?.fontSize || undefined,
-                  fontWeight: headlineEl?.typography?.fontWeight || undefined,
+                  fontWeight: headlineEl?.typography?.fontWeight || '900',
                 }}
-                className="font-syne text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.02]"
+                className="font-syne text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.02]"
                 defaultText="I'm Nihal ON"
               />
             </motion.div>

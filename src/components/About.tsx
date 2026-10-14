@@ -145,7 +145,7 @@ export default function About({ onOpenResumeModal }: AboutProps) {
     }
   };
 
-  const aboutPortraitImageUrl = aboutPortraitEl?.content?.imageUrl;
+  const aboutPortraitImageUrl = aboutPortraitEl?.content?.imageUrl || aboutPortrait;
   const isAboutPortraitVisible = aboutPortraitEl?.visible !== false && aboutPortraitImageUrl !== '' && aboutPortraitImageUrl !== 'none';
 
   return (

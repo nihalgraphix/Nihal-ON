@@ -1,5 +1,6 @@
 import { StudioData, EditableElement } from '../types/studio';
-import { PROJECTS, BLOG_POSTS, GALLERY_ITEMS, PERSONAL_INFO } from './portfolioData';
+import { PROJECTS, BLOG_POSTS, GALLERY_ITEMS, PERSONAL_INFO, aboutPortrait } from './portfolioData';
+import aiSprintLeaderImage from '../components/image/3ebaca72-c048-4ad3-ace0-649046417171.png';
 
 export const INITIAL_ELEMENTS: Record<string, EditableElement> = {
   // Hero section elements
@@ -46,7 +47,7 @@ export const INITIAL_ELEMENTS: Record<string, EditableElement> = {
     },
     typography: {
       fontSize: '48px',
-      fontWeight: '700',
+      fontWeight: '900',
       textColor: '#FFFFFF',
       lineHeight: '1.05',
       textAlign: 'left',
@@ -139,7 +140,7 @@ export const INITIAL_ELEMENTS: Record<string, EditableElement> = {
     parentId: 'hero-section',
     type: 'image',
     content: {
-      imageUrl: '',
+      imageUrl: aiSprintLeaderImage,
       alt: 'Hero Model Portrait',
     },
     appearance: {
@@ -280,7 +281,7 @@ export const INITIAL_ELEMENTS: Record<string, EditableElement> = {
     parentId: 'about-section',
     type: 'image',
     content: {
-      imageUrl: '',
+      imageUrl: aboutPortrait,
       alt: 'Nihal Portrait Photo',
     },
     appearance: {
