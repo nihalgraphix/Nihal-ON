@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { PERSONAL_INFO } from '../data/portfolioData';
 import EditableText from './EditableText';
+import { useCustomization } from '../context/CustomizationContext';
 
 interface FloatingInputProps {
   label: string;
@@ -97,6 +98,7 @@ function FloatingTextArea({ label, value, onChange, required, rows = 4 }: Floati
 }
 
 export default function Contact() {
+  const { saveContactMessage } = useCustomization();
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -116,7 +118,24 @@ export default function Contact() {
 
     let sentSuccessfully = false;
 
-    // 1. Try server API endpoint (/api/contact)
+    // 1. Save to real-time Firestore DB (`contact_messages`) so Admin Dashboard Inbox receives it live
+    try {
+      if (saveContactMessage) {
+        await saveContactMessage({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          phone: formData.phone,
+          country: formData.country,
+          message: formData.message,
+        });
+        sentSuccessfully = true;
+      }
+    } catch (dbErr) {
+      console.warn('Firestore save contact message warning:', dbErr);
+    }
+
+    // 2. Try server API endpoint (/api/contact) for server logging & email dispatch
     try {
       const response = await fetch('/api/contact', {
         method: 'POST',

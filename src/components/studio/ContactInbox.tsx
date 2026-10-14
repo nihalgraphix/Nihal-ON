@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Mail, CheckCircle2, Circle, Trash2, Download, Search, RefreshCw, Eye, MessageSquare } from 'lucide-react';
+import { useCustomization } from '../../context/CustomizationContext';
 
 interface ContactMessage {
   id: string;
@@ -14,10 +15,35 @@ interface ContactMessage {
 }
 
 export default function ContactInbox() {
+  const { contactMessages: ctxMessages, markContactMessageRead, deleteContactMessage } = useCustomization();
   const [messages, setMessages] = useState<ContactMessage[]>([]);
   const [search, setSearch] = useState('');
   const [selectedMessage, setSelectedMessage] = useState<ContactMessage | null>(null);
   const [loading, setLoading] = useState(false);
+
+  // Sync real-time Firestore messages into component display
+  useEffect(() => {
+    if (ctxMessages && ctxMessages.length > 0) {
+      const formattedCtx = ctxMessages.map(m => ({
+        id: m.id,
+        timestamp: m.createdAt ? new Date(m.createdAt).toLocaleDateString("en-US", { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Recently',
+        firstName: m.firstName || '',
+        lastName: m.lastName || '',
+        email: m.email || '',
+        phone: m.phone || '',
+        country: m.country || '',
+        message: m.message || '',
+        read: m.read || false
+      }));
+
+      setMessages(prev => {
+        const mergedMap = new Map<string, ContactMessage>();
+        for (const m of prev) mergedMap.set(m.id, m);
+        for (const m of formattedCtx) mergedMap.set(m.id, m);
+        return Array.from(mergedMap.values()).sort((a, b) => b.id.localeCompare(a.id));
+      });
+    }
+  }, [ctxMessages]);
 
   const fetchMessages = () => {
     setLoading(true);
@@ -25,7 +51,12 @@ export default function ContactInbox() {
       .then(res => res.json())
       .then(data => {
         if (data.success && data.messages) {
-          setMessages(data.messages);
+          setMessages(prev => {
+            const mergedMap = new Map<string, ContactMessage>();
+            for (const m of data.messages) mergedMap.set(m.id, m);
+            for (const m of prev) mergedMap.set(m.id, m);
+            return Array.from(mergedMap.values()).sort((a, b) => b.id.localeCompare(a.id));
+          });
         }
       })
       .catch(() => {})
@@ -37,6 +68,9 @@ export default function ContactInbox() {
   }, []);
 
   const toggleRead = async (id: string) => {
+    if (markContactMessageRead) {
+      markContactMessageRead(id);
+    }
     try {
       const res = await fetch(`/api/messages/${id}/read`, { method: 'PATCH' });
       if (res.ok) {
@@ -48,6 +82,9 @@ export default function ContactInbox() {
   };
 
   const deleteMsg = async (id: string) => {
+    if (deleteContactMessage) {
+      deleteContactMessage(id);
+    }
     try {
       const res = await fetch(`/api/messages/${id}`, { method: 'DELETE' });
       if (res.ok) {

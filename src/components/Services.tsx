@@ -19,9 +19,11 @@ import {
 } from 'lucide-react';
 import { useStudio } from '../context/StudioContext';
 import EditableText from './EditableText';
+import { useCustomization } from '../context/CustomizationContext';
 
 export default function Services() {
   const { publishedData } = useStudio();
+  const { saveContactMessage } = useCustomization();
   const elements = publishedData?.elements || {};
   const [selectedService, setSelectedService] = useState<any | null>(null);
 
@@ -57,6 +59,16 @@ export default function Services() {
     if (!inquiryEmail.trim()) return;
     setIsSubmitting(true);
     try {
+      if (saveContactMessage) {
+        await saveContactMessage({
+          firstName: inquiryName || 'Prospective Client',
+          lastName: `[${selectedService?.title || 'Service'}]`,
+          email: inquiryEmail,
+          phone: inquiryBudget || '',
+          country: inquiryTimeline || '',
+          message: `[SERVICE INQUIRY: ${selectedService?.title || 'General'}]\nTimeline/Scope: ${inquiryTimeline}\nBudget: ${inquiryBudget}\n\nClient Details:\n${inquiryDetails}`,
+        });
+      }
       await fetch('/api/services/inquire', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
