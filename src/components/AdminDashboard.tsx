@@ -2498,6 +2498,21 @@ export default function AdminDashboard() {
                               />
                             </div>
                             <div className="sm:col-span-2">
+                              <label className="text-xs font-space text-neutral-300 block mb-1">
+                                Case Study Gallery Image URLs (One URL per line)
+                              </label>
+                              <textarea
+                                rows={2}
+                                value={(editingProject.galleryImages || []).join('\n')}
+                                onChange={(e) => setEditingProject({ 
+                                  ...editingProject, 
+                                  galleryImages: e.target.value.split('\n').map(s => s.trim()).filter(Boolean) 
+                                })}
+                                placeholder="https://images.unsplash.com/photo-1...\nhttps://images.unsplash.com/photo-2..."
+                                className="w-full px-3 py-2 rounded-xl bg-black/50 border border-white/15 text-white text-xs font-mono"
+                              />
+                            </div>
+                            <div className="sm:col-span-2">
                               <label className="text-xs font-space text-neutral-300 block mb-1">Description</label>
                               <textarea
                                 rows={3}
@@ -2770,20 +2785,34 @@ export default function AdminDashboard() {
                               <p className="text-xs font-space font-bold text-white line-clamp-1">{item.title}</p>
                               <div className="flex items-center justify-between mt-2 pt-2 border-t border-white/10">
                                 <span className="text-[10px] font-space text-neutral-400">{item.likes} Likes</span>
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setDeleteConfirmation({
-                                      type: 'gallery',
-                                      id: item.id,
-                                      title: item.title,
-                                    });
-                                  }}
-                                  className="p-1 rounded bg-rose-500/20 text-rose-300 hover:bg-rose-500 hover:text-white transition-colors cursor-pointer"
-                                  title="Delete Photo"
-                                >
-                                  <Trash2 className="h-3 w-3" />
-                                </button>
+                                <div className="flex items-center gap-1.5">
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      setGalleryUploadPreview('');
+                                      setEditingGallery(item);
+                                      setIsAddingGallery(false);
+                                    }}
+                                    className="p-1 rounded bg-white/10 text-white hover:bg-white/20 transition-colors cursor-pointer"
+                                    title="Edit Photo URL & Details"
+                                  >
+                                    <Edit3 className="h-3 w-3" />
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      setDeleteConfirmation({
+                                        type: 'gallery',
+                                        id: item.id,
+                                        title: item.title,
+                                      });
+                                    }}
+                                    className="p-1 rounded bg-rose-500/20 text-rose-300 hover:bg-rose-500 hover:text-white transition-colors cursor-pointer"
+                                    title="Delete Photo"
+                                  >
+                                    <Trash2 className="h-3 w-3" />
+                                  </button>
+                                </div>
                               </div>
                             </div>
                           </div>
@@ -2791,82 +2820,116 @@ export default function AdminDashboard() {
                       ))}
                     </div>
 
-                    {/* Gallery Upload Modal */}
+                    {/* Gallery Upload / URL Modal */}
                     {editingGallery && (
                       <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4">
                         <div className="w-full max-w-lg p-6 rounded-3xl bg-[#121218] border border-white/15 space-y-4">
                           <div className="flex items-center justify-between border-b border-white/10 pb-3">
-                            <h4 className="font-syne text-lg font-bold text-white">Upload New Photo</h4>
+                            <h4 className="font-syne text-lg font-bold text-white">
+                              {isAddingGallery ? 'Add Gallery Photo' : 'Edit Gallery Photo'}
+                            </h4>
                             <button
-                              onClick={() => setEditingGallery(null)}
-                              className="p-1 rounded-lg text-neutral-400 hover:text-white"
+                              onClick={() => {
+                                setEditingGallery(null);
+                                setGalleryUploadPreview('');
+                              }}
+                              className="p-1 rounded-lg text-neutral-400 hover:text-white cursor-pointer"
                             >
                               <X className="h-5 w-5" />
                             </button>
                           </div>
 
-                          {/* Image File Selector or URL input */}
-                          <div className="space-y-3">
-                            <label className="text-xs font-space text-neutral-300 block font-medium">
-                              Select Image File or Enter URL
-                            </label>
-
-                            <input
-                              type="file"
-                              ref={fileInputRef}
-                              accept="image/*"
-                              onChange={handleImageFileUpload}
-                              className="hidden"
-                            />
-
-                            <div
-                              onClick={() => fileInputRef.current?.click()}
-                              className="border-2 border-dashed border-white/20 hover:border-[#FF5A1F] rounded-2xl p-6 text-center cursor-pointer transition-colors bg-black/40"
-                            >
-                              {galleryUploadPreview || editingGallery.image ? (
-                                <div className="space-y-2">
-                                  <img
-                                    src={galleryUploadPreview || editingGallery.image}
-                                    alt="Preview"
-                                    className="max-h-40 mx-auto rounded-xl object-cover"
-                                  />
-                                  <span className="text-xs font-space text-[#FF5A1F]">Click to change image</span>
-                                </div>
-                              ) : (
-                                <div className="space-y-2 text-neutral-400">
-                                  <Upload className="h-8 w-8 mx-auto" />
-                                  <p className="text-xs font-space">Click to upload image file from device</p>
-                                  <p className="text-[10px] text-neutral-500">PNG, JPG, WEBP up to 5MB</p>
-                                </div>
-                              )}
-                            </div>
-
+                          <div className="space-y-4">
+                            {/* Image URL Input */}
                             <div>
-                              <label className="text-xs font-space text-neutral-400 block mb-1">
-                                Or Image URL:
+                              <label className="text-xs font-space text-neutral-200 block font-medium mb-1.5">
+                                Gallery Image URL <span className="text-[#FF5A1F]">*</span>
                               </label>
+                              <div className="relative">
+                                <input
+                                  type="text"
+                                  value={editingGallery.image}
+                                  onChange={(e) => {
+                                    setEditingGallery({ ...editingGallery, image: e.target.value });
+                                    setGalleryUploadPreview('');
+                                  }}
+                                  placeholder="https://images.unsplash.com/... or https://firebasestorage.googleapis.com/..."
+                                  className="w-full px-3 py-2.5 rounded-xl bg-black/60 border border-white/20 text-white text-xs font-mono focus:border-[#FF5A1F] focus:outline-none transition-colors pr-8"
+                                />
+                                {editingGallery.image && (
+                                  <button
+                                    type="button"
+                                    onClick={() => {
+                                      setEditingGallery({ ...editingGallery, image: '' });
+                                      setGalleryUploadPreview('');
+                                    }}
+                                    className="absolute right-2.5 top-2.5 text-neutral-400 hover:text-white text-xs"
+                                    title="Clear URL"
+                                  >
+                                    <X className="h-4 w-4" />
+                                  </button>
+                                )}
+                              </div>
+                              <p className="text-[10px] text-neutral-400 mt-1 font-space">
+                                Paste any image URL, Unsplash link, or Firebase Storage URL.
+                              </p>
+                            </div>
+
+                            {/* Or Device Upload */}
+                            <div className="space-y-1.5">
+                              <label className="text-xs font-space text-neutral-400 block font-medium">
+                                Or Upload Image File from Device:
+                              </label>
+
                               <input
-                                type="text"
-                                value={editingGallery.image}
-                                onChange={(e) => setEditingGallery({ ...editingGallery, image: e.target.value })}
-                                placeholder="https://images.unsplash.com/..."
-                                className="w-full px-3 py-2 rounded-xl bg-black/50 border border-white/15 text-white text-xs font-mono"
+                                type="file"
+                                ref={fileInputRef}
+                                accept="image/*"
+                                onChange={handleImageFileUpload}
+                                className="hidden"
                               />
+
+                              <div
+                                onClick={() => fileInputRef.current?.click()}
+                                className="border-2 border-dashed border-white/20 hover:border-[#FF5A1F] rounded-2xl p-4 text-center cursor-pointer transition-colors bg-black/40"
+                              >
+                                {galleryUploadPreview || editingGallery.image ? (
+                                  <div className="space-y-2">
+                                    <img
+                                      src={galleryUploadPreview || editingGallery.image}
+                                      alt="Preview"
+                                      className="max-h-36 mx-auto rounded-xl object-cover border border-white/10"
+                                      onError={(e) => {
+                                        (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80';
+                                      }}
+                                    />
+                                    <span className="text-[11px] font-space text-[#FF5A1F] inline-block font-medium">
+                                      Click to change device photo
+                                    </span>
+                                  </div>
+                                ) : (
+                                  <div className="space-y-1 text-neutral-400 py-1">
+                                    <Upload className="h-6 w-6 mx-auto" />
+                                    <p className="text-xs font-space">Click to select an image from your device</p>
+                                    <p className="text-[10px] text-neutral-500">Auto-compressed to &lt; 200KB</p>
+                                  </div>
+                                )}
+                              </div>
                             </div>
 
                             <div>
-                              <label className="text-xs font-space text-neutral-300 block mb-1">Title</label>
+                              <label className="text-xs font-space text-neutral-300 block mb-1 font-medium">Title</label>
                               <input
                                 type="text"
                                 value={editingGallery.title}
                                 onChange={(e) => setEditingGallery({ ...editingGallery, title: e.target.value })}
-                                placeholder="Cybernetic Silhouette"
+                                placeholder="e.g. Cybernetic Portrait"
                                 className="w-full px-3 py-2 rounded-xl bg-black/50 border border-white/15 text-white text-xs"
                               />
                             </div>
 
                             <div>
-                              <label className="text-xs font-space text-neutral-300 block mb-1">Category</label>
+                              <label className="text-xs font-space text-neutral-300 block mb-1 font-medium">Category</label>
                               <select
                                 value={editingGallery.category}
                                 onChange={(e) => setEditingGallery({ ...editingGallery, category: e.target.value as any })}
@@ -2883,8 +2946,11 @@ export default function AdminDashboard() {
 
                           <div className="flex justify-end gap-3 pt-3 border-t border-white/10">
                             <button
-                              onClick={() => setEditingGallery(null)}
-                              className="px-4 py-2 rounded-xl text-xs font-space text-neutral-400 hover:text-white"
+                              onClick={() => {
+                                setEditingGallery(null);
+                                setGalleryUploadPreview('');
+                              }}
+                              className="px-4 py-2 rounded-xl text-xs font-space text-neutral-400 hover:text-white cursor-pointer"
                             >
                               Cancel
                             </button>
@@ -2892,7 +2958,7 @@ export default function AdminDashboard() {
                               onClick={async () => {
                                 const finalImage = galleryUploadPreview || editingGallery.image;
                                 if (!finalImage) {
-                                  alert('Please upload an image or provide a valid image URL');
+                                  alert('Please enter an image URL or upload an image file');
                                   return;
                                 }
                                 await saveGalleryItem({
@@ -2900,9 +2966,10 @@ export default function AdminDashboard() {
                                   image: finalImage,
                                 });
                                 setEditingGallery(null);
+                                setGalleryUploadPreview('');
                               }}
                               style={{ backgroundColor: settings.accentColor }}
-                              className="px-5 py-2 rounded-xl font-space font-bold text-xs text-black"
+                              className="px-5 py-2 rounded-xl font-space font-bold text-xs text-black cursor-pointer"
                             >
                               Save to Firebase
                             </button>
