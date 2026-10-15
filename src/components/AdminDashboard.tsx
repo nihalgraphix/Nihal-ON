@@ -2800,7 +2800,7 @@ export default function AdminDashboard() {
                                   {isVideoAsset ? (
                                     <video
                                       src={item.image}
-                                      className="h-full w-full object-cover"
+                                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
                                       muted
                                       loop
                                       playsInline
@@ -2811,7 +2811,7 @@ export default function AdminDashboard() {
                                     <img
                                       src={item.image}
                                       alt={item.title}
-                                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
                                       onError={(e) => {
                                         (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80';
                                       }}

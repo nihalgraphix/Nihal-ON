@@ -1,6 +1,7 @@
 import { BRANDS, AWARDS } from '../data/portfolioData';
 import { Award, Trophy, Star } from 'lucide-react';
 import { useStudio } from '../context/StudioContext';
+import EditableText from './EditableText';
 
 export default function Marquee() {
   const { publishedData, draftData, isStudioOpen } = useStudio();
@@ -65,20 +66,20 @@ export default function Marquee() {
                   ? `translate(${elements[`awards-highlight-${i + 1}`]?.spacing?.transformX || 0}px, ${elements[`awards-highlight-${i + 1}`]?.spacing?.transformY || 0}px)`
                   : undefined,
               }}
-              className="glass-card glass-card-hover p-4 rounded-2xl flex items-center gap-4 cursor-pointer"
-            >
-              <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-[#FF5A1F]/10 text-[#FF5A1F] border border-[#FF5A1F]/30">
-                <Trophy className="h-5 w-5" />
-              </div>
-              <div className="min-w-0">
-                <div className="flex items-center justify-between text-[11px] font-space text-[#FF5A1F]">
-                  <span>{award.title}</span>
-                  <span>{award.year}</span>
+              className="glass-card flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-4 backdrop-blur-md transition-all hover:bg-white/[0.06] hover:border-[#FF5A1F]/30"
+              >
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-[#FF5A1F]/10 text-[#FF5A1F] border border-[#FF5A1F]/30">
+                  <Trophy className="h-5 w-5" />
                 </div>
-                <h4 className="text-xs font-syne font-bold text-white truncate">{award.project}</h4>
-                <p className="text-[10px] text-neutral-400 truncate">{award.category}</p>
+                <div className="min-w-0">
+                  <div className="flex items-center justify-between text-[11px] font-space text-[#FF5A1F]">
+                    <EditableText id={`award-${i + 1}-title`} as="span" defaultText={award.title}>{award.title}</EditableText>
+                    <EditableText id={`award-${i + 1}-year`} as="span" defaultText={award.year}>{award.year}</EditableText>
+                  </div>
+                  <EditableText id={`award-${i + 1}-project`} as="h4" className="text-xs font-syne font-bold text-white truncate" defaultText={award.project}>{award.project}</EditableText>
+                  <EditableText id={`award-${i + 1}-category`} as="p" className="text-[10px] text-neutral-400 truncate" defaultText={award.category}>{award.category}</EditableText>
+                </div>
               </div>
-            </div>
           ))}
         </div>
       </div>

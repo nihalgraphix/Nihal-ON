@@ -553,24 +553,16 @@ export default function About({ onOpenResumeModal }: AboutProps) {
               <div className="space-y-7">
                 <div>
                   <span className="text-xs font-mono text-[#FF5A1F] font-semibold tracking-wide">2023 - PRESENT</span>
-                  <h5 className="mt-1 text-base font-syne font-bold text-white">
-                    {elements['about-experience-1']?.content?.text?.split('\n')[0] || 'Lead Creative Technologist & Director'}
-                  </h5>
-                  <p className="mt-0.5 text-xs text-neutral-400">
-                    {elements['about-experience-1']?.content?.text?.split('\n')[1] || 'NIHAL Creative Studio'}
-                  </p>
+                  <EditableText id="about-experience-1-title" as="h5" className="mt-1 text-base font-syne font-bold text-white" defaultText="Lead Creative Technologist & Director">{elements['about-experience-1']?.content?.text?.split('\n')[0] || 'Lead Creative Technologist & Director'}</EditableText>
+                  <EditableText id="about-experience-1-company" as="p" className="mt-0.5 text-xs text-neutral-400" defaultText="NIHAL Creative Studio">{elements['about-experience-1']?.content?.text?.split('\n')[1] || 'NIHAL Creative Studio'}</EditableText>
                 </div>
                 <div 
                   data-editable-id="about-experience-2"
                   className="border-t border-white/5 pt-6 cursor-pointer"
                 >
                   <span className="text-xs font-mono text-neutral-500 font-medium tracking-wide">2021 - 2023</span>
-                  <h5 className="mt-1 text-base font-syne font-bold text-white">
-                    {elements['about-experience-2']?.content?.text?.split('\n')[0] || 'Senior UI/UX Architect & Staff Engineer'}
-                  </h5>
-                  <p className="mt-0.5 text-xs text-neutral-400">
-                    {elements['about-experience-2']?.content?.text?.split('\n')[1] || 'Aetheria AI Labs'}
-                  </p>
+                  <EditableText id="about-experience-2-title" as="h5" className="mt-1 text-base font-syne font-bold text-white" defaultText="Senior UI/UX Architect & Staff Engineer">{elements['about-experience-2']?.content?.text?.split('\n')[0] || 'Senior UI/UX Architect & Staff Engineer'}</EditableText>
+                  <EditableText id="about-experience-2-company" as="p" className="mt-0.5 text-xs text-neutral-400" defaultText="Aetheria AI Labs">{elements['about-experience-2']?.content?.text?.split('\n')[1] || 'Aetheria AI Labs'}</EditableText>
                 </div>
               </div>
             </motion.div>
@@ -590,24 +582,16 @@ export default function About({ onOpenResumeModal }: AboutProps) {
               <div className="space-y-7">
                 <div>
                   <span className="text-xs font-mono text-[#FF5A1F] font-semibold tracking-wide">2018 - 2022</span>
-                  <h5 className="mt-1 text-base font-syne font-bold text-white">
-                    {elements['about-education-1']?.content?.text?.split('\n')[0] || 'Bachelor Degree in Computer Science & Interactive Media'}
-                  </h5>
-                  <p className="mt-0.5 text-xs text-neutral-400">
-                    {elements['about-education-1']?.content?.text?.split('\n')[1] || 'University of California, Berkeley'}
-                  </p>
+                  <EditableText id="about-education-1-title" as="h5" className="mt-1 text-base font-syne font-bold text-white" defaultText="Bachelor Degree in Computer Science & Interactive Media">{elements['about-education-1']?.content?.text?.split('\n')[0] || 'Bachelor Degree in Computer Science & Interactive Media'}</EditableText>
+                  <EditableText id="about-education-1-school" as="p" className="mt-0.5 text-xs text-neutral-400" defaultText="University of California, Berkeley">{elements['about-education-1']?.content?.text?.split('\n')[1] || 'University of California, Berkeley'}</EditableText>
                 </div>
                 <div 
                   data-editable-id="about-education-2"
                   className="border-t border-white/5 pt-6 cursor-pointer"
                 >
                   <span className="text-xs font-mono text-neutral-500 font-medium tracking-wide">2022 - 2024</span>
-                  <h5 className="mt-1 text-base font-syne font-bold text-white">
-                    {elements['about-education-2']?.content?.text?.split('\n')[0] || 'Master Degree in Human-Computer Interaction'}
-                  </h5>
-                  <p className="mt-0.5 text-xs text-neutral-400">
-                    {elements['about-education-2']?.content?.text?.split('\n')[1] || 'Stanford University Center for Design Research'}
-                  </p>
+                  <EditableText id="about-education-2-title" as="h5" className="mt-1 text-base font-syne font-bold text-white" defaultText="Master Degree in Human-Computer Interaction">{elements['about-education-2']?.content?.text?.split('\n')[0] || 'Master Degree in Human-Computer Interaction'}</EditableText>
+                  <EditableText id="about-education-2-school" as="p" className="mt-0.5 text-xs text-neutral-400" defaultText="Stanford University Center for Design Research">{elements['about-education-2']?.content?.text?.split('\n')[1] || 'Stanford University Center for Design Research'}</EditableText>
                 </div>
               </div>
             </motion.div>
