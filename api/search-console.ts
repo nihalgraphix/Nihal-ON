@@ -74,7 +74,7 @@ export default async function handler(req: any, res: any) {
   }
 
   const dashboardToken = process.env.SEARCH_CONSOLE_DASHBOARD_TOKEN;
-  const suppliedToken = req.headers.authorization?.replace(/^Bearer\\s+/i, '');
+  const suppliedToken = req.headers.authorization?.replace(/^Bearer\s+/i, '');
   if (!dashboardToken || !suppliedToken || suppliedToken !== dashboardToken) {
     return res.status(401).json({ error: 'Dashboard authentication required.' });
   }
