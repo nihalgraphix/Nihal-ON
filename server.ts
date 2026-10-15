@@ -356,6 +356,18 @@ async function startServer() {
     }
   });
 
+  // Search Console Analytics Endpoint
+  app.get("/api/search-console", async (req, res) => {
+    try {
+      const searchConsoleModule = await import("./api/search-console");
+      const handler = searchConsoleModule.default;
+      return handler(req, res);
+    } catch (err: any) {
+      console.error("Search Console route error:", err);
+      return res.status(500).json({ error: "Failed to process Search Console query", details: err?.message });
+    }
+  });
+
   app.get("/api/studio/analytics", (_req, res) => {
     const events: AnalyticsEvent[] = readJsonFile(STUDIO_ANALYTICS_FILE, []);
     const now = new Date();
@@ -645,6 +657,60 @@ async function startServer() {
         success: true,
         message: "Message received successfully."
       });
+    }
+  });
+
+  // Reply via Email Endpoint
+  app.post("/api/contact/reply", async (req, res) => {
+    try {
+      const { messageId, toEmail, recipientName, subject, replyText } = req.body;
+      if (!toEmail || !replyText) {
+        return res.status(400).json({ error: "Recipient email and reply text are required." });
+      }
+
+      const timestamp = new Date().toLocaleString("en-US", { timeZoneName: "short" });
+      const newReply = {
+        id: `rep_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`,
+        timestamp,
+        text: replyText,
+        sentBy: "Nihal Mohammed (Admin)"
+      };
+
+      // Find and update message in local server store if present
+      const targetMsg = messagesStore.find((m: any) => m.id === messageId);
+      if (targetMsg) {
+        if (!(targetMsg as any).replies) (targetMsg as any).replies = [];
+        (targetMsg as any).replies.push(newReply);
+        saveMessages();
+      }
+
+      // Dispatch real email via FormSubmit AJAX to recipient's inbox
+      try {
+        await fetch(`https://formsubmit.co/ajax/${toEmail}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify({
+            _subject: subject || `Re: Response from Nihal . ON`,
+            _replyto: "nihal.graphix@gmail.com",
+            "Message": replyText,
+            "Sent By": "Nihal Mohammed — Creative Developer & Graphic Designer"
+          })
+        });
+      } catch (fErr) {
+        console.warn("FormSubmit email reply dispatch warning:", fErr);
+      }
+
+      return res.json({
+        success: true,
+        message: "Email reply dispatched successfully",
+        reply: newReply
+      });
+    } catch (err: any) {
+      console.error("Error sending email reply:", err);
+      return res.status(500).json({ error: "Failed to send email reply", details: err?.message });
     }
   });
 

@@ -60,14 +60,30 @@ export interface SocialLinks {
   dribbble?: string;
 }
 
+export interface MessageReply {
+  id: string;
+  timestamp: string;
+  text: string;
+  sentBy: string;
+}
+
 export interface ContactMessage {
   id: string;
   name: string;
+  firstName?: string;
+  lastName?: string;
   email: string;
   subject?: string;
   message: string;
   createdAt: string;
   read?: boolean;
+  phone?: string;
+  country?: string;
+  replies?: MessageReply[];
+  isStarred?: boolean;
+  isArchived?: boolean;
+  isPinned?: boolean;
+  category?: 'focused' | 'other';
 }
 
 export interface SkillItem {

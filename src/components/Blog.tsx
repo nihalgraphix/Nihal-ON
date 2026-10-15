@@ -21,6 +21,7 @@ import {
   Linkedin
 } from 'lucide-react';
 import { useStudio } from '../context/StudioContext';
+import LazyImage from './LazyImage';
 
 export default function Blog() {
   const { publishedData } = useStudio();
@@ -497,12 +498,10 @@ export default function Blog() {
                 >
                   {/* Card Background Image & Dark Luxury Overlay */}
                   <div className="absolute inset-0 z-0 bg-[#0d0d10] overflow-hidden">
-                    <img
+                    <LazyImage
                       src={post.image}
                       alt={post.title}
-                      loading="lazy"
-                      decoding="async"
-                      referrerPolicy="no-referrer"
+                      wrapperClassName="h-full w-full"
                       className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
                     />
                     {/* Gradient Overlay for high-contrast reading */}
@@ -696,10 +695,10 @@ export default function Blog() {
               </div>
 
               <div className="aspect-[16/9] w-full rounded-2xl overflow-hidden bg-[#111111]">
-                <img
+                <LazyImage
                   src={selectedPost.image}
                   alt={selectedPost.title}
-                  referrerPolicy="no-referrer"
+                  wrapperClassName="h-full w-full"
                   className="h-full w-full object-cover"
                 />
               </div>

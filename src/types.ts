@@ -107,11 +107,12 @@ export interface BlogPost {
 export interface GalleryItem {
   id: string;
   title: string;
-  category: 'Photography' | 'Branding' | 'UI' | 'Motion' | 'Concepts';
+  category: string;
   image: string;
-  aspectRatio: 'aspect-square' | 'aspect-[4/5]' | 'aspect-[16/9]' | 'aspect-[3/4]';
+  aspectRatio: 'aspect-square' | 'aspect-[4/5]' | 'aspect-[16/9]' | 'aspect-[3/4]' | string;
   date: string;
   likes: number;
+  description?: string;
 }
 
 export interface FAQItem {
@@ -192,9 +193,18 @@ export interface SocialLinks {
   email?: string;
 }
 
+export interface MessageReply {
+  id: string;
+  timestamp: string;
+  text: string;
+  sentBy: string;
+}
+
 export interface ContactMessage {
   id: string;
   name: string;
+  firstName?: string;
+  lastName?: string;
   email: string;
   subject?: string;
   message: string;
@@ -202,5 +212,10 @@ export interface ContactMessage {
   read?: boolean;
   phone?: string;
   country?: string;
+  replies?: MessageReply[];
+  isStarred?: boolean;
+  isArchived?: boolean;
+  isPinned?: boolean;
+  category?: 'focused' | 'other';
 }
 

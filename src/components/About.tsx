@@ -17,6 +17,7 @@ import {
 import { PERSONAL_INFO, aboutPortrait } from '../data/portfolioData';
 import { useStudio } from '../context/StudioContext';
 import EditableText from './EditableText';
+import LazyImage from './LazyImage';
 
 function StarburstIcon({ className = 'w-6 h-6 sm:w-8 sm:h-8 text-[#FF5A1F]' }: { className?: string }) {
   return (
@@ -296,15 +297,14 @@ export default function About({ onOpenResumeModal }: AboutProps) {
                 }}
                 className="group relative min-h-[360px] overflow-hidden rounded-[26px] border border-white/10 bg-[#111113] sm:col-span-2 lg:col-span-5 lg:row-span-2 xl:col-span-5 cursor-pointer"
               >
-                <img
+                <LazyImage
                   src={aboutPortraitImageUrl || aboutPortrait}
                   alt={aboutPortraitEl?.content?.alt || 'Nihal . ON studio portrait'}
-                  loading="eager"
-                  decoding="async"
+                  wrapperClassName="absolute inset-0 h-full w-full"
                   style={{
                     borderRadius: aboutPortraitEl?.appearance?.borderRadius || undefined,
                   }}
-                  className="absolute inset-0 h-full w-full object-cover object-center grayscale-[0.15] transition-transform duration-700 group-hover:scale-105"
+                  className="h-full w-full object-cover object-center grayscale-[0.15] transition-transform duration-700 group-hover:scale-105"
                 />
                 <div className="absolute left-5 top-5 flex items-center gap-2 rounded-full border border-white/15 bg-black/40 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white backdrop-blur-md">
                   <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 shrink-0" />

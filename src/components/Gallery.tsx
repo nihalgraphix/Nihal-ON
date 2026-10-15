@@ -4,6 +4,7 @@ import { GALLERY_ITEMS, PERSONAL_INFO } from '../data/portfolioData';
 import { GalleryItem } from '../types';
 import { ChevronLeft, ChevronRight, ArrowUpRight, Maximize2, Heart, X, Sparkles } from 'lucide-react';
 import { useStudio } from '../context/StudioContext';
+import LazyImage from './LazyImage';
 
 interface GalleryProps {
   onOpenGalleryPage?: () => void;
@@ -231,12 +232,10 @@ export default function Gallery({ onOpenGalleryPage }: GalleryProps = {}) {
                     diff === 0 ? 'ring-2 ring-[#FF5A1F]/50' : ''
                   }`}
                 >
-                  <img
+                  <LazyImage
                     src={item.image}
                     alt={item.title}
-                    loading="lazy"
-                    decoding="async"
-                    referrerPolicy="no-referrer"
+                    wrapperClassName="h-full w-full"
                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                   />
 
@@ -375,10 +374,10 @@ export default function Gallery({ onOpenGalleryPage }: GalleryProps = {}) {
                     className="group cursor-pointer relative rounded-3xl overflow-hidden glass-card border border-white/10 bg-[#111111] transition-all hover:border-[#FF5A1F]/50"
                   >
                     <div className="w-full aspect-[3/4] overflow-hidden relative">
-                      <img
+                      <LazyImage
                         src={item.image}
                         alt={item.title}
-                        referrerPolicy="no-referrer"
+                        wrapperClassName="h-full w-full"
                         className="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105 filter saturate-[1.05]"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-300" />

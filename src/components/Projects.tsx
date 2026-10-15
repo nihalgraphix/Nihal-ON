@@ -4,6 +4,7 @@ import { PROJECTS } from '../data/portfolioData';
 import { ChevronLeft, ChevronRight, ArrowUpRight, Sparkles, Circle, Crosshair, Heart } from 'lucide-react';
 import { useStudio } from '../context/StudioContext';
 import EditableText from './EditableText';
+import LazyImage from './LazyImage';
 
 import projSunglasses1 from '../assets/images/proj_sunglasses_1_1785549548646.jpg';
 import projSilhouette2 from '../assets/images/proj_silhouette_2_1785549562035.jpg';
@@ -192,13 +193,11 @@ export default function Projects({ onSelectProject }: ProjectsProps) {
                   className="group relative cursor-pointer aspect-[2/3] w-full rounded-2xl overflow-hidden bg-[#0A0A0A] border border-white/10 shadow-2xl hover:border-[#FF5A1F]/60 transition-all duration-500 hover:scale-[1.02] active:scale-[0.98] flex flex-col justify-between p-5 select-none"
                 >
                   {/* Background Image */}
-                  <img
+                  <LazyImage
                     src={card.image}
                     alt={card.title}
-                    loading="lazy"
-                    decoding="async"
-                    referrerPolicy="no-referrer"
-                    className="absolute inset-0 h-full w-full object-cover object-center filter brightness-95 contrast-105 group-hover:scale-105 transition-transform duration-700 ease-out"
+                    wrapperClassName="absolute inset-0 h-full w-full"
+                    className="h-full w-full object-cover object-center filter brightness-95 contrast-105 group-hover:scale-105 transition-transform duration-700 ease-out"
                   />
 
                   {/* Subtle Gradient Overlay */}

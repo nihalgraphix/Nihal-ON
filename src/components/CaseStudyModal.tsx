@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import LazyImage from './LazyImage';
 import {
   X,
   ArrowRight,
@@ -133,10 +134,10 @@ export default function CaseStudyModal({
 
           {/* Hero Banner */}
           <div className="relative aspect-[21/9] w-full overflow-hidden bg-[#111111]">
-            <img
+            <LazyImage
               src={project.heroImage || project.coverImage}
               alt={project.title}
-              referrerPolicy="no-referrer"
+              wrapperClassName="h-full w-full"
               className="h-full w-full object-cover filter saturate-[1.1]"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-[#090909] via-[#090909]/50 to-transparent" />
@@ -242,10 +243,10 @@ export default function CaseStudyModal({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   {project.galleryImages.map((img, i) => (
                     <div key={i} className="rounded-2xl overflow-hidden border border-white/10 aspect-[4/3] bg-[#111111]">
-                      <img
+                      <LazyImage
                         src={img}
                         alt={`${project.title} Artifact ${i + 1}`}
-                        referrerPolicy="no-referrer"
+                        wrapperClassName="h-full w-full"
                         className="h-full w-full object-cover filter saturate-[1.05]"
                       />
                     </div>

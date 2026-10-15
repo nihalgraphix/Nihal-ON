@@ -3,6 +3,7 @@ import { TESTIMONIALS } from '../data/portfolioData';
 import { Star, Quote } from 'lucide-react';
 import { useStudio } from '../context/StudioContext';
 import EditableText from './EditableText';
+import LazyImage from './LazyImage';
 
 export default function Testimonials() {
   const { publishedData, draftData, isStudioOpen } = useStudio();
@@ -74,11 +75,11 @@ export default function Testimonials() {
 
               {/* Author Footer */}
               <div className="flex items-center gap-4 pt-4 border-t border-white/10">
-                <img
+                <LazyImage
                   src={t.avatar}
                   alt={t.author}
-                  referrerPolicy="no-referrer"
-                  className="h-11 w-11 rounded-full object-cover border border-[#FF5A1F]"
+                  wrapperClassName="h-11 w-11 rounded-full overflow-hidden shrink-0 border border-[#FF5A1F]"
+                  className="h-full w-full object-cover"
                 />
                 <div>
                   <EditableText

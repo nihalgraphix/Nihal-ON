@@ -1,5 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import EmailClientInbox from './studio/EmailClientInbox';
+import GalleryUploadModal from './studio/GalleryUploadModal';
+import SearchConsoleAnalytics from './studio/SearchConsoleAnalytics';
 import { 
   X, 
   Save, 
@@ -39,6 +42,7 @@ import {
   Film,
   CheckCheck,
   Search,
+  Play,
   Copy,
   TrendingUp,
   Users,
@@ -143,6 +147,9 @@ export default function AdminDashboard() {
   const [galleryUploadPreview, setGalleryUploadPreview] = useState<string>('');
   const [galleryInputMode, setGalleryInputMode] = useState<'upload' | 'url'>('upload');
   const [isCompressingGallery, setIsCompressingGallery] = useState(false);
+  const [galleryCategoryFilter, setGalleryCategoryFilter] = useState<string>('All');
+  const [gallerySearch, setGallerySearch] = useState<string>('');
+  const [galleryLightboxItem, setGalleryLightboxItem] = useState<GalleryItem | null>(null);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -796,124 +803,16 @@ export default function AdminDashboard() {
                         </div>
                       </div>
                     </div>
+
+                    {/* GOOGLE SEARCH CONSOLE ANALYTICS SECTION */}
+                    <SearchConsoleAnalytics />
                   </div>
                 )}
 
                 {/* TAB 0.1: CONTACT INBOX */}
                 {activeTab === 'inbox' && (
-                  <div className="space-y-6 max-w-4xl">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h3 className="font-syne text-xl font-bold text-white">Contact Inbox & Client Leads</h3>
-                        <p className="text-xs font-space text-neutral-400 mt-1">
-                          Messages submitted directly through your portfolio contact form.
-                        </p>
-                      </div>
-
-                      {/* Filter */}
-                      <div className="flex items-center gap-1 bg-[#101015] p-1 rounded-xl border border-white/10">
-                        <button
-                          type="button"
-                          onClick={() => setInboxFilter('all')}
-                          className={`px-3 py-1 rounded-lg text-xs font-space font-bold cursor-pointer ${
-                            inboxFilter === 'all' ? 'bg-white/15 text-white' : 'text-neutral-400 hover:text-white'
-                          }`}
-                        >
-                          All ({contactMessages.length})
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setInboxFilter('unread')}
-                          className={`px-3 py-1 rounded-lg text-xs font-space font-bold cursor-pointer ${
-                            inboxFilter === 'unread' ? 'bg-[#FF5A1F] text-black' : 'text-neutral-400 hover:text-white'
-                          }`}
-                        >
-                          Unread ({contactMessages.filter(m => !m.read).length})
-                        </button>
-                      </div>
-                    </div>
-
-                    {contactMessages.length === 0 ? (
-                      <div className="p-12 text-center rounded-3xl bg-[#101015] border border-white/10 space-y-3">
-                        <Mail className="h-10 w-10 mx-auto text-neutral-600" />
-                        <h4 className="font-syne text-base font-bold text-white">No Messages Yet</h4>
-                        <p className="text-xs font-space text-neutral-400 max-w-sm mx-auto">
-                          When visitors fill out the contact form on your portfolio, their inquiry will appear here in real-time!
-                        </p>
-                      </div>
-                    ) : (
-                      <div className="space-y-3">
-                        {contactMessages
-                          .filter(m => inboxFilter === 'all' || !m.read)
-                          .map((msg) => (
-                            <div
-                              key={msg.id}
-                              className={`p-5 rounded-2xl border transition-all ${
-                                !msg.read
-                                  ? 'bg-[#14141d] border-[#FF5A1F]/40 shadow-lg shadow-[#FF5A1F]/5'
-                                  : 'bg-[#101015] border-white/10'
-                              }`}
-                            >
-                              <div className="flex items-start justify-between gap-4 border-b border-white/10 pb-3">
-                                <div>
-                                  <div className="flex items-center gap-2">
-                                    <h4 className="font-syne font-bold text-white text-sm">{msg.name}</h4>
-                                    {!msg.read && (
-                                      <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-[#FF5A1F] text-black">
-                                        NEW INQUIRY
-                                      </span>
-                                    )}
-                                  </div>
-                                  <div className="flex items-center gap-3 text-xs font-mono text-neutral-400 mt-1">
-                                    <span>{msg.email}</span>
-                                    {msg.phone && <span>• {msg.phone}</span>}
-                                    {msg.country && <span>• {msg.country}</span>}
-                                  </div>
-                                </div>
-
-                                <div className="flex items-center gap-2">
-                                  <span className="text-[10px] font-mono text-neutral-500">
-                                    {new Date(msg.createdAt).toLocaleDateString()}
-                                  </span>
-                                  {!msg.read && (
-                                    <button
-                                      type="button"
-                                      onClick={() => markContactMessageRead(msg.id)}
-                                      className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-emerald-400 cursor-pointer"
-                                      title="Mark as Read"
-                                    >
-                                      <CheckCheck className="h-4 w-4" />
-                                    </button>
-                                  )}
-                                  <button
-                                    type="button"
-                                    onClick={() => deleteContactMessage(msg.id)}
-                                    className="p-1.5 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 cursor-pointer"
-                                    title="Delete Message"
-                                  >
-                                    <Trash2 className="h-4 w-4" />
-                                  </button>
-                                </div>
-                              </div>
-
-                              <div className="pt-3">
-                                <p className="text-xs font-space text-neutral-200 leading-relaxed whitespace-pre-wrap">
-                                  {msg.message}
-                                </p>
-                                <div className="mt-3 pt-2 border-t border-white/5 flex justify-end">
-                                  <a
-                                    href={`mailto:${msg.email}?subject=Re:%20Portfolio%20Inquiry`}
-                                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-space font-bold transition-all"
-                                  >
-                                    <Mail className="h-3.5 w-3.5 text-[#FF5A1F]" />
-                                    <span>Reply via Email</span>
-                                  </a>
-                                </div>
-                              </div>
-                            </div>
-                          ))}
-                      </div>
-                    )}
+                  <div className="h-[calc(100vh-140px)] w-full rounded-2xl overflow-hidden border border-white/10 bg-[#0d0f12]">
+                    <EmailClientInbox />
                   </div>
                 )}
 
@@ -2774,23 +2673,31 @@ export default function AdminDashboard() {
                   </div>
                 )}
 
-                {/* TAB 6: GALLERY & PHOTO UPLOAD */}
+                {/* TAB 6: REBUILT GALLERY & MEDIA MASTER STUDIO */}
                 {activeTab === 'gallery' && (
-                  <div className="space-y-6 max-w-4xl">
-                    <div className="flex items-center justify-between">
+                  <div className="space-y-6 max-w-5xl">
+                    {/* Header & Primary CTA */}
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-white/10">
                       <div>
-                        <h3 className="font-syne text-xl font-bold text-white">Visual Gallery & Photo Uploads</h3>
+                        <div className="flex items-center gap-2">
+                          <h3 className="font-syne text-xl font-bold text-white">Visual Gallery Studio</h3>
+                          <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                            {galleryItems.length} Assets
+                          </span>
+                        </div>
                         <p className="text-xs font-space text-neutral-400 mt-1">
-                          Upload high-resolution photography, 3D concepts, and motion graphics.
+                          Manage photography, 3D concepts, motion graphics, and cinematic reels.
                         </p>
                       </div>
+
                       <button
+                        type="button"
                         onClick={() => {
                           setGalleryUploadPreview('');
                           setEditingGallery({
                             id: `gal-${Date.now()}`,
                             title: '',
-                            category: 'Photography',
+                            category: 'Cinematic Reels',
                             image: '',
                             aspectRatio: 'aspect-[3/4]',
                             date: '2026',
@@ -2799,361 +2706,236 @@ export default function AdminDashboard() {
                           setIsAddingGallery(true);
                         }}
                         style={{ backgroundColor: settings.accentColor }}
-                        className="flex items-center gap-2 px-4 py-2 rounded-xl font-space font-bold text-xs text-black shadow-lg cursor-pointer"
+                        className="flex items-center gap-2 px-5 py-2.5 rounded-2xl font-space font-bold text-xs text-black shadow-xl shadow-blue-500/20 hover:brightness-110 active:scale-98 transition-all cursor-pointer shrink-0"
                       >
                         <Upload className="h-4 w-4" />
-                        <span>Upload Photo</span>
+                        <span>Upload Media Asset</span>
                       </button>
                     </div>
 
-                    {/* Gallery Items Grid */}
-                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                      {galleryItems.map((item) => (
-                        <div
-                          key={item.id}
-                          className="group relative rounded-2xl overflow-hidden border border-white/10 bg-[#121216] aspect-[3/4]"
-                        >
-                          <img
-                            src={item.image}
-                            alt={item.title}
-                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent p-3 flex flex-col justify-between">
-                            <span className="self-start text-[9px] font-space uppercase px-2 py-0.5 rounded-full bg-black/60 text-white border border-white/10">
-                              {item.category}
-                            </span>
-                            <div>
-                              <p className="text-xs font-space font-bold text-white line-clamp-1">{item.title}</p>
-                              <div className="flex items-center justify-between mt-2 pt-2 border-t border-white/10">
-                                <span className="text-[10px] font-space text-neutral-400">{item.likes} Likes</span>
-                                <div className="flex items-center gap-1.5">
-                                  <button
-                                    type="button"
-                                    onClick={() => {
-                                      setGalleryUploadPreview('');
-                                      setEditingGallery(item);
-                                      setIsAddingGallery(false);
-                                    }}
-                                    className="p-1 rounded bg-white/10 text-white hover:bg-white/20 transition-colors cursor-pointer"
-                                    title="Edit Photo URL & Details"
-                                  >
-                                    <Edit3 className="h-3 w-3" />
-                                  </button>
-                                  <button
-                                    type="button"
-                                    onClick={() => {
-                                      setDeleteConfirmation({
-                                        type: 'gallery',
-                                        id: item.id,
-                                        title: item.title,
-                                      });
-                                    }}
-                                    className="p-1 rounded bg-rose-500/20 text-rose-300 hover:bg-rose-500 hover:text-white transition-colors cursor-pointer"
-                                    title="Delete Photo"
-                                  >
-                                    <Trash2 className="h-3 w-3" />
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      ))}
+                    {/* Filter & Search Toolbar */}
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 bg-[#0d0e15] p-3 rounded-2xl border border-white/10">
+                      {/* Category Pills */}
+                      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 scrollbar-none">
+                        {['All', 'Cinematic Reels', 'Photography', 'UI/UX Design', 'Motion Graphics', 'Branding', '3D Concepts'].map((cat) => (
+                          <button
+                            key={cat}
+                            type="button"
+                            onClick={() => setGalleryCategoryFilter(cat)}
+                            className={`px-3 py-1.5 rounded-xl text-xs font-space font-semibold whitespace-nowrap transition-all cursor-pointer ${
+                              galleryCategoryFilter === cat
+                                ? 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-md'
+                                : 'text-neutral-400 hover:text-white bg-white/5 hover:bg-white/10'
+                            }`}
+                          >
+                            {cat}
+                          </button>
+                        ))}
+                      </div>
+
+                      {/* Search Bar */}
+                      <div className="relative min-w-[220px]">
+                        <Search className="w-3.5 h-3.5 text-neutral-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                        <input
+                          type="text"
+                          placeholder="Search assets..."
+                          value={gallerySearch}
+                          onChange={(e) => setGallerySearch(e.target.value)}
+                          className="w-full bg-[#080911] border border-white/10 rounded-xl pl-8 pr-3 py-1.5 text-xs text-white placeholder-neutral-500 focus:outline-none focus:border-blue-500 font-space"
+                        />
+                        {gallerySearch && (
+                          <button
+                            onClick={() => setGallerySearch('')}
+                            className="absolute right-2.5 top-1/2 -translate-y-1/2 text-neutral-500 hover:text-white text-xs"
+                          >
+                            ✕
+                          </button>
+                        )}
+                      </div>
                     </div>
 
-                    {/* Gallery Upload / URL Popup Modal */}
-                    {editingGallery && (
-                      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 overflow-y-auto">
-                        <div className="w-full max-w-xl p-6 sm:p-7 rounded-3xl bg-[#121218] border border-white/20 shadow-2xl space-y-5 my-8">
-                          {/* Modal Header */}
-                          <div className="flex items-center justify-between border-b border-white/10 pb-4">
-                            <div className="flex items-center gap-3">
-                              <div 
-                                className="flex h-10 w-10 items-center justify-center rounded-xl"
-                                style={{ backgroundColor: `${settings.accentColor}20`, border: `1px solid ${settings.accentColor}50` }}
-                              >
-                                <ImageIcon className="h-5 w-5" style={{ color: settings.accentColor }} />
-                              </div>
-                              <div>
-                                <h4 className="font-syne text-lg font-bold text-white">
-                                  {isAddingGallery ? 'Add Gallery Photo' : 'Edit Gallery Photo'}
-                                </h4>
-                                <p className="text-xs font-space text-neutral-400">
-                                  Choose how to add your photo and set image content details.
-                                </p>
-                              </div>
-                            </div>
+                    {/* Gallery Items Grid */}
+                    {(() => {
+                      const filteredItems = galleryItems.filter((item) => {
+                        const matchesCategory = galleryCategoryFilter === 'All' || item.category === galleryCategoryFilter;
+                        const matchesSearch = !gallerySearch.trim() ||
+                          item.title.toLowerCase().includes(gallerySearch.toLowerCase()) ||
+                          item.category.toLowerCase().includes(gallerySearch.toLowerCase());
+                        return matchesCategory && matchesSearch;
+                      });
+
+                      if (filteredItems.length === 0) {
+                        return (
+                          <div className="p-12 text-center rounded-3xl bg-[#0a0b12] border border-white/10 space-y-3">
+                            <ImageIcon className="w-10 h-10 text-neutral-600 mx-auto" />
+                            <p className="font-space font-bold text-sm text-white">No gallery assets found</p>
+                            <p className="text-xs font-space text-neutral-500 max-w-sm mx-auto">
+                              Try clearing your search query or upload a new media item.
+                            </p>
                             <button
+                              type="button"
                               onClick={() => {
-                                setEditingGallery(null);
-                                setGalleryUploadPreview('');
+                                setGalleryCategoryFilter('All');
+                                setGallerySearch('');
                               }}
-                              className="p-1.5 rounded-xl bg-white/5 hover:bg-white/15 text-neutral-400 hover:text-white transition-colors cursor-pointer"
+                              className="px-4 py-2 rounded-xl bg-white/10 text-xs font-space font-bold text-white hover:bg-white/20 transition-all cursor-pointer"
                             >
-                              <X className="h-5 w-5" />
+                              Reset Filters
                             </button>
                           </div>
+                        );
+                      }
 
-                          {/* Source Selection Tabs: Upload Image vs Image URL */}
-                          <div className="space-y-2">
-                            <label className="text-xs font-space text-neutral-300 font-bold uppercase tracking-wider block">
-                              Select Image Source
-                            </label>
-                            <div className="grid grid-cols-2 gap-2 p-1.5 rounded-2xl bg-black/60 border border-white/10">
-                              <button
-                                type="button"
-                                onClick={() => setGalleryInputMode('upload')}
-                                className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs font-space font-bold transition-all cursor-pointer ${
-                                  galleryInputMode === 'upload'
-                                    ? 'bg-[#FF5A1F] text-black shadow-lg shadow-[#FF5A1F]/30'
-                                    : 'text-neutral-400 hover:text-white hover:bg-white/5'
-                                }`}
-                              >
-                                <Upload className="h-4 w-4" />
-                                <span>Upload Image File</span>
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => setGalleryInputMode('url')}
-                                className={`flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl text-xs font-space font-bold transition-all cursor-pointer ${
-                                  galleryInputMode === 'url'
-                                    ? 'bg-[#FF5A1F] text-black shadow-lg shadow-[#FF5A1F]/30'
-                                    : 'text-neutral-400 hover:text-white hover:bg-white/5'
-                                }`}
-                              >
-                                <Globe className="h-4 w-4" />
-                                <span>Image URL</span>
-                              </button>
-                            </div>
-                          </div>
+                      return (
+                        <div className="columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
+                          {filteredItems.map((item) => {
+                            const isVideoAsset = item.image.startsWith('data:video') || item.image.endsWith('.mp4') || item.image.includes('vimeo') || item.image.includes('youtube') || item.image.includes('drive');
 
-                          {/* Mode 1: Upload Image File from Device */}
-                          {galleryInputMode === 'upload' && (
-                            <div className="space-y-2">
-                              <label className="text-xs font-space text-neutral-300 font-medium block">
-                                Device Image Upload (Auto Compressed to &lt; 200KB)
-                              </label>
-
-                              <input
-                                type="file"
-                                ref={fileInputRef}
-                                accept="image/*"
-                                onChange={handleImageFileUpload}
-                                className="hidden"
-                              />
-
+                            return (
                               <div
-                                onClick={() => !isCompressingGallery && fileInputRef.current?.click()}
-                                className="border-2 border-dashed border-white/20 hover:border-[#FF5A1F] rounded-2xl p-5 text-center cursor-pointer transition-all bg-black/40 hover:bg-black/60 relative overflow-hidden group"
+                                key={item.id}
+                                className="break-inside-avoid mb-4 group relative rounded-2xl overflow-hidden border border-white/10 bg-[#0c0d15] hover:border-blue-500/50 transition-all shadow-lg"
                               >
-                                {isCompressingGallery ? (
-                                  <div className="py-6 space-y-2 flex flex-col items-center justify-center">
-                                    <Loader2 className="h-8 w-8 text-[#FF5A1F] animate-spin" />
-                                    <p className="text-xs font-space text-white font-bold">
-                                      Compressing image to &lt; 200KB...
-                                    </p>
-                                    <p className="text-[10px] font-mono text-neutral-400">Optimizing for Firebase storage</p>
+                                <div className={`relative w-full ${item.aspectRatio || 'aspect-[3/4]'}`}>
+                                  {isVideoAsset ? (
+                                    <video
+                                      src={item.image}
+                                      className="h-full w-full object-cover"
+                                      muted
+                                      loop
+                                      playsInline
+                                      onMouseOver={(e) => (e.target as HTMLVideoElement).play().catch(() => {})}
+                                      onMouseOut={(e) => (e.target as HTMLVideoElement).pause()}
+                                    />
+                                  ) : (
+                                    <img
+                                      src={item.image}
+                                      alt={item.title}
+                                      className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                      onError={(e) => {
+                                        (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80';
+                                      }}
+                                    />
+                                  )}
+                                </div>
+
+                                {/* Category Badge */}
+                                <div className="absolute top-2.5 left-2.5 z-10 flex items-center gap-1.5">
+                                  <span className="text-[9px] font-space font-bold uppercase px-2.5 py-0.5 rounded-full bg-black/70 backdrop-blur-md text-white border border-white/15">
+                                    {item.category}
+                                  </span>
+                                  {isVideoAsset && (
+                                    <span className="px-1.5 py-0.5 rounded-full bg-blue-600 text-white text-[9px] font-mono font-bold flex items-center gap-0.5">
+                                      <Play className="w-2.5 h-2.5 fill-white" />
+                                    </span>
+                                  )}
+                                </div>
+
+                                {/* Hover Overlay */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-3 flex flex-col justify-between">
+                                  <div className="flex justify-end">
+                                    <button
+                                      type="button"
+                                      onClick={() => setGalleryLightboxItem(item)}
+                                      className="p-1.5 rounded-full bg-black/60 text-white hover:bg-blue-600 transition-colors cursor-pointer"
+                                      title="Fullscreen Preview"
+                                    >
+                                      <Eye className="h-3.5 w-3.5" />
+                                    </button>
                                   </div>
-                                ) : galleryUploadPreview || editingGallery.image ? (
-                                  <div className="space-y-3">
-                                    <div className="relative inline-block max-w-xs mx-auto">
-                                      <img
-                                        src={galleryUploadPreview || editingGallery.image}
-                                        alt="Preview"
-                                        className="max-h-44 mx-auto rounded-xl object-cover border border-white/15 shadow-xl"
-                                        onError={(e) => {
-                                          (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80';
-                                        }}
-                                      />
-                                      <div className="absolute top-2 right-2 px-2 py-0.5 rounded-md bg-emerald-500/90 text-black font-space font-bold text-[9px]">
-                                        Ready (&lt; 200KB)
+
+                                  <div>
+                                    <p className="text-xs font-space font-bold text-white line-clamp-1">{item.title}</p>
+                                    <div className="flex items-center justify-between mt-2 pt-2 border-t border-white/15">
+                                      <span className="text-[10px] font-mono text-neutral-300">♥ {item.likes || 500}</span>
+                                      <div className="flex items-center gap-1.5">
+                                        <button
+                                          type="button"
+                                          onClick={() => {
+                                            setGalleryUploadPreview('');
+                                            setEditingGallery(item);
+                                            setIsAddingGallery(false);
+                                          }}
+                                          className="p-1.5 rounded-xl bg-white/15 text-white hover:bg-blue-600 transition-colors cursor-pointer"
+                                          title="Edit Asset"
+                                        >
+                                          <Edit3 className="h-3 w-3" />
+                                        </button>
+                                        <button
+                                          type="button"
+                                          onClick={() => {
+                                            setDeleteConfirmation({
+                                              type: 'gallery',
+                                              id: item.id,
+                                              title: item.title,
+                                            });
+                                          }}
+                                          className="p-1.5 rounded-xl bg-rose-500/20 text-rose-300 hover:bg-rose-600 hover:text-white transition-colors cursor-pointer"
+                                          title="Delete Asset"
+                                        >
+                                          <Trash2 className="h-3 w-3" />
+                                        </button>
                                       </div>
                                     </div>
-                                    <div>
-                                      <span className="text-xs font-space text-[#FF5A1F] font-bold group-hover:underline">
-                                        Click to change or choose a different image file
-                                      </span>
-                                    </div>
                                   </div>
-                                ) : (
-                                  <div className="py-6 space-y-2 text-neutral-400">
-                                    <Upload className="h-8 w-8 mx-auto text-[#FF5A1F] group-hover:scale-110 transition-transform" />
-                                    <p className="text-xs font-space font-bold text-white">
-                                      Click to choose an image from your device
-                                    </p>
-                                    <p className="text-[10px] font-space text-neutral-400">
-                                      PNG, JPG, WebP supported • Automatically compressed to 200KB max
-                                    </p>
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          )}
-
-                          {/* Mode 2: Image URL Input */}
-                          {galleryInputMode === 'url' && (
-                            <div className="space-y-2">
-                              <label className="text-xs font-space text-neutral-300 font-medium block">
-                                Direct Image Web Link (URL) <span className="text-[#FF5A1F]">*</span>
-                              </label>
-                              <div className="relative">
-                                <input
-                                  type="text"
-                                  value={editingGallery.image}
-                                  onChange={(e) => {
-                                    setEditingGallery({ ...editingGallery, image: e.target.value });
-                                    setGalleryUploadPreview('');
-                                  }}
-                                  placeholder="https://images.unsplash.com/... or https://..."
-                                  className="w-full px-4 py-3 rounded-xl bg-black/60 border border-white/20 text-white text-xs font-mono focus:border-[#FF5A1F] focus:outline-none transition-colors pr-10"
-                                />
-                                {editingGallery.image && (
-                                  <button
-                                    type="button"
-                                    onClick={() => {
-                                      setEditingGallery({ ...editingGallery, image: '' });
-                                      setGalleryUploadPreview('');
-                                    }}
-                                    className="absolute right-3 top-3 text-neutral-400 hover:text-white"
-                                    title="Clear URL"
-                                  >
-                                    <X className="h-4 w-4" />
-                                  </button>
-                                )}
-                              </div>
-                              <p className="text-[10px] text-neutral-400 font-space">
-                                Enter any public image URL (Unsplash, Firebase, CDN, etc.)
-                              </p>
-
-                              {/* Live URL Image Preview */}
-                              {editingGallery.image && (
-                                <div className="p-3 rounded-xl bg-black/40 border border-white/10 text-center space-y-2 mt-2">
-                                  <p className="text-[10px] font-space text-neutral-400 uppercase tracking-wider font-bold">
-                                    Live Image URL Preview
-                                  </p>
-                                  <img
-                                    src={editingGallery.image}
-                                    alt="Live URL Preview"
-                                    className="max-h-36 mx-auto rounded-lg object-cover border border-white/10"
-                                    onError={(e) => {
-                                      (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=600&q=80';
-                                    }}
-                                  />
                                 </div>
-                              )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                      );
+                    })()}
+
+                    {/* LIGHTBOX PREVIEW MODAL */}
+                    {galleryLightboxItem && (
+                      <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-2xl p-4 sm:p-6">
+                        <div className="relative max-w-4xl w-full bg-[#0a0c14] border border-white/15 rounded-3xl overflow-hidden shadow-2xl p-6 space-y-4 my-auto">
+                          <div className="flex items-center justify-between pb-3 border-b border-white/10">
+                            <div>
+                              <h4 className="font-syne font-bold text-base text-white">{galleryLightboxItem.title}</h4>
+                              <p className="text-xs font-space text-neutral-400">{galleryLightboxItem.category}</p>
                             </div>
+                            <button
+                              onClick={() => setGalleryLightboxItem(null)}
+                              className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center cursor-pointer"
+                            >
+                              ✕
+                            </button>
+                          </div>
+
+                          <div className="flex items-center justify-center rounded-2xl bg-black border border-white/10 overflow-hidden max-h-[65vh]">
+                            {galleryLightboxItem.image.startsWith('data:video') || galleryLightboxItem.image.endsWith('.mp4') ? (
+                              <video src={galleryLightboxItem.image} controls autoPlay className="max-h-[65vh] w-auto object-contain" />
+                            ) : (
+                              <img src={galleryLightboxItem.image} alt={galleryLightboxItem.title} className="max-h-[65vh] w-auto object-contain" />
+                            )}
+                          </div>
+
+                          {galleryLightboxItem.description && (
+                            <p className="text-xs font-space text-neutral-300 bg-white/5 p-3 rounded-2xl border border-white/10">
+                              {galleryLightboxItem.description}
+                            </p>
                           )}
-
-                          {/* Image Content Details Form */}
-                          <div className="space-y-3 pt-2 border-t border-white/10">
-                            <h5 className="text-xs font-space font-bold text-white uppercase tracking-wider">
-                              Image Content Details
-                            </h5>
-
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                              <div>
-                                <label className="text-xs font-space text-neutral-300 block mb-1 font-medium">
-                                  Image Title <span className="text-[#FF5A1F]">*</span>
-                                </label>
-                                <input
-                                  type="text"
-                                  value={editingGallery.title}
-                                  onChange={(e) => setEditingGallery({ ...editingGallery, title: e.target.value })}
-                                  placeholder="e.g. Futuristic Cyber Vision"
-                                  className="w-full px-3.5 py-2.5 rounded-xl bg-black/50 border border-white/15 text-white text-xs focus:border-[#FF5A1F] focus:outline-none"
-                                />
-                              </div>
-
-                              <div>
-                                <label className="text-xs font-space text-neutral-300 block mb-1 font-medium">
-                                  Category
-                                </label>
-                                <select
-                                  value={editingGallery.category}
-                                  onChange={(e) => setEditingGallery({ ...editingGallery, category: e.target.value as any })}
-                                  className="w-full px-3.5 py-2.5 rounded-xl bg-black/50 border border-white/15 text-white text-xs focus:border-[#FF5A1F] focus:outline-none"
-                                >
-                                  <option value="Photography">Photography</option>
-                                  <option value="Branding">Branding</option>
-                                  <option value="UI">UI Design</option>
-                                  <option value="Motion">Motion Graphics</option>
-                                  <option value="Concepts">3D Concepts & Art</option>
-                                </select>
-                              </div>
-                            </div>
-
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                              <div>
-                                <label className="text-xs font-space text-neutral-300 block mb-1 font-medium">
-                                  Aspect Ratio
-                                </label>
-                                <select
-                                  value={editingGallery.aspectRatio || 'aspect-[3/4]'}
-                                  onChange={(e) => setEditingGallery({ ...editingGallery, aspectRatio: e.target.value as any })}
-                                  className="w-full px-3.5 py-2.5 rounded-xl bg-black/50 border border-white/15 text-white text-xs focus:border-[#FF5A1F] focus:outline-none"
-                                >
-                                  <option value="aspect-[3/4]">Vertical Portrait (3:4)</option>
-                                  <option value="aspect-[4/5]">Portrait (4:5)</option>
-                                  <option value="aspect-square">Square (1:1)</option>
-                                  <option value="aspect-[16/9]">Landscape Wide (16:9)</option>
-                                </select>
-                              </div>
-
-                              <div>
-                                <label className="text-xs font-space text-neutral-300 block mb-1 font-medium">
-                                  Initial Likes / Views
-                                </label>
-                                <input
-                                  type="number"
-                                  value={editingGallery.likes || 120}
-                                  onChange={(e) => setEditingGallery({ ...editingGallery, likes: parseInt(e.target.value) || 0 })}
-                                  className="w-full px-3.5 py-2.5 rounded-xl bg-black/50 border border-white/15 text-white text-xs focus:border-[#FF5A1F] focus:outline-none"
-                                />
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* Modal Actions */}
-                          <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/10">
-                            <button
-                              type="button"
-                              onClick={() => {
-                                setEditingGallery(null);
-                                setGalleryUploadPreview('');
-                              }}
-                              className="px-4 py-2.5 rounded-xl text-xs font-space text-neutral-400 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
-                            >
-                              Cancel
-                            </button>
-                            <button
-                              type="button"
-                              onClick={async () => {
-                                const finalImage = galleryUploadPreview || editingGallery.image;
-                                if (!finalImage) {
-                                  alert('Please select an image file or enter an image URL.');
-                                  return;
-                                }
-                                if (!editingGallery.title.trim()) {
-                                  alert('Please enter a title for the gallery photo.');
-                                  return;
-                                }
-                                await saveGalleryItem({
-                                  ...editingGallery,
-                                  image: finalImage,
-                                });
-                                setEditingGallery(null);
-                                setGalleryUploadPreview('');
-                              }}
-                              style={{ backgroundColor: settings.accentColor }}
-                              className="px-6 py-2.5 rounded-xl font-space font-bold text-xs text-black shadow-lg hover:brightness-110 active:scale-95 transition-all cursor-pointer flex items-center gap-2"
-                            >
-                              <Save className="h-4 w-4" />
-                              <span>Save Photo to Gallery & Firebase</span>
-                            </button>
-                          </div>
                         </div>
                       </div>
                     )}
+
+                    {/* GALLERY UPLOAD / EDIT POPUP MODAL (Reference Video/Media Master Upload) */}
+                    <GalleryUploadModal
+                      isOpen={!!editingGallery}
+                      onClose={() => {
+                        setEditingGallery(null);
+                        setGalleryUploadPreview('');
+                      }}
+                      item={editingGallery}
+                      isAdding={isAddingGallery}
+                      onSave={async (item) => {
+                        await saveGalleryItem(item);
+                        setEditingGallery(null);
+                        setGalleryUploadPreview('');
+                      }}
+                      accentColor={settings.accentColor}
+                    />
                   </div>
                 )}
 
