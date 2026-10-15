@@ -1,4 +1,3 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { createSign } from 'node:crypto';
 
 const SITE_URL = 'https://nihal-on.vercel.app/';
@@ -65,7 +64,7 @@ async function querySearchConsole(token: string, startDate: string, endDate: str
   return data.rows || [];
 }
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req: any, res: any) {
   res.setHeader('Cache-Control', 'private, no-store');
   res.setHeader('Vary', 'Authorization');
 
