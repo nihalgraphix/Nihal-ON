@@ -89,7 +89,7 @@ export const SECTION_METADATA_DEFINITIONS: Record<string, { label: string; route
 
 export const DEFAULT_SECTION_SEO: SectionSeoMap = {
   global: {
-    metaTitle: "Nihal . ON — Principal Designer & Creative Developer",
+    metaTitle: "Nihal . ON — Designer & Creative Developer",
     metaDescription: "Award-winning dark luxury portfolio of Nihal . ON. Crafting spatial digital experiences, high-performance web applications, and AI-driven interfaces.",
     ogTitle: "Nihal . ON — Principal UX Architect & Creative Technologist",
     ogDescription: "Explore selected works, interactive case studies, design systems, and digital engineering by Nihal . ON.",
@@ -101,7 +101,7 @@ export const DEFAULT_SECTION_SEO: SectionSeoMap = {
     structuredDataType: "WebApplication"
   },
   hero: {
-    metaTitle: "Nihal . ON — Creative Technologist & Spatial UI Engineer",
+    metaTitle: "Nihal . ON ",
     metaDescription: "From concept to deployment, building award-winning web products, fluid spring animations, and high-impact digital experiences.",
     ogTitle: "Nihal . ON — Spatial & High-Impact Digital Experiences",
     ogDescription: "Available for Q3/Q4 Enterprise Projects & Advisory. Discover cutting-edge frontend engineering and design systems.",
@@ -113,7 +113,7 @@ export const DEFAULT_SECTION_SEO: SectionSeoMap = {
     structuredDataType: "WebApplication"
   },
   about: {
-    metaTitle: "About Nihal . ON — Philosophy, Background & Craft",
+    metaTitle: "Nihal . ON",
     metaDescription: "With over 8 years at the vanguard of digital product architecture, transforming ambitious visions into award-winning interfaces.",
     ogTitle: "About Nihal . ON — Design & Engineering Craft",
     ogDescription: "Discover Nihal's design philosophy, engineering stack, and milestones across top-tier digital agencies.",
@@ -125,7 +125,7 @@ export const DEFAULT_SECTION_SEO: SectionSeoMap = {
     structuredDataType: "Person"
   },
   projects: {
-    metaTitle: "Selected Projects & Case Studies — Nihal . ON",
+    metaTitle: "Nihal . ON",
     metaDescription: "Explore interactive case studies in AI copilot dashboards, 3D spatial commerce, design systems, and WebGL experiences.",
     ogTitle: "Featured Case Studies & Digital Works — Nihal . ON",
     ogDescription: "Deep dive into architecture, metrics, and interactive prototypes built with React, Three.js, and GSAP.",
@@ -137,7 +137,7 @@ export const DEFAULT_SECTION_SEO: SectionSeoMap = {
     structuredDataType: "ItemList"
   },
   services: {
-    metaTitle: "Design & Development Capabilities — Nihal . ON",
+    metaTitle: "Nihal . ON",
     metaDescription: "Full-stack frontend architecture, generative AI interfaces, 3D WebGL motion, and enterprise design system consulting.",
     ogTitle: "Services & Capabilities — Nihal . ON Studio",
     ogDescription: "High-performance web architecture, interaction design, and AI copilot integration for modern digital brands.",
@@ -149,7 +149,7 @@ export const DEFAULT_SECTION_SEO: SectionSeoMap = {
     structuredDataType: "WebApplication"
   },
   process: {
-    metaTitle: "8-Step Blueprint For Digital Excellence — Nihal . ON",
+    metaTitle: "Nihal . ON",
     metaDescription: "A structured, transparent engineering process from discovery and wireframing to rapid prototyping and production deployment.",
     ogTitle: "The 8-Step Product Blueprint — Nihal . ON",
     ogDescription: "How we collaborate to build Lighthouse 95+ rated digital products on time and with zero critical bugs.",
@@ -161,7 +161,7 @@ export const DEFAULT_SECTION_SEO: SectionSeoMap = {
     structuredDataType: "CreativeWork"
   },
   skills: {
-    metaTitle: "Tools & Mastery Matrix — Nihal . ON Tech Stack",
+    metaTitle: "Nihal . ON",
     metaDescription: "Comprehensive matrix of frontend technologies: React 19, Next.js 15, TypeScript, Tailwind CSS, Three.js, GSAP, and Gemini API.",
     ogTitle: "Technical Proficiency Matrix — Nihal . ON",
     ogDescription: "Verified mastery across modern web standards, animation physics, and cloud platforms.",
@@ -173,7 +173,7 @@ export const DEFAULT_SECTION_SEO: SectionSeoMap = {
     structuredDataType: "WebApplication"
   },
   experience: {
-    metaTitle: "Career & Leadership Milestones — Nihal . ON",
+    metaTitle: "Nihal . ON",
     metaDescription: "Proven track record as Lead Creative Technologist and Senior UI/UX Architect across high-growth startups and creative agencies.",
     ogTitle: "Experience & Track Record — Nihal . ON",
     ogDescription: "8+ years delivering enterprise portals, scaling user bases to 320K+, and winning international design awards.",
@@ -185,7 +185,7 @@ export const DEFAULT_SECTION_SEO: SectionSeoMap = {
     structuredDataType: "Person"
   },
   testimonials: {
-    metaTitle: "Client Reviews & Endorsements — Nihal . ON",
+    metaTitle: "Nihal . ON",
     metaDescription: "What founders, CMOs, and engineering leaders say about collaborating with Nihal on flagship digital products.",
     ogTitle: "Client Endorsements & Proof — Nihal . ON",
     ogDescription: "100% client satisfaction across 45+ enterprise ventures and funded startups worldwide.",
@@ -197,7 +197,7 @@ export const DEFAULT_SECTION_SEO: SectionSeoMap = {
     structuredDataType: "CreativeWork"
   },
   blog: {
-    metaTitle: "Journal & Engineering Insights — Nihal . ON",
+    metaTitle: "Nihal . ON",
     metaDescription: "Articles on modern frontend performance, spring animation physics, AI integration, and design systems.",
     ogTitle: "Journal & Engineering Insights — Nihal . ON",
     ogDescription: "Read the latest essays on web development, UX craft, and generative interface engineering.",
@@ -209,7 +209,7 @@ export const DEFAULT_SECTION_SEO: SectionSeoMap = {
     structuredDataType: "ItemList"
   },
   gallery: {
-    metaTitle: "Visual Archive & Conceptual Renders — Nihal . ON",
+    metaTitle: "Nihal . ON",
     metaDescription: "Curated gallery of editorial photography, branding artifacts, 3D visual explorations, and typography studies.",
     ogTitle: "Visual Gallery & Design Archive — Nihal . ON",
     ogDescription: "A curated collection of visual experiments, motion stills, and high-fidelity product imagery.",
@@ -221,7 +221,7 @@ export const DEFAULT_SECTION_SEO: SectionSeoMap = {
     structuredDataType: "CreativeWork"
   },
   stats: {
-    metaTitle: "Performance & Impact Metrics — Nihal . ON",
+    metaTitle: "Nihal . ON",
     metaDescription: "Key performance indicators: 40+ products shipped, 98+ Lighthouse scores, 3 Awwwards Site of the Day accolades.",
     ogTitle: "Impact & Performance Metrics — Nihal . ON",
     ogDescription: "Measurable business outcomes and technical achievements across global client engagements.",
@@ -233,7 +233,7 @@ export const DEFAULT_SECTION_SEO: SectionSeoMap = {
     structuredDataType: "CreativeWork"
   },
   faq: {
-    metaTitle: "Frequently Asked Questions — Nihal . ON",
+    metaTitle: "Nihal . ON",
     metaDescription: "Answers to common inquiries regarding project availability, pricing models, tech stacks, and engagement timelines.",
     ogTitle: "FAQ & Collaboration Guidelines — Nihal . ON",
     ogDescription: "Everything you need to know about hiring Nihal for your next flagship digital product.",
@@ -245,7 +245,7 @@ export const DEFAULT_SECTION_SEO: SectionSeoMap = {
     structuredDataType: "FAQPage"
   },
   contact: {
-    metaTitle: "Get in Touch & Consultations — Nihal . ON",
+    metaTitle: "Nihal . ON",
     metaDescription: "Ready to elevate your digital experience? Schedule a discovery call or send an inquiry for Q3/Q4 project availability.",
     ogTitle: "Start a Conversation — Nihal . ON",
     ogDescription: "Direct contact channel for new client inquiries, design advisory, and speaking engagements.",
