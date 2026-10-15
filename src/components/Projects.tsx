@@ -1,17 +1,10 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { PROJECTS } from '../data/portfolioData';
+import { aboutPortrait, heroPortrait } from '../data/portfolioData';
 import { ChevronLeft, ChevronRight, ArrowUpRight, Sparkles, Circle, Crosshair, Heart } from 'lucide-react';
 import { useStudio } from '../context/StudioContext';
 import EditableText from './EditableText';
 import LazyImage from './LazyImage';
-
-import projSunglasses1 from '../assets/images/proj_sunglasses_1_1785549548646.jpg';
-import projSilhouette2 from '../assets/images/proj_silhouette_2_1785549562035.jpg';
-import projChain3 from '../assets/images/proj_chain_3_1785549576796.jpg';
-import projModel4 from '../assets/images/proj_model_4_1785549589023.jpg';
-import projEyewear5 from '../assets/images/proj_eyewear_5_1785549608139.jpg';
-import projManShades6 from '../assets/images/proj_man_shades_6_1785549620013.jpg';
 
 interface ProjectsProps {
   onSelectProject: (id: string) => void;
@@ -78,7 +71,7 @@ export default function Projects({ onSelectProject }: ProjectsProps) {
     }
   };
 
-  const fallbackImages = [projSunglasses1, projSilhouette2, projChain3, projModel4, projEyewear5, projManShades6];
+  const fallbackImages = [heroPortrait, aboutPortrait];
   const cardTypes = ["sunglasses-1", "silhouette-2", "chain-3", "model-4", "eyewear-5", "man-shades-6"];
 
   const projectSets: Array<Array<{

@@ -10,23 +10,8 @@ import {
   FAQItem
 } from '../types';
 
-import heroPortrait from '../assets/images/hero_portrait_1785413008544.jpg';
-import aboutPortrait from '../assets/images/about_portrait_1785413022971.jpg';
-import projSunglasses1 from '../assets/images/proj_sunglasses_1_1785549548646.jpg';
-import projSilhouette2 from '../assets/images/proj_silhouette_2_1785549562035.jpg';
-import projChain3 from '../assets/images/proj_chain_3_1785549576796.jpg';
-import projModel4 from '../assets/images/proj_model_4_1785549589023.jpg';
-import projEyewear5 from '../assets/images/proj_eyewear_5_1785549608139.jpg';
-import projManShades6 from '../assets/images/proj_man_shades_6_1785549620013.jpg';
-
-import galleryImageOne from '../components/image/1000009034.jpg';
-import galleryImageTwo from '../components/image/1000009035.jpg';
-import galleryImageThree from '../components/image/1000009036.jpg';
-import galleryImageFour from '../components/image/16337.png';
-import galleryImageFive from '../components/image/20251106_112821(1)(1).jpg';
-import galleryImageSix from '../components/image/20251106_172421.jpg';
-import galleryImageSeven from '../components/image/IMG_20251205_205918_106~2.jpg';
-import galleryImageEight from '../components/image/Zenitsu 3.png';
+import heroPortrait from '../components/image/3ebaca72-c048-4ad3-ace0-649046417171.png';
+import aboutPortrait from '../assets/images/regenerated_image_1785750001960.png';
 
 export { heroPortrait, aboutPortrait };
 
