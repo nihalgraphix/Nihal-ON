@@ -357,10 +357,12 @@ export default function About({ onOpenResumeModal }: AboutProps) {
                 </span>
                 <ArrowUpRight className="h-5 w-5 text-neutral-600" />
               </div>
-              <p className="text-[10px] uppercase tracking-widest text-neutral-500">Credentials</p>
-              <h3 className="mt-2 font-syne text-xl font-bold text-white whitespace-pre-line">
+              <p className="text-[10px] uppercase tracking-widest text-neutral-500">
+                <EditableText id="about-credentials-label" as="span" defaultText="Credentials">Credentials</EditableText>
+              </p>
+              <EditableText id="about-credentials-value" as="h3" className="mt-2 font-syne text-xl font-bold text-white whitespace-pre-line" defaultText="6+ years\nof making things move.">
                 {elements['about-credentials']?.content?.text || '6+ years\nof making things move.'}
-              </h3>
+              </EditableText>
             </motion.article>
 
             <motion.article
@@ -382,10 +384,12 @@ export default function About({ onOpenResumeModal }: AboutProps) {
                 </span>
                 <ArrowUpRight className="h-5 w-5 text-neutral-600" />
               </div>
-              <p className="text-[10px] uppercase tracking-widest text-neutral-500">Selected work</p>
-              <h3 className="mt-2 font-syne text-xl font-bold text-white whitespace-pre-line">
+              <p className="text-[10px] uppercase tracking-widest text-neutral-500">
+                <EditableText id="about-selected-work-label" as="span" defaultText="Selected work">Selected work</EditableText>
+              </p>
+              <EditableText id="about-selected-work-value" as="h3" className="mt-2 font-syne text-xl font-bold text-white whitespace-pre-line" defaultText="Product systems,\nwebsites & AI tools.">
                 {elements['about-selected-work']?.content?.text || 'Product systems,\nwebsites & AI tools.'}
-              </h3>
+              </EditableText>
             </motion.article>
 
             <motion.article
@@ -401,11 +405,15 @@ export default function About({ onOpenResumeModal }: AboutProps) {
               }}
               className="rounded-[26px] border border-white/10 bg-[#111113] p-5 sm:col-span-1 lg:col-span-3 xl:col-span-3 flex flex-col justify-between cursor-pointer w-full h-full"
             >
-              <div className="mb-8 text-4xl font-black text-white">{PERSONAL_INFO.projectsCompleted}</div>
-              <p className="text-[10px] uppercase tracking-widest text-neutral-500">Projects completed</p>
-              <p className="mt-2 text-sm text-neutral-300">
-                {elements['about-projects-completed']?.content?.text?.replace(/.*Projects completed\n?/i, '') || 'Across product, brand, and digital experience.'}
+              <div className="mb-8 text-4xl font-black text-white">
+                <EditableText id="about-projects-completed-value" as="span" defaultText={PERSONAL_INFO.projectsCompleted}>{PERSONAL_INFO.projectsCompleted}</EditableText>
+              </div>
+              <p className="text-[10px] uppercase tracking-widest text-neutral-500">
+                <EditableText id="about-projects-completed-label" as="span" defaultText="Projects completed">Projects completed</EditableText>
               </p>
+              <EditableText id="about-projects-completed-desc" as="p" className="mt-2 text-sm text-neutral-300" defaultText="Across product, brand, and digital experience.">
+                {elements['about-projects-completed']?.content?.text?.replace(/.*Projects completed\n?/i, '') || 'Across product, brand, and digital experience.'}
+              </EditableText>
             </motion.article>
 
             <motion.article
@@ -421,11 +429,15 @@ export default function About({ onOpenResumeModal }: AboutProps) {
               }}
               className="rounded-[26px] border border-white/10 bg-[#111113] p-5 sm:col-span-1 lg:col-span-4 xl:col-span-4 flex flex-col justify-between cursor-pointer w-full h-full"
             >
-              <div className="mb-8 text-4xl font-black text-[#FF5A1F]">{PERSONAL_INFO.clientSatisfaction}</div>
-              <p className="text-[10px] uppercase tracking-widest text-neutral-500">Client satisfaction</p>
-              <p className="mt-2 text-sm text-neutral-300">
-                {elements['about-client-satisfaction']?.content?.text?.replace(/.*Client satisfaction\n?/i, '') || 'Built through clarity, craft, and direct collaboration.'}
+              <div className="mb-8 text-4xl font-black text-[#FF5A1F]">
+                <EditableText id="about-client-satisfaction-value" as="span" defaultText={PERSONAL_INFO.clientSatisfaction}>{PERSONAL_INFO.clientSatisfaction}</EditableText>
+              </div>
+              <p className="text-[10px] uppercase tracking-widest text-neutral-500">
+                <EditableText id="about-client-satisfaction-label" as="span" defaultText="Client satisfaction">Client satisfaction</EditableText>
               </p>
+              <EditableText id="about-client-satisfaction-desc" as="p" className="mt-2 text-sm text-neutral-300" defaultText="Built through clarity, craft, and direct collaboration.">
+                {elements['about-client-satisfaction']?.content?.text?.replace(/.*Client satisfaction\n?/i, '') || 'Built through clarity, craft, and direct collaboration.'}
+              </EditableText>
             </motion.article>
 
             <motion.article
