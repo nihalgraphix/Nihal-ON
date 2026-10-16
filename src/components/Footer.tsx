@@ -260,10 +260,17 @@ export default function Footer({
           })()}
         </div>
 
-        {/* Bottom Metadata & Copyright Bar */}
         <div className="pt-4 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] font-space text-neutral-500">
           <div className="flex items-center gap-3">
-            <span>Nihal . On ©{new Date().getFullYear()}</span>
+            <span
+              onClick={() => {
+                window.dispatchEvent(new CustomEvent('open-admin-login'));
+              }}
+              title="Admin Studio (Win+Shift+A or Right-Click)"
+              className="hover:text-white transition-colors cursor-pointer select-none"
+            >
+              Nihal . On ©{new Date().getFullYear()}
+            </span>
             <span>•</span>
             <span className="hover:text-white transition-colors cursor-pointer">Privacy Policy</span>
             <span>•</span>

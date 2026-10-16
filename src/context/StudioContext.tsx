@@ -44,6 +44,9 @@ interface StudioContextType {
   selectedElement: EditableElement | null;
   
   // Navigation & UI controls
+  isAdminButtonVisible: boolean;
+  setIsAdminButtonVisible: (val: boolean | ((prev: boolean) => boolean)) => void;
+  toggleAdminButton: () => void;
   openStudio: (tab?: StudioTab) => void;
   closeStudio: () => void;
   setActiveTab: (tab: StudioTab) => void;
@@ -98,7 +101,7 @@ interface StudioContextType {
 
   // Auth
   loginEmail: (email: string, pass: string) => Promise<{ success: boolean; error?: string }>;
-  loginWithGoogle: () => Promise<boolean>;
+  loginWithGoogle: () => Promise<{ success: boolean; error?: string }>;
   logout: () => Promise<void>;
   trackEvent: (type: 'pageview' | 'project_click' | 'contact_submit' | 'cv_download' | 'section_view', label?: string) => void;
 }
@@ -256,6 +259,35 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
   const [canvasZoom, setCanvasZoom] = useState<number>(100);
   const [interactMode, setInteractMode] = useState<boolean>(false);
 
+  const [isAdminButtonVisible, setIsAdminButtonVisible] = useState<boolean>(() => {
+    try {
+      return (
+        localStorage.getItem('nihal_admin_button_visible') === 'true' ||
+        sessionStorage.getItem('nihal_admin_button_visible') === 'true'
+      );
+    } catch {
+      return false;
+    }
+  });
+
+  const toggleAdminButton = useCallback(() => {
+    setIsAdminButtonVisible((prev) => {
+      const next = !prev;
+      try {
+        if (next) {
+          localStorage.setItem('nihal_admin_button_visible', 'true');
+          sessionStorage.setItem('nihal_admin_button_visible', 'true');
+        } else {
+          localStorage.removeItem('nihal_admin_button_visible');
+          sessionStorage.removeItem('nihal_admin_button_visible');
+        }
+      } catch {
+        // ignore
+      }
+      return next;
+    });
+  }, []);
+
   const [publishedData, setPublishedData] = useState<StudioData>(getInitialPubData);
   const [draftData, setDraftData] = useState<StudioData>(getInitialDraftData);
   const [isDirty, setIsDirty] = useState<boolean>(false);
@@ -282,13 +314,25 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  // Listen to Firebase Auth state
+  // Listen to Firebase Auth state - strictly restricted to nihal.graphix@gmail.com
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (firebaseUser) => {
       setUser(firebaseUser);
       if (firebaseUser) {
-        setIsAdmin(true);
-        localStorage.setItem('nihal_portfolio_admin_auth', 'true');
+        const email = (firebaseUser.email || '').toLowerCase().trim();
+        if (email === 'nihal.graphix@gmail.com') {
+          setIsAdmin(true);
+          localStorage.setItem('nihal_portfolio_admin_auth', 'true');
+        } else {
+          // Any other Gmail/email is rejected from admin privileges
+          setIsAdmin(false);
+          setIsStudioOpen(false);
+          localStorage.removeItem('nihal_portfolio_admin_auth');
+        }
+      } else {
+        setIsAdmin(false);
+        setIsStudioOpen(false);
+        localStorage.removeItem('nihal_portfolio_admin_auth');
       }
     });
     return () => unsub();
@@ -1049,38 +1093,68 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
     setIsDirty(false);
   }, [pushUndoState, draftData]);
 
-  // Auth operations
+  // Auth operations - Strictly restricted to nihal.graphix@gmail.com
   const loginEmail = useCallback(async (email: string, pass: string): Promise<{ success: boolean; error?: string }> => {
+    const cleanEmail = email.toLowerCase().trim();
+    if (cleanEmail !== 'nihal.graphix@gmail.com') {
+      return { 
+        success: false, 
+        error: `Access Denied: The Admin Dashboard is only accessible with nihal.graphix@gmail.com. Account "${email}" is not authorized.` 
+      };
+    }
+
     try {
-      const cred = await signInWithEmailAndPassword(auth, email, pass);
-      setUser(cred.user);
-      setIsAdmin(true);
-      localStorage.setItem('nihal_portfolio_admin_auth', 'true');
-      return { success: true };
-    } catch (err: any) {
-      // In development or if admin credentials match owner email, authorize session
-      if (email.toLowerCase().includes('nihal') || email.toLowerCase().includes('admin')) {
+      const cred = await signInWithEmailAndPassword(auth, cleanEmail, pass);
+      const authenticatedEmail = (cred.user.email || '').toLowerCase().trim();
+      if (authenticatedEmail === 'nihal.graphix@gmail.com') {
+        setUser(cred.user);
         setIsAdmin(true);
         localStorage.setItem('nihal_portfolio_admin_auth', 'true');
         return { success: true };
       }
-      return { success: false, error: err?.message || 'Invalid credentials' };
+      return { success: false, error: 'Access Denied: Account not permitted.' };
+    } catch (err: any) {
+      return { success: false, error: err?.message || 'Authentication error' };
     }
   }, []);
 
-  const loginWithGoogle = useCallback(async (): Promise<boolean> => {
+  const loginWithGoogle = useCallback(async (): Promise<{ success: boolean; error?: string }> => {
     try {
       const res = await googleSignIn();
       if (res?.user) {
+        const userEmail = (res.user.email || '').toLowerCase().trim();
+        if (userEmail !== 'nihal.graphix@gmail.com') {
+          // If any other Gmail account signs in, it WON'T allow access to admin dashboard
+          await signOut(auth).catch(() => {});
+          await logoutGoogle().catch(() => {});
+          setUser(null);
+          setIsAdmin(false);
+          setIsStudioOpen(false);
+          localStorage.removeItem('nihal_portfolio_admin_auth');
+          return {
+            success: false,
+            error: `Access Denied: Account "${res.user.email}" is not authorized. The Admin Dashboard is strictly restricted to nihal.graphix@gmail.com.`
+          };
+        }
+
+        // Successfully authenticated as nihal.graphix@gmail.com
         setUser(res.user);
         setIsAdmin(true);
         localStorage.setItem('nihal_portfolio_admin_auth', 'true');
-        return true;
+        return { success: true };
       }
-    } catch (err) {
+      return { success: false, error: 'Google sign-in was cancelled or returned no account.' };
+    } catch (err: any) {
       console.error('Google Sign-in failed:', err);
+      const msg = err?.message || 'Google sign-in error';
+      if (msg.includes('popup-closed-by-user')) {
+        return { success: false, error: 'Google sign-in window was closed before completing.' };
+      }
+      if (msg.includes('popup-blocked')) {
+        return { success: false, error: 'Sign-in popup was blocked by your browser. Please allow popups for this site.' };
+      }
+      return { success: false, error: msg };
     }
-    return false;
   }, []);
 
   const logout = useCallback(async () => {
@@ -1135,6 +1209,9 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
         saveStatus,
         isDirty,
         selectedElement,
+        isAdminButtonVisible,
+        setIsAdminButtonVisible,
+        toggleAdminButton,
         openStudio: (tab) => {
           if (tab) setActiveTab(tab);
           setIsStudioOpen(true);

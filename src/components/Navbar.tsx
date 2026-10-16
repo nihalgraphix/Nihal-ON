@@ -77,6 +77,11 @@ export default function Navbar({
               e.preventDefault();
               scrollToSection('home');
             }}
+            onDoubleClick={(e) => {
+              e.preventDefault();
+              window.dispatchEvent(new CustomEvent('open-admin-login'));
+            }}
+            title="Nihal Portfolio (Double-click or Right-click for Admin)"
             className="group flex items-center gap-2.5 sm:gap-3 pr-2 cursor-pointer shrink-0"
           >
             <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full overflow-hidden transition-transform group-hover:scale-105">

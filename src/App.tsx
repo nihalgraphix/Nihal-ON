@@ -29,15 +29,70 @@ import StudioShell from './components/studio/StudioShell';
 import AdminFloatingButton from './components/studio/AdminFloatingButton';
 import AdminDashboard from './components/AdminDashboard';
 import SeoHeadSync from './components/SeoHeadSync';
+import PortfolioContextMenu from './components/PortfolioContextMenu';
 
 function PortfolioMain() {
-  const { publishedData, trackEvent, isStudioOpen } = useStudio();
+  const { publishedData, trackEvent, isStudioOpen, isAdminButtonVisible, toggleAdminButton } = useStudio();
   const [activeSection, setActiveSection] = useState<string>('home');
   const [galleryModalOpen, setGalleryModalOpen] = useState<boolean>(false);
   const [soundEnabled, setSoundEnabled] = useState<boolean>(false);
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
   const [aiModalOpen, setAiModalOpen] = useState<boolean>(false);
   const [resumeModalOpen, setResumeModalOpen] = useState<boolean>(false);
+
+  // Global Key Listener: 'Windows + Shift + A' to toggle Admin button, and deny Inspect / View Source
+  useEffect(() => {
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      const keyLower = e.key?.toLowerCase();
+      const isCtrlOrMeta = e.ctrlKey || e.metaKey;
+
+      // 1. DENY Code Inspection & Source Viewing:
+      // Block F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C, Ctrl+U, Ctrl+S (and Mac Cmd equivalents)
+      if (
+        e.key === 'F12' ||
+        (isCtrlOrMeta && e.shiftKey && (keyLower === 'i' || keyLower === 'j' || keyLower === 'c')) ||
+        (isCtrlOrMeta && (keyLower === 'u' || keyLower === 's'))
+      ) {
+        e.preventDefault();
+        e.stopPropagation();
+        window.dispatchEvent(new CustomEvent('inspect-denied'));
+        return false;
+      }
+
+      // 2. 'Windows + Shift + A' Key Combination:
+      // Correctly toggles the visibility state of the admin floating button
+      const isKeyA = keyLower === 'a' || e.code === 'KeyA';
+      const hasShift = e.shiftKey;
+      const hasWinOrMeta =
+        e.metaKey ||
+        (typeof e.getModifierState === 'function' &&
+          (e.getModifierState('Meta') || e.getModifierState('OS') || e.getModifierState('Win')));
+      const hasModifier = hasWinOrMeta || e.ctrlKey || e.altKey;
+
+      if (isKeyA && hasShift && hasModifier) {
+        e.preventDefault();
+        e.stopPropagation();
+        toggleAdminButton();
+      }
+    };
+
+    const handleGlobalContextMenu = (e: MouseEvent) => {
+      // Completely remove default browser right-click across the entire page
+      e.preventDefault();
+    };
+
+    window.addEventListener('keydown', handleGlobalKeyDown, { capture: true });
+    document.addEventListener('keydown', handleGlobalKeyDown, { capture: true });
+    window.addEventListener('contextmenu', handleGlobalContextMenu, { capture: true });
+    document.addEventListener('contextmenu', handleGlobalContextMenu, { capture: true });
+
+    return () => {
+      window.removeEventListener('keydown', handleGlobalKeyDown, { capture: true });
+      document.removeEventListener('keydown', handleGlobalKeyDown, { capture: true });
+      window.removeEventListener('contextmenu', handleGlobalContextMenu, { capture: true });
+      document.removeEventListener('contextmenu', handleGlobalContextMenu, { capture: true });
+    };
+  }, [toggleAdminButton]);
 
   // Active project object (from live studio data or default)
   const currentProjects = publishedData?.projects && publishedData.projects.length > 0
@@ -169,18 +224,24 @@ function PortfolioMain() {
       {/* Precision Custom Cursor & Glow Follow */}
       <CustomCursor soundEnabled={soundEnabled} setSoundEnabled={setSoundEnabled} />
 
-      {/* Sticky Header Navigation */}
-      <Navbar
-        activeSection={activeSection}
-        setActiveSection={setActiveSection}
-        soundEnabled={soundEnabled}
-        setSoundEnabled={setSoundEnabled}
-        onOpenAiModal={() => setAiModalOpen(true)}
+      {/* Global Right-Click Context Menu */}
+      <PortfolioContextMenu
         onOpenResumeModal={() => setResumeModalOpen(true)}
-      />
+        onOpenAiModal={() => setAiModalOpen(true)}
+        onOpenGallery={() => setGalleryModalOpen(true)}
+      >
+        {/* Sticky Header Navigation */}
+        <Navbar
+          activeSection={activeSection}
+          setActiveSection={setActiveSection}
+          soundEnabled={soundEnabled}
+          setSoundEnabled={setSoundEnabled}
+          onOpenAiModal={() => setAiModalOpen(true)}
+          onOpenResumeModal={() => setResumeModalOpen(true)}
+        />
 
-      {/* Main Page Sections with Scroll Animations */}
-      <main>
+        {/* Main Page Sections with Scroll Animations */}
+        <main>
         <Hero
           onSelectProject={(id) => {
             trackEvent('project_click', id);
@@ -314,6 +375,7 @@ function PortfolioMain() {
 
       {/* Footer */}
       <Footer setActiveSection={setActiveSection} />
+      </PortfolioContextMenu>
 
       {/* Modals & Fullscreen Overlays */}
       <CaseStudyModal
