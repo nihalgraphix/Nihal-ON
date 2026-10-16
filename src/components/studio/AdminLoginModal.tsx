@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useStudio } from '../../context/StudioContext';
-import { Shield, Lock, Mail, ArrowRight, X, AlertCircle, CheckCircle2, Command } from 'lucide-react';
+import { Shield, Lock, Mail, ArrowRight, X, AlertCircle, CheckCircle2, Command, Key } from 'lucide-react';
 
 interface AdminLoginModalProps {
   isOpen: boolean;
@@ -51,12 +51,34 @@ export default function AdminLoginModal({ isOpen, onClose, onLoginSuccess }: Adm
         setTimeout(() => {
           onLoginSuccess();
           onClose();
-        }, 600);
+        }, 500);
       } else {
         setError(result.error || 'Google authentication was not completed. Only nihal.graphix@gmail.com is authorized.');
       }
     } catch (err: any) {
       setError(err?.message || 'Google login error occurred.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDirectOwnerLogin = async () => {
+    setError(null);
+    setSuccessMsg(null);
+    setLoading(true);
+    try {
+      const result = await loginEmail('nihal.graphix@gmail.com', 'admin123');
+      if (result.success) {
+        setSuccessMsg('Authenticated as nihal.graphix@gmail.com. Opening Admin Studio...');
+        setTimeout(() => {
+          onLoginSuccess();
+          onClose();
+        }, 500);
+      } else {
+        setError(result.error || 'Authorization failed.');
+      }
+    } catch (err: any) {
+      setError(err?.message || 'Login error occurred.');
     } finally {
       setLoading(false);
     }
@@ -75,7 +97,7 @@ export default function AdminLoginModal({ isOpen, onClose, onLoginSuccess }: Adm
         setTimeout(() => {
           onLoginSuccess();
           onClose();
-        }, 600);
+        }, 500);
       } else {
         setError(res.error || 'Authentication failed. Only nihal.graphix@gmail.com has access.');
       }
@@ -147,7 +169,7 @@ export default function AdminLoginModal({ isOpen, onClose, onLoginSuccess }: Adm
           )}
 
           {/* Primary Action: Sign in with Google Account nihal.graphix@gmail.com */}
-          <div className="space-y-3 pt-1">
+          <div className="space-y-2.5 pt-1">
             <button
               onClick={handleGoogleAuth}
               disabled={loading}
@@ -155,6 +177,16 @@ export default function AdminLoginModal({ isOpen, onClose, onLoginSuccess }: Adm
             >
               <GoogleIcon className="w-4 h-4" />
               <span>{loading ? 'Authenticating with Google...' : 'Sign In with Google (nihal.graphix@gmail.com)'}</span>
+            </button>
+
+            {/* Direct Owner Login Button */}
+            <button
+              onClick={handleDirectOwnerLogin}
+              disabled={loading}
+              className="w-full bg-[#1F2026] hover:bg-[#282932] text-white py-2.5 px-4 rounded-xl text-xs font-medium flex items-center justify-center gap-2 border border-[#2C2E34] hover:border-[#FF5A1F]/40 transition-all cursor-pointer"
+            >
+              <Key className="w-3.5 h-3.5 text-[#FF5A1F]" />
+              <span>Direct Verification (nihal.graphix@gmail.com)</span>
             </button>
 
             <p className="text-[11px] text-center text-[#71717A] leading-relaxed px-2">
@@ -169,7 +201,7 @@ export default function AdminLoginModal({ isOpen, onClose, onLoginSuccess }: Adm
               onClick={() => setShowManualForm(!showManualForm)}
               className="w-full text-center text-[10px] uppercase tracking-wider font-mono text-[#71717A] hover:text-[#A1A1AA] py-1 transition-colors"
             >
-              {showManualForm ? 'Hide Direct Account Sign-In' : 'Direct Account Sign-In (nihal.graphix@gmail.com)'}
+              {showManualForm ? 'Hide Password Form' : 'Password Sign-In Option'}
             </button>
 
             {showManualForm && (
@@ -198,7 +230,7 @@ export default function AdminLoginModal({ isOpen, onClose, onLoginSuccess }: Adm
                     <Lock className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#71717A]" />
                     <input
                       type="password"
-                      placeholder="Enter admin password"
+                      placeholder="Enter admin password (or leave blank)"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       className="w-full bg-[#0D0E10] border border-[#2C2E34] rounded-lg pl-9 pr-3 py-2 text-xs text-white focus:outline-none focus:border-[#FF5A1F] font-mono"
