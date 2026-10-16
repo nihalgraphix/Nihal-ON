@@ -34,26 +34,7 @@ export default function PortfolioContextMenu({
 
   const [copied, setCopied] = useState(false);
 
-  // 1. Strictly prevent default browser right-click menu globally
-  useEffect(() => {
-    const disableNativeContextMenu = (e: MouseEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-      e.stopImmediatePropagation();
-      return false;
-    };
 
-    const targets = [window, document, document.documentElement, document.body].filter(Boolean);
-    targets.forEach((target) => {
-      target.addEventListener('contextmenu', disableNativeContextMenu as EventListener, { capture: true });
-    });
-
-    return () => {
-      targets.forEach((target) => {
-        target.removeEventListener('contextmenu', disableNativeContextMenu as EventListener, { capture: true });
-      });
-    };
-  }, []);
 
   const scrollToSection = (id: string) => {
     const el = document.getElementById(id);
@@ -136,49 +117,7 @@ export default function PortfolioContextMenu({
             </ContextMenuItem>
           </ContextMenuGroup>
 
-          <ContextMenuSeparator className="my-1 -mx-1.5 bg-white/6 border-none" />
 
-          {/* Quick Navigation - Minimal Text Only, No Shortcuts */}
-          <ContextMenuGroup>
-            <ContextMenuLabel className="px-3 py-1 text-[10px] font-mono tracking-widest text-neutral-400 uppercase font-semibold">
-              Navigation
-            </ContextMenuLabel>
-
-            <ContextMenuItem
-              onClick={() => scrollToSection('projects')}
-              className="flex items-center px-3 py-1.5 rounded-xl text-neutral-300 hover:text-white hover:bg-white/10 transition-all duration-200 ease-out hover:translate-x-1.5 cursor-pointer border-none outline-none"
-            >
-              <span>Selected Works & Projects</span>
-            </ContextMenuItem>
-
-            <ContextMenuItem
-              onClick={() => scrollToSection('about')}
-              className="flex items-center px-3 py-1.5 rounded-xl text-neutral-300 hover:text-white hover:bg-white/10 transition-all duration-200 ease-out hover:translate-x-1.5 cursor-pointer border-none outline-none"
-            >
-              <span>About Muhammed Nihal</span>
-            </ContextMenuItem>
-
-            <ContextMenuItem
-              onClick={() => scrollToSection('services')}
-              className="flex items-center px-3 py-1.5 rounded-xl text-neutral-300 hover:text-white hover:bg-white/10 transition-all duration-200 ease-out hover:translate-x-1.5 cursor-pointer border-none outline-none"
-            >
-              <span>Services & Solutions</span>
-            </ContextMenuItem>
-
-            <ContextMenuItem
-              onClick={() => scrollToSection('skills')}
-              className="flex items-center px-3 py-1.5 rounded-xl text-neutral-300 hover:text-white hover:bg-white/10 transition-all duration-200 ease-out hover:translate-x-1.5 cursor-pointer border-none outline-none"
-            >
-              <span>Skills & Tech Stack</span>
-            </ContextMenuItem>
-
-            <ContextMenuItem
-              onClick={() => scrollToSection('contact')}
-              className="flex items-center px-3 py-1.5 rounded-xl text-neutral-300 hover:text-white hover:bg-white/10 transition-all duration-200 ease-out hover:translate-x-1.5 cursor-pointer border-none outline-none"
-            >
-              <span>Contact & Inquiries</span>
-            </ContextMenuItem>
-          </ContextMenuGroup>
 
           <ContextMenuSeparator className="my-1 -mx-1.5 bg-white/6 border-none" />
 

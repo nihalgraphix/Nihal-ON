@@ -13,29 +13,31 @@ import {
 import heroPortrait from '../components/image/3ebaca72-c048-4ad3-ace0-649046417171.png';
 import aboutPortrait from '../assets/images/regenerated_image_1785750001960.png';
 
+import { SITE_TEXTS } from './siteTexts';
+
 export { heroPortrait, aboutPortrait };
 
 export const PERSONAL_INFO = {
-  name: "MUHAMMED NIHAL",
-  title: "16-Year-Old Developer & Graphic Designer",
-  tagline: "Always learning. Always building. Always creating.",
-  location: "Kochi, Kerala, India",
-  status: "🟢 Available for Projects & Collaborations",
-  yearsExperience: "3+",
-  projectsCompleted: "Hands-on",
-  clientSatisfaction: "100%",
-  happyClients: "Creative",
-  email: "nihal.graphix@gmail.com",
-  phone: "+91 9946001322",
-  github: "https://github.com/nihaldeveloper",
-  linkedin: "https://linkedin.com",
-  twitter: "https://twitter.com",
-  instagram: "https://instagram.com/nihal.graphix",
-  dribbble: "https://dribbble.com",
-  behance: "https://behance.com",
-  calendly: "https://calendly.com",
-  blogUrl: "https://medium.com",
-  bio: "Hi, I'm Nihal — a 16-year-old Developer & Graphic Designer from Kochi, Kerala, India, passionate about technology, creativity, and building things for the digital world. I enjoy turning ideas into meaningful digital experiences by combining creative design with modern web technologies.",
+  name: SITE_TEXTS.personal.name,
+  title: SITE_TEXTS.personal.title,
+  tagline: SITE_TEXTS.personal.tagline,
+  location: SITE_TEXTS.personal.location,
+  status: `🟢 ${SITE_TEXTS.personal.status}`,
+  yearsExperience: SITE_TEXTS.personal.yearsExperience,
+  projectsCompleted: SITE_TEXTS.personal.projectsCompleted,
+  clientSatisfaction: SITE_TEXTS.personal.clientSatisfaction,
+  happyClients: SITE_TEXTS.personal.happyClients,
+  email: SITE_TEXTS.personal.email,
+  phone: SITE_TEXTS.personal.phone,
+  github: SITE_TEXTS.personal.github,
+  linkedin: SITE_TEXTS.personal.linkedin,
+  twitter: SITE_TEXTS.personal.twitter,
+  instagram: SITE_TEXTS.personal.instagram,
+  dribbble: SITE_TEXTS.personal.dribbble,
+  behance: SITE_TEXTS.personal.behance,
+  calendly: SITE_TEXTS.personal.calendly,
+  blogUrl: SITE_TEXTS.personal.blogUrl,
+  bio: SITE_TEXTS.personal.bio,
 };
 
 export const BRANDS = [

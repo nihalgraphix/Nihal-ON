@@ -2,6 +2,7 @@ import { motion } from 'motion/react';
 import { Sparkles, ArrowDown, ChevronRight, ChevronLeft } from 'lucide-react';
 import nihalHeroPhoto from './image/3ebaca72-c048-4ad3-ace0-649046417171.png';
 import { PERSONAL_INFO } from '../data/portfolioData';
+import { SITE_TEXTS } from '../data/siteTexts';
 import { useStudio } from '../context/StudioContext';
 import EditableText from './EditableText';
 
@@ -35,10 +36,10 @@ export default function Hero({ onOpenResumeModal }: HeroProps) {
         <div className="pointer-events-none absolute -top-40 -left-40 h-[600px] w-[600px] rounded-full bg-white/10 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-40 -right-40 h-[600px] w-[600px] rounded-full bg-black/30 blur-3xl" />
 
-        <div className="relative z-10 mx-auto max-w-7xl grid grid-cols-1 lg:grid-cols-12 gap-8 items-center min-h-[560px] lg:min-h-[620px]">
+        <div style={{ gap: SITE_TEXTS.spacing?.heroColumnGap || '56px' }} className="relative z-10 mx-auto max-w-7xl grid grid-cols-1 lg:grid-cols-12 items-center min-h-[560px] lg:min-h-[620px]">
           
           {/* Left Column: Headline, Pill, Subtitle & Buttons */}
-          <div className="lg:col-span-5 flex flex-col justify-center space-y-6 lg:space-y-8 text-white z-20">
+          <div style={{ gap: SITE_TEXTS.spacing?.heroElementGap || '32px' }} className="lg:col-span-5 flex flex-col justify-center text-white z-20 min-w-0">
             {/* Top Pill Badge */}
             {badgeEl?.visible !== false && (
               <motion.div
@@ -51,14 +52,15 @@ export default function Hero({ onOpenResumeModal }: HeroProps) {
                   style={{
                     backgroundColor: badgeEl?.appearance?.backgroundColor || '#FFFFFF',
                     color: badgeEl?.typography?.textColor || '#000000',
-                    fontSize: badgeEl?.typography?.fontSize || '12px',
-                    fontWeight: badgeEl?.typography?.fontWeight || '700',
+                    fontSize: badgeEl?.typography?.fontSize || SITE_TEXTS.typography?.heroBadgeFontSize || '12px',
+                    fontWeight: badgeEl?.typography?.fontWeight || SITE_TEXTS.typography?.heroBadgeFontWeight || '700',
                     borderRadius: badgeEl?.appearance?.borderRadius || '9999px',
+                    whiteSpace: 'pre',
                   }}
-                  className="inline-flex items-center gap-2 px-4 py-1.5 font-space shadow-lg cursor-pointer"
+                  className="inline-flex items-center gap-2 px-4 py-1.5 font-space shadow-lg cursor-pointer whitespace-pre"
                 >
-                  <Sparkles className="h-3.5 w-3.5 text-[#FF5A1F]" />
-                  <EditableText id="hero-badge-text" as="span" defaultText="16-Year-Old Developer & Graphic Designer" />
+                  <Sparkles className="h-3.5 w-3.5 text-[#FF5A1F] shrink-0" />
+                  <EditableText id="hero-badge-text" as="span" style={{ whiteSpace: 'pre' }} className="whitespace-pre" defaultText={SITE_TEXTS.hero.badge} />
                 </span>
               </motion.div>
             )}
@@ -69,18 +71,20 @@ export default function Hero({ onOpenResumeModal }: HeroProps) {
               initial={{ opacity: 0, y: 25 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="space-y-2 cursor-pointer"
+              className="cursor-pointer min-w-0"
             >
               <EditableText
                 id="hero-headline-text"
                 as="h1"
                 style={{
                   color: headlineEl?.typography?.textColor || '#FFFFFF',
-                  fontSize: headlineEl?.typography?.fontSize || undefined,
-                  fontWeight: headlineEl?.typography?.fontWeight || '900',
+                  fontSize: headlineEl?.typography?.fontSize || SITE_TEXTS.typography?.heroHeadlineFontSize,
+                  fontWeight: headlineEl?.typography?.fontWeight || SITE_TEXTS.typography?.heroHeadlineFontWeight || '800',
+                  lineHeight: headlineEl?.typography?.lineHeight || SITE_TEXTS.spacing?.heroHeadlineLineHeight || '1.05',
+                  whiteSpace: 'pre',
                 }}
-                className="font-syne text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.02]"
-                defaultText="Hi, I'm Nihal"
+                className="font-syne text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight whitespace-pre"
+                defaultText={SITE_TEXTS.hero.headline}
               />
             </motion.div>
 
@@ -96,10 +100,13 @@ export default function Hero({ onOpenResumeModal }: HeroProps) {
                 as="p"
                 style={{
                   color: subtextEl?.typography?.textColor || 'rgba(255, 255, 255, 0.95)',
-                  fontSize: subtextEl?.typography?.fontSize || undefined,
+                  fontSize: subtextEl?.typography?.fontSize || SITE_TEXTS.typography?.heroSubtextFontSize,
+                  fontWeight: subtextEl?.typography?.fontWeight || SITE_TEXTS.typography?.heroSubtextFontWeight || '400',
+                  lineHeight: subtextEl?.typography?.lineHeight || SITE_TEXTS.spacing?.heroSubtextLineHeight || '1.6',
+                  whiteSpace: 'pre-line',
                 }}
-                className="text-sm sm:text-base font-sans max-w-md leading-relaxed font-normal cursor-pointer"
-                defaultText="A 16-year-old Developer & Graphic Designer from Kochi, Kerala, India, passionate about technology, creativity, and turning ideas into meaningful digital experiences by combining creative design with modern web technologies."
+                className="text-sm sm:text-base font-sans max-w-xl cursor-pointer"
+                defaultText={SITE_TEXTS.hero.subtext}
               />
             </motion.div>
 
@@ -108,7 +115,8 @@ export default function Hero({ onOpenResumeModal }: HeroProps) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="flex flex-wrap items-center gap-4 pt-2"
+              style={{ gap: SITE_TEXTS.spacing?.heroButtonsGap || '16px' }}
+              className="flex flex-wrap items-center pt-2"
             >
               <a
                 data-editable-id="hero-btn-primary"
@@ -120,7 +128,7 @@ export default function Hero({ onOpenResumeModal }: HeroProps) {
                 }}
                 className="px-8 py-3.5 text-xs sm:text-sm font-bold shadow-2xl hover:bg-black hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer font-syne border border-white/10"
               >
-                {btn1El?.content?.text || 'Explore Work'}
+                {btn1El?.content?.text || SITE_TEXTS.hero.btnPrimary}
               </a>
 
               <a
@@ -133,7 +141,7 @@ export default function Hero({ onOpenResumeModal }: HeroProps) {
                 }}
                 className="px-8 py-3.5 text-xs sm:text-sm font-bold shadow-lg hover:bg-neutral-100 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer font-syne"
               >
-                {btn2El?.content?.text || 'Get In Touch'}
+                {btn2El?.content?.text || SITE_TEXTS.hero.btnSecondary}
               </a>
             </motion.div>
           </div>
@@ -183,7 +191,7 @@ export default function Hero({ onOpenResumeModal }: HeroProps) {
                     <EditableText
                       id="hero-scroll-pill-text"
                       as="span"
-                      defaultText="Scroll for more"
+                      defaultText={SITE_TEXTS.hero.scrollPill}
                       className="font-bold"
                     />
                     <span className="flex h-4 w-4 items-center justify-center rounded-full bg-black text-white text-[10px]">
@@ -196,7 +204,7 @@ export default function Hero({ onOpenResumeModal }: HeroProps) {
           )}
 
           {/* Right Column: Case study testimonial & Growth metric */}
-          <div className="lg:col-span-3 flex flex-col justify-between space-y-10 text-white z-20 lg:pl-4">
+          <div style={{ gap: SITE_TEXTS.spacing?.heroRightColumnGap || '48px' }} className="lg:col-span-3 flex flex-col justify-between text-white z-20 lg:pl-4">
             {/* Top Right Testimonial Text */}
             <motion.div
               data-editable-id="hero-quote"
@@ -213,7 +221,7 @@ export default function Hero({ onOpenResumeModal }: HeroProps) {
                 id="hero-quote-text"
                 as="p"
                 className="text-xs sm:text-sm text-white/95 font-sans leading-relaxed"
-                defaultText="I believe age is no barrier to creativity, learning, or innovation. Every project is an opportunity to challenge myself, gain experience, and turn new ideas into something real."
+                defaultText={SITE_TEXTS.hero.quote}
               />
             </motion.div>
 
@@ -239,7 +247,7 @@ export default function Hero({ onOpenResumeModal }: HeroProps) {
                   id="hero-growth-label-text"
                   as="span"
                   className="text-[10px] font-space font-extrabold uppercase tracking-widest text-white/80"
-                  defaultText="ALWAYS CREATING"
+                  defaultText={SITE_TEXTS.hero.growthLabel}
                 />
                 <div className="flex items-center gap-1 text-white/80">
                   <ChevronLeft className="h-3.5 w-3.5 cursor-pointer hover:text-white" />
@@ -258,7 +266,7 @@ export default function Hero({ onOpenResumeModal }: HeroProps) {
                   id="hero-growth-value-text"
                   as="h3"
                   className="font-syne text-5xl sm:text-7xl font-extrabold tracking-tight text-white leading-none"
-                  defaultText="16 YRS"
+                  defaultText={SITE_TEXTS.hero.growthValue}
                 />
               </div>
             </motion.div>

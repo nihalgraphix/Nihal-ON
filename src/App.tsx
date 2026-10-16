@@ -110,11 +110,8 @@ function PortfolioMain() {
     };
 
     const handleGlobalContextMenu = (e: MouseEvent) => {
-      // Strictly prevent browser's native context menu across all elements
+      // Prevent native browser right-click inspect menu while allowing custom context menu to trigger
       e.preventDefault();
-      e.stopPropagation();
-      e.stopImmediatePropagation();
-      return false;
     };
 
     const handleGlobalDragStart = (e: DragEvent) => {

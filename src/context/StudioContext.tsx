@@ -5,6 +5,7 @@ import { StudioData, EditableElement, ElementTypography, ElementAppearance, Elem
 import { DEFAULT_STUDIO_DATA } from '../data/defaultStudioData';
 import { DEFAULT_SECTION_SEO } from '../data/defaultSeoData';
 import { PROJECTS } from '../data/portfolioData';
+import { SITE_TEXTS } from '../data/siteTexts';
 import { persistStudioData, fetchStudioData, deleteFirestoreDocument, setFirestoreDocument, fetchFirestoreCollection, revokeAllAdminSessionsFirestore, fetchAdminSessionRevocationTime } from '../lib/firebaseStore';
 import { Project, BlogPost, GalleryItem, SkillCategory } from '../types';
 
@@ -135,66 +136,66 @@ function sanitizeStudioData(data: StudioData): StudioData {
     }
   }
 
-  // Force pristine original texts for all Hero section elements & text nodes
+  // Force pristine texts from SITE_TEXTS for all Hero section elements & text nodes
   elements['hero-badge'] = {
     ...elements['hero-badge'],
-    content: { ...(elements['hero-badge']?.content || {}), text: '16-Year-Old Developer & Graphic Designer' }
+    content: { ...(elements['hero-badge']?.content || {}), text: SITE_TEXTS.hero.badge }
   };
   elements['hero-badge-text'] = {
     ...elements['hero-badge-text'],
-    content: { ...(elements['hero-badge-text']?.content || {}), text: '16-Year-Old Developer & Graphic Designer' }
+    content: { ...(elements['hero-badge-text']?.content || {}), text: SITE_TEXTS.hero.badge }
   };
   elements['hero-headline'] = {
     ...elements['hero-headline'],
-    content: { text: "Hi, I'm Nihal", subtext: "16-Year-Old Developer & Graphic Designer from Kochi, Kerala" }
+    content: { text: SITE_TEXTS.hero.headline, subtext: SITE_TEXTS.hero.headlineSubtext }
   };
   elements['hero-headline-text'] = {
     ...elements['hero-headline-text'],
-    content: { text: "Hi, I'm Nihal" }
+    content: { text: SITE_TEXTS.hero.headline }
   };
   elements['hero-subtext'] = {
     ...elements['hero-subtext'],
-    content: { text: "A 16-year-old Developer & Graphic Designer from Kochi, Kerala, India, passionate about technology, creativity, and turning ideas into meaningful digital experiences by combining creative design with modern web technologies." }
+    content: { text: SITE_TEXTS.hero.subtext }
   };
   elements['hero-subtext-para'] = {
     ...elements['hero-subtext-para'],
-    content: { text: "A 16-year-old Developer & Graphic Designer from Kochi, Kerala, India, passionate about technology, creativity, and turning ideas into meaningful digital experiences by combining creative design with modern web technologies." }
+    content: { text: SITE_TEXTS.hero.subtext }
   };
   elements['hero-btn-primary'] = {
     ...elements['hero-btn-primary'],
-    content: { text: 'Explore Work', link: '#about' }
+    content: { text: SITE_TEXTS.hero.btnPrimary, link: '#about' }
   };
   elements['hero-btn-secondary'] = {
     ...elements['hero-btn-secondary'],
-    content: { text: 'Get In Touch', link: '#contact' }
+    content: { text: SITE_TEXTS.hero.btnSecondary, link: '#contact' }
   };
   elements['hero-quote'] = {
     ...elements['hero-quote'],
-    content: { text: "I believe age is no barrier to creativity, learning, or innovation. Every project is an opportunity to challenge myself, gain experience, and turn new ideas into something real." }
+    content: { text: SITE_TEXTS.hero.quote }
   };
   elements['hero-quote-text'] = {
     ...elements['hero-quote-text'],
-    content: { text: "I believe age is no barrier to creativity, learning, or innovation. Every project is an opportunity to challenge myself, gain experience, and turn new ideas into something real." }
+    content: { text: SITE_TEXTS.hero.quote }
   };
   elements['hero-growth-label'] = {
     ...elements['hero-growth-label'],
-    content: { text: "ALWAYS CREATING" }
+    content: { text: SITE_TEXTS.hero.growthLabel }
   };
   elements['hero-growth-label-text'] = {
     ...elements['hero-growth-label-text'],
-    content: { text: "ALWAYS CREATING" }
+    content: { text: SITE_TEXTS.hero.growthLabel }
   };
   elements['hero-growth-value'] = {
     ...elements['hero-growth-value'],
-    content: { text: "16 YRS" }
+    content: { text: SITE_TEXTS.hero.growthValue }
   };
   elements['hero-growth-value-text'] = {
     ...elements['hero-growth-value-text'],
-    content: { text: "16 YRS" }
+    content: { text: SITE_TEXTS.hero.growthValue }
   };
   elements['hero-scroll-pill-text'] = {
     ...elements['hero-scroll-pill-text'],
-    content: { text: "Scroll for more" }
+    content: { text: SITE_TEXTS.hero.scrollPill }
   };
   if (elements['about-heading']?.content?.text?.includes('Bridging Imagination') || elements['about-heading']?.content?.text?.includes('A small studio')) {
     elements['about-heading'] = {
@@ -557,16 +558,16 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
     setRedoStack([]);
   }, []);
 
-  // Text Node Operations - Always serves original default text
+  // Text Node Operations - Always serves original default text from SITE_TEXTS
   const getTextNode = useCallback((id: string, defaultText: string = ''): string => {
-    // Explicit baseline overrides for hero text nodes
-    if (id === 'hero-headline-text' || id === 'hero-headline') return "Hi, I'm Nihal";
-    if (id === 'hero-badge-text' || id === 'hero-badge') return "16-Year-Old Developer & Graphic Designer";
-    if (id === 'hero-subtext-para' || id === 'hero-subtext') return "A 16-year-old Developer & Graphic Designer from Kochi, Kerala, India, passionate about technology, creativity, and turning ideas into meaningful digital experiences by combining creative design with modern web technologies.";
-    if (id === 'hero-quote-text' || id === 'hero-quote') return "I believe age is no barrier to creativity, learning, or innovation. Every project is an opportunity to challenge myself, gain experience, and turn new ideas into something real.";
-    if (id === 'hero-growth-label-text' || id === 'hero-growth-label') return "ALWAYS CREATING";
-    if (id === 'hero-growth-value-text' || id === 'hero-growth-value') return "16 YRS";
-    if (id === 'hero-scroll-pill-text') return "Scroll for more";
+    // Explicit baseline overrides for hero text nodes derived directly from SITE_TEXTS
+    if (id === 'hero-headline-text' || id === 'hero-headline') return SITE_TEXTS.hero.headline;
+    if (id === 'hero-badge-text' || id === 'hero-badge') return SITE_TEXTS.hero.badge;
+    if (id === 'hero-subtext-para' || id === 'hero-subtext') return SITE_TEXTS.hero.subtext;
+    if (id === 'hero-quote-text' || id === 'hero-quote') return SITE_TEXTS.hero.quote;
+    if (id === 'hero-growth-label-text' || id === 'hero-growth-label') return SITE_TEXTS.hero.growthLabel;
+    if (id === 'hero-growth-value-text' || id === 'hero-growth-value') return SITE_TEXTS.hero.growthValue;
+    if (id === 'hero-scroll-pill-text') return SITE_TEXTS.hero.scrollPill;
 
     const origElem = DEFAULT_STUDIO_DATA?.elements?.[id];
     if (origElem?.content?.text) {

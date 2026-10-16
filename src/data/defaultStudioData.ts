@@ -1,6 +1,7 @@
 import { StudioData, EditableElement } from '../types/studio';
 import { PROJECTS, BLOG_POSTS, GALLERY_ITEMS, PERSONAL_INFO, aboutPortrait, SKILL_CATEGORIES } from './portfolioData';
 import { DEFAULT_SECTION_SEO } from './defaultSeoData';
+import { SITE_TEXTS } from './siteTexts';
 import aiSprintLeaderImage from '../components/image/3ebaca72-c048-4ad3-ace0-649046417171.png';
 
 export const INITIAL_ELEMENTS: Record<string, EditableElement> = {
@@ -23,7 +24,7 @@ export const INITIAL_ELEMENTS: Record<string, EditableElement> = {
     parentId: 'hero-section',
     type: 'badge',
     content: {
-      text: '16-Year-Old Developer & Graphic Designer',
+      text: SITE_TEXTS.hero.badge,
     },
     typography: {
       fontSize: '12px',
@@ -43,8 +44,8 @@ export const INITIAL_ELEMENTS: Record<string, EditableElement> = {
     parentId: 'hero-section',
     type: 'heading',
     content: {
-      text: "Hi, I'm Nihal",
-      subtext: "16-Year-Old Developer & Graphic Designer from Kochi, Kerala",
+      text: SITE_TEXTS.hero.headline,
+      subtext: SITE_TEXTS.hero.headlineSubtext,
     },
     typography: {
       fontSize: '48px',
@@ -65,7 +66,7 @@ export const INITIAL_ELEMENTS: Record<string, EditableElement> = {
     parentId: 'hero-section',
     type: 'text',
     content: {
-      text: 'A 16-year-old Developer & Graphic Designer from Kochi, Kerala, India, passionate about technology, creativity, and turning ideas into meaningful digital experiences by combining creative design with modern web technologies.',
+      text: SITE_TEXTS.hero.subtext,
     },
     typography: {
       fontSize: '16px',

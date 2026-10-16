@@ -35,7 +35,7 @@ export const EditableText: React.FC<EditableTextProps> = ({
   const typo = elementConfig?.typography;
 
   const combinedStyle: React.CSSProperties = {
-    whiteSpace: (typo as any)?.whiteSpace || 'pre-line',
+    whiteSpace: style?.whiteSpace || (typo as any)?.whiteSpace || 'pre-line',
     ...style,
     ...(typo?.fontSize ? { fontSize: typo.fontSize } : {}),
     ...(typo?.fontWeight ? { fontWeight: typo.fontWeight } : {}),
@@ -57,7 +57,7 @@ export const EditableText: React.FC<EditableTextProps> = ({
 
   const textClassNames = [
     className,
-    'whitespace-pre-line break-words overflow-wrap-anywhere max-w-full',
+    'max-w-full',
   ].filter(Boolean).join(' ');
 
   const contentToDisplay = currentText || children || fallbackText;
