@@ -286,7 +286,7 @@ export default function Contact() {
                 id="contact-subtitle"
                 as="p"
                 className="text-neutral-300 text-sm font-sans mt-4 leading-relaxed"
-                defaultText="Have a new venture, product redesign, or Framer motion concept in mind? Fill out the form or reach out directly."
+                defaultText="Interested in collaborating on a website, interactive dashboard, graphic design, or AI-powered project? Send a message or get in touch directly."
               />
             </div>
 

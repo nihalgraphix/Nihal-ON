@@ -52,9 +52,9 @@ export default function ResumeModal({
 
           {/* Executive Summary */}
           <div className="p-6 rounded-2xl glass-card border border-white/10 space-y-2">
-            <span className="text-xs uppercase font-space text-[#FF5A1F] font-bold block">Executive Summary</span>
+            <span className="text-xs uppercase font-space text-[#FF5A1F] font-bold block">About Me & Overview</span>
             <p className="text-xs sm:text-sm text-neutral-300 font-sans leading-relaxed">
-              Senior Creative Technologist with 6+ years of experience leading UI/UX architecture and full-stack web engineering. Proven track record deploying 150+ web platforms with 98% client satisfaction and multiple Awwwards recognitions.
+              Hi, I'm Nihal — a 16-year-old Developer & Graphic Designer from Kochi, Kerala, India, passionate about technology, creativity, and building things for the digital world. I combine creative design with modern web technologies, developing interactive websites, web applications, dashboards, sports fest systems, and graphics with clean modern interfaces, smooth animations, and glassmorphism.
             </p>
           </div>
 

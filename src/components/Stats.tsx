@@ -37,10 +37,10 @@ export default function Stats() {
           className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-16"
         >
           {[
-            { id: 'projects', value: "150+", label: "Projects Completed", subtitle: "Web apps, design systems & mobile" },
-            { id: 'satisfaction', value: "98%", label: "Client Satisfaction", subtitle: "5-star rating on all case studies" },
-            { id: 'clients', value: "50+", label: "Global Clients", subtitle: "Silicon Valley, London, Paris, Tokyo" },
-            { id: 'experience', value: "6+", label: "Years Experience", subtitle: "Senior creative & full-stack role" }
+            { id: 'projects', value: "Hands-on", label: "Projects Completed", subtitle: "Sports fest systems, web apps & UI" },
+            { id: 'satisfaction', value: "100%", label: "Creative Passion", subtitle: "Always learning, building & creating" },
+            { id: 'clients', value: "16 Yrs", label: "Age No Barrier", subtitle: "Developer & Graphic Designer" },
+            { id: 'experience', value: "3+", label: "Years Coding & Design", subtitle: "Frontend, UI/UX & Graphics" }
           ].map((item, idx) => (
             <motion.div
               key={idx}
@@ -90,7 +90,7 @@ export default function Stats() {
               id="stats-pulse-desc"
               as="p"
               className="text-xs text-neutral-300 font-sans leading-relaxed"
-              defaultText="Active open source maintainer contributing to Next.js templates, Framer motion presets, and React component libraries."
+              defaultText="Hands-on learning through code, experimenting with modern web tools, AI-powered systems, and building interactive platforms."
             />
 
             <div className="flex items-center gap-6 pt-2 text-xs font-space text-neutral-400">

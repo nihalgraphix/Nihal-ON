@@ -75,25 +75,25 @@ const tabContent = {
         id="about-story-title"
         as="h3"
         className="font-syne text-xl font-bold text-white cursor-pointer"
-        defaultText="From visual craft to useful code."
+        defaultText="16-Year-Old Developer & Graphic Designer"
       >
-        From visual craft to useful code.
+        16-Year-Old Developer & Graphic Designer
       </EditableText>
       <EditableText
         id="about-story-p1"
         as="p"
         className="text-sm leading-relaxed text-neutral-300 cursor-pointer"
-        defaultText="I am a creative technologist based in Kochi, combining editorial instincts with modern full-stack engineering."
+        defaultText="Hi, I'm Nihal — a 16-year-old Developer & Graphic Designer from Kochi, Kerala, India, passionate about technology, creativity, and building things for the digital world."
       >
-        I am a creative technologist based in Kochi, combining editorial instincts with modern full-stack engineering.
+        Hi, I'm Nihal — a 16-year-old Developer & Graphic Designer from Kochi, Kerala, India, passionate about technology, creativity, and building things for the digital world.
       </EditableText>
       <EditableText
         id="about-story-p2"
         as="p"
         className="text-sm leading-relaxed text-neutral-400 cursor-pointer"
-        defaultText="Every project is shaped around less friction, stronger storytelling, and a product people want to return to."
+        defaultText="I enjoy turning ideas into meaningful digital experiences by combining creative design with modern web technologies. From developing interactive websites and web applications to designing graphics and experimenting with AI-powered tools, I’m always exploring new ways to bring ideas to life."
       >
-        Every project is shaped around less friction, stronger storytelling, and a product people want to return to.
+        I enjoy turning ideas into meaningful digital experiences by combining creative design with modern web technologies. From developing interactive websites and web applications to designing graphics and experimenting with AI-powered tools, I’m always exploring new ways to bring ideas to life.
       </EditableText>
     </div>
   ),
@@ -106,18 +106,18 @@ const tabContent = {
             id="about-mission-title"
             as="span"
             className="cursor-pointer"
-            defaultText="My mission"
+            defaultText="My Goal & Mission"
           >
-            My mission
+            My Goal & Mission
           </EditableText>
         </h3>
         <EditableText
           id="about-mission-desc"
           as="p"
           className="text-sm leading-relaxed text-neutral-300 cursor-pointer"
-          defaultText="Bridge sharp artistic direction with dependable engineering so digital products feel as clear as they are beautiful."
+          defaultText="My goal is to grow as a developer and designer, build impactful digital products, and create work that reflects both technical ability and creative thinking."
         >
-          Bridge sharp artistic direction with dependable engineering so digital products feel as clear as they are beautiful.
+          My goal is to grow as a developer and designer, build impactful digital products, and create work that reflects both technical ability and creative thinking.
         </EditableText>
       </div>
       <div className="border-t border-white/10 pt-4">
@@ -127,18 +127,18 @@ const tabContent = {
             id="about-vision-title"
             as="span"
             className="cursor-pointer"
-            defaultText="My vision"
+            defaultText="Visual Aesthetic & Exploration"
           >
-            My vision
+            Visual Aesthetic & Exploration
           </EditableText>
         </h3>
         <EditableText
           id="about-vision-desc"
           as="p"
           className="text-sm leading-relaxed text-neutral-300 cursor-pointer"
-          defaultText="Make thoughtful motion, intelligent AI, and accessible interfaces feel standard across every digital touchpoint."
+          defaultText="Creating clean, modern interfaces with smooth animations, thoughtful layouts, glassmorphism, and a premium visual feel while exploring AI, game graphics, and realistic visual effects."
         >
-          Make thoughtful motion, intelligent AI, and accessible interfaces feel standard across every digital touchpoint.
+          Creating clean, modern interfaces with smooth animations, thoughtful layouts, glassmorphism, and a premium visual feel while exploring AI, game graphics, and realistic visual effects.
         </EditableText>
       </div>
     </div>
@@ -146,9 +146,9 @@ const tabContent = {
   manifesto: (
     <div className="space-y-2.5">
       {[
-        { id: 'manifesto-1', title: 'Clarity first', content: 'Great systems feel obvious, not overloaded.' },
-        { id: 'manifesto-2', title: 'Intentional motion', content: 'Animation should guide attention without distraction.' },
-        { id: 'manifesto-3', title: 'Crafted precision', content: 'Beautiful work still needs dependable performance and clean logic.' },
+        { id: 'manifesto-1', title: 'Always Learning', content: 'Beyond design and development, I enjoy solving technical problems, experimenting with new tools, and learning through hands-on projects.' },
+        { id: 'manifesto-2', title: 'Always Building', content: 'Whether building a sports fest result management system, online platforms, or refining visual identities, every project is functional, visually appealing, and easy to use.' },
+        { id: 'manifesto-3', title: 'Always Creating', content: 'I believe age is no barrier to creativity, learning, or innovation. Every project is an opportunity to challenge myself and turn new ideas into something real.' },
       ].map((item) => (
         <div key={item.id} className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
           <EditableText
@@ -174,10 +174,10 @@ const tabContent = {
   values: (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
       {[
-        { id: 'val-1', text: 'Bespoke precision' },
-        { id: 'val-2', text: '60fps motion' },
-        { id: 'val-3', text: 'Type-safe systems' },
-        { id: 'val-4', text: 'Direct collaboration' },
+        { id: 'val-1', text: 'Creative Design + Modern Web' },
+        { id: 'val-2', text: 'Glassmorphism & Smooth Motion' },
+        { id: 'val-3', text: 'Clean & Thoughtful Layouts' },
+        { id: 'val-4', text: 'AI & Realistic Visual Effects' },
       ].map((val) => (
         <div key={val.id} className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] p-3 text-sm text-neutral-200">
           <Check className="h-4 w-4 shrink-0 text-[#FF5A1F]" />
@@ -261,7 +261,7 @@ export default function About({ onOpenResumeModal }: AboutProps) {
                   : undefined,
               }}
               className="max-w-2xl font-syne text-3xl font-extrabold tracking-tight sm:text-5xl cursor-pointer"
-              defaultText="A small studio with a large point of view."
+              defaultText="Turning ideas into meaningful digital experiences."
             />
           </div>
           <EditableText
@@ -275,7 +275,7 @@ export default function About({ onOpenResumeModal }: AboutProps) {
                 : undefined,
             }}
             className="max-w-sm text-sm leading-relaxed text-neutral-400 cursor-pointer"
-            defaultText="Design direction, product thinking, and production-ready code for ambitious teams."
+            defaultText="Nihal — a 16-year-old Developer & Graphic Designer from Kochi, Kerala, India. From developing interactive web apps to designing graphics and experimenting with AI tools, always exploring new ways to bring ideas to life."
           />
         </div>
 
@@ -299,7 +299,7 @@ export default function About({ onOpenResumeModal }: AboutProps) {
               >
                 <LazyImage
                   src={aboutPortraitImageUrl || aboutPortrait}
-                  alt={aboutPortraitEl?.content?.alt || 'Nihal . ON studio portrait'}
+                  alt={aboutPortraitEl?.content?.alt || 'Nihal studio portrait'}
                   wrapperClassName="absolute inset-0 h-full w-full"
                   style={{
                     borderRadius: aboutPortraitEl?.appearance?.borderRadius || undefined,
@@ -320,19 +320,19 @@ export default function About({ onOpenResumeModal }: AboutProps) {
                     id="about-portrait-role"
                     as="p"
                     className="mb-1 text-[10px] uppercase tracking-[0.2em] text-neutral-400 font-medium"
-                    defaultText="Creative technologist"
+                    defaultText="16-Year-Old Developer & Graphic Designer"
                   />
                   <EditableText
                     id="about-portrait-name"
                     as="h3"
                     className="font-syne text-3xl font-bold text-white"
-                    defaultText="Nihal . ON"
+                    defaultText="MUHAMMED NIHAL"
                   />
                   <EditableText
                     id="about-portrait-location"
                     as="p"
                     className="mt-1 text-sm text-neutral-300"
-                    defaultText="Kochi, Kerala / working worldwide"
+                    defaultText="Kochi, Kerala, India"
                   />
                 </div>
               </motion.article>
@@ -358,10 +358,10 @@ export default function About({ onOpenResumeModal }: AboutProps) {
                 <ArrowUpRight className="h-5 w-5 text-neutral-600" />
               </div>
               <p className="text-[10px] uppercase tracking-widest text-neutral-500">
-                <EditableText id="about-credentials-label" as="span" defaultText="Credentials">Credentials</EditableText>
+                <EditableText id="about-credentials-label" as="span" defaultText="Passion & Innovation">Passion & Innovation</EditableText>
               </p>
-              <EditableText id="about-credentials-value" as="h3" className="mt-2 font-syne text-xl font-bold text-white whitespace-pre-line" defaultText="6+ years\nof making things move.">
-                {elements['about-credentials']?.content?.text || '6+ years\nof making things move.'}
+              <EditableText id="about-credentials-value" as="h3" className="mt-2 font-syne text-xl font-bold text-white whitespace-pre-line" defaultText="Age is no barrier\nto innovation.">
+                {elements['about-credentials']?.content?.text || 'Age is no barrier\nto innovation.'}
               </EditableText>
             </motion.article>
 
@@ -385,10 +385,10 @@ export default function About({ onOpenResumeModal }: AboutProps) {
                 <ArrowUpRight className="h-5 w-5 text-neutral-600" />
               </div>
               <p className="text-[10px] uppercase tracking-widest text-neutral-500">
-                <EditableText id="about-selected-work-label" as="span" defaultText="Selected work">Selected work</EditableText>
+                <EditableText id="about-selected-work-label" as="span" defaultText="Work Spans">Work Spans</EditableText>
               </p>
-              <EditableText id="about-selected-work-value" as="h3" className="mt-2 font-syne text-xl font-bold text-white whitespace-pre-line" defaultText="Product systems,\nwebsites & AI tools.">
-                {elements['about-selected-work']?.content?.text || 'Product systems,\nwebsites & AI tools.'}
+              <EditableText id="about-selected-work-value" as="h3" className="mt-2 font-syne text-xl font-bold text-white whitespace-pre-line" defaultText="Web apps, UI/UX,\ngraphics & AI tools.">
+                {elements['about-selected-work']?.content?.text || 'Web apps, UI/UX,\ngraphics & AI tools.'}
               </EditableText>
             </motion.article>
 
@@ -406,13 +406,13 @@ export default function About({ onOpenResumeModal }: AboutProps) {
               className="rounded-[26px] border border-white/10 bg-[#111113] p-5 sm:col-span-1 lg:col-span-3 xl:col-span-3 flex flex-col justify-between cursor-pointer w-full h-full"
             >
               <div className="mb-8 text-4xl font-black text-white">
-                <EditableText id="about-projects-completed-value" as="span" defaultText={PERSONAL_INFO.projectsCompleted}>{PERSONAL_INFO.projectsCompleted}</EditableText>
+                <EditableText id="about-projects-completed-value" as="span" defaultText="Hands-on">Hands-on</EditableText>
               </div>
               <p className="text-[10px] uppercase tracking-widest text-neutral-500">
-                <EditableText id="about-projects-completed-label" as="span" defaultText="Projects completed">Projects completed</EditableText>
+                <EditableText id="about-projects-completed-label" as="span" defaultText="Projects Built">Projects Built</EditableText>
               </p>
-              <EditableText id="about-projects-completed-desc" as="p" className="mt-2 text-sm text-neutral-300" defaultText="Across product, brand, and digital experience.">
-                {elements['about-projects-completed']?.content?.text?.replace(/.*Projects completed\n?/i, '') || 'Across product, brand, and digital experience.'}
+              <EditableText id="about-projects-completed-desc" as="p" className="mt-2 text-sm text-neutral-300" defaultText="Sports fest result systems, interactive web platforms & visual identities.">
+                {elements['about-projects-completed']?.content?.text?.replace(/.*Projects completed\n?/i, '') || 'Sports fest result systems, interactive web platforms & visual identities.'}
               </EditableText>
             </motion.article>
 
@@ -430,13 +430,13 @@ export default function About({ onOpenResumeModal }: AboutProps) {
               className="rounded-[26px] border border-white/10 bg-[#111113] p-5 sm:col-span-1 lg:col-span-4 xl:col-span-4 flex flex-col justify-between cursor-pointer w-full h-full"
             >
               <div className="mb-8 text-4xl font-black text-[#FF5A1F]">
-                <EditableText id="about-client-satisfaction-value" as="span" defaultText={PERSONAL_INFO.clientSatisfaction}>{PERSONAL_INFO.clientSatisfaction}</EditableText>
+                <EditableText id="about-client-satisfaction-value" as="span" defaultText="100%">100%</EditableText>
               </div>
               <p className="text-[10px] uppercase tracking-widest text-neutral-500">
-                <EditableText id="about-client-satisfaction-label" as="span" defaultText="Client satisfaction">Client satisfaction</EditableText>
+                <EditableText id="about-client-satisfaction-label" as="span" defaultText="Core Philosophy">Core Philosophy</EditableText>
               </p>
-              <EditableText id="about-client-satisfaction-desc" as="p" className="mt-2 text-sm text-neutral-300" defaultText="Built through clarity, craft, and direct collaboration.">
-                {elements['about-client-satisfaction']?.content?.text?.replace(/.*Client satisfaction\n?/i, '') || 'Built through clarity, craft, and direct collaboration.'}
+              <EditableText id="about-client-satisfaction-desc" as="p" className="mt-2 text-sm text-neutral-300" defaultText="Always learning. Always building. Always creating.">
+                {elements['about-client-satisfaction']?.content?.text?.replace(/.*Client satisfaction\n?/i, '') || 'Always learning. Always building. Always creating.'}
               </EditableText>
             </motion.article>
 
@@ -482,19 +482,19 @@ export default function About({ onOpenResumeModal }: AboutProps) {
                         data-editable-id="about-story-title"
                         className="font-syne text-xl font-bold text-white cursor-pointer hover:text-[#FF5A1F] transition-colors"
                       >
-                        {elements['about-story-title']?.content?.text || 'From visual craft to useful code.'}
+                        {elements['about-story-title']?.content?.text || '16-Year-Old Developer & Graphic Designer'}
                       </h3>
                       <p 
                         data-editable-id="about-story-p1"
                         className="text-sm leading-relaxed text-neutral-300 cursor-pointer"
                       >
-                        {elements['about-story-p1']?.content?.text || 'I am a creative technologist based in Kochi, combining editorial instincts with modern full-stack engineering.'}
+                        {elements['about-story-p1']?.content?.text || "Hi, I'm Nihal — a 16-year-old Developer & Graphic Designer from Kochi, Kerala, India, passionate about technology, creativity, and building things for the digital world."}
                       </p>
                       <p 
                         data-editable-id="about-story-p2"
                         className="text-sm leading-relaxed text-neutral-400 cursor-pointer"
                       >
-                        {elements['about-story-p2']?.content?.text || 'Every project is shaped around less friction, stronger storytelling, and a product people want to return to.'}
+                        {elements['about-story-p2']?.content?.text || "I enjoy turning ideas into meaningful digital experiences by combining creative design with modern web technologies. From developing interactive websites and web applications to designing graphics and experimenting with AI-powered tools, I’m always exploring new ways to bring ideas to life."}
                       </p>
                     </div>
                   ) : tabContent[activeTab]}
@@ -546,7 +546,7 @@ export default function About({ onOpenResumeModal }: AboutProps) {
             >
               <StarburstIcon className="mb-6 h-8 w-8 text-[#FF5A1F]" />
               <h3 className="font-syne text-2xl font-extrabold text-white">
-                {elements['about-creative-direction']?.content?.text || 'Creative direction with technical depth.'}
+                {elements['about-creative-direction']?.content?.text || 'Creative design meets modern web technologies.'}
               </h3>
             </motion.div>
 
@@ -565,16 +565,16 @@ export default function About({ onOpenResumeModal }: AboutProps) {
               <div className="space-y-7">
                 <div>
                   <span className="text-xs font-mono text-[#FF5A1F] font-semibold tracking-wide">2023 - PRESENT</span>
-                  <EditableText id="about-experience-1-title" as="h5" className="mt-1 text-base font-syne font-bold text-white" defaultText="Lead Creative Technologist & Director">{elements['about-experience-1']?.content?.text?.split('\n')[0] || 'Lead Creative Technologist & Director'}</EditableText>
-                  <EditableText id="about-experience-1-company" as="p" className="mt-0.5 text-xs text-neutral-400" defaultText="NIHAL Creative Studio">{elements['about-experience-1']?.content?.text?.split('\n')[1] || 'NIHAL Creative Studio'}</EditableText>
+                  <EditableText id="about-experience-1-title" as="h5" className="mt-1 text-base font-syne font-bold text-white" defaultText="Developer & Graphic Designer">{elements['about-experience-1']?.content?.text?.split('\n')[0] || 'Developer & Graphic Designer'}</EditableText>
+                  <EditableText id="about-experience-1-company" as="p" className="mt-0.5 text-xs text-neutral-400" defaultText="Independent & Freelance Projects • Kochi, Kerala">{elements['about-experience-1']?.content?.text?.split('\n')[1] || 'Independent & Freelance Projects • Kochi, Kerala'}</EditableText>
                 </div>
                 <div 
                   data-editable-id="about-experience-2"
                   className="border-t border-white/5 pt-6 cursor-pointer"
                 >
-                  <span className="text-xs font-mono text-neutral-500 font-medium tracking-wide">2021 - 2023</span>
-                  <EditableText id="about-experience-2-title" as="h5" className="mt-1 text-base font-syne font-bold text-white" defaultText="Senior UI/UX Architect & Staff Engineer">{elements['about-experience-2']?.content?.text?.split('\n')[0] || 'Senior UI/UX Architect & Staff Engineer'}</EditableText>
-                  <EditableText id="about-experience-2-company" as="p" className="mt-0.5 text-xs text-neutral-400" defaultText="Aetheria AI Labs">{elements['about-experience-2']?.content?.text?.split('\n')[1] || 'Aetheria AI Labs'}</EditableText>
+                  <span className="text-xs font-mono text-neutral-500 font-medium tracking-wide">HANDS-ON</span>
+                  <EditableText id="about-experience-2-title" as="h5" className="mt-1 text-base font-syne font-bold text-white" defaultText="Interactive Dashboards & Web Systems">{elements['about-experience-2']?.content?.text?.split('\n')[0] || 'Interactive Dashboards & Web Systems'}</EditableText>
+                  <EditableText id="about-experience-2-company" as="p" className="mt-0.5 text-xs text-neutral-400" defaultText="Sports Fest Result Management & Web Platforms">{elements['about-experience-2']?.content?.text?.split('\n')[1] || 'Sports Fest Result Management & Web Platforms'}</EditableText>
                 </div>
               </div>
             </motion.div>
@@ -588,22 +588,22 @@ export default function About({ onOpenResumeModal }: AboutProps) {
               className="rounded-[32px] bg-gradient-to-br from-[#161619] via-[#0f0f12] to-[#0a0a0c] p-8 sm:p-10 md:col-span-4 cursor-pointer"
             >
               <div className="mb-8 flex items-center justify-between">
-                <h4 className="text-xs font-mono font-bold tracking-widest text-[#FF5A1F] uppercase">Education</h4>
+                <h4 className="text-xs font-mono font-bold tracking-widest text-[#FF5A1F] uppercase">Learning & Tech</h4>
                 <span className="h-1.5 w-1.5 rounded-full bg-[#FF5A1F]" />
               </div>
               <div className="space-y-7">
                 <div>
-                  <span className="text-xs font-mono text-[#FF5A1F] font-semibold tracking-wide">2018 - 2022</span>
-                  <EditableText id="about-education-1-title" as="h5" className="mt-1 text-base font-syne font-bold text-white" defaultText="Bachelor Degree in Computer Science & Interactive Media">{elements['about-education-1']?.content?.text?.split('\n')[0] || 'Bachelor Degree in Computer Science & Interactive Media'}</EditableText>
-                  <EditableText id="about-education-1-school" as="p" className="mt-0.5 text-xs text-neutral-400" defaultText="University of California, Berkeley">{elements['about-education-1']?.content?.text?.split('\n')[1] || 'University of California, Berkeley'}</EditableText>
+                  <span className="text-xs font-mono text-[#FF5A1F] font-semibold tracking-wide">FOUNDATIONS</span>
+                  <EditableText id="about-education-1-title" as="h5" className="mt-1 text-base font-syne font-bold text-white" defaultText="High School Student & Tech Enthusiast">{elements['about-education-1']?.content?.text?.split('\n')[0] || 'High School Student & Tech Enthusiast'}</EditableText>
+                  <EditableText id="about-education-1-school" as="p" className="mt-0.5 text-xs text-neutral-400" defaultText="Kochi, Kerala, India">{elements['about-education-1']?.content?.text?.split('\n')[1] || 'Kochi, Kerala, India'}</EditableText>
                 </div>
                 <div 
                   data-editable-id="about-education-2"
                   className="border-t border-white/5 pt-6 cursor-pointer"
                 >
-                  <span className="text-xs font-mono text-neutral-500 font-medium tracking-wide">2022 - 2024</span>
-                  <EditableText id="about-education-2-title" as="h5" className="mt-1 text-base font-syne font-bold text-white" defaultText="Master Degree in Human-Computer Interaction">{elements['about-education-2']?.content?.text?.split('\n')[0] || 'Master Degree in Human-Computer Interaction'}</EditableText>
-                  <EditableText id="about-education-2-school" as="p" className="mt-0.5 text-xs text-neutral-400" defaultText="Stanford University Center for Design Research">{elements['about-education-2']?.content?.text?.split('\n')[1] || 'Stanford University Center for Design Research'}</EditableText>
+                  <span className="text-xs font-mono text-neutral-500 font-medium tracking-wide">FOCUS</span>
+                  <EditableText id="about-education-2-title" as="h5" className="mt-1 text-base font-syne font-bold text-white" defaultText="Frontend, UI/UX, AI Tools & Game Graphics">{elements['about-education-2']?.content?.text?.split('\n')[0] || 'Frontend, UI/UX, AI Tools & Game Graphics'}</EditableText>
+                  <EditableText id="about-education-2-school" as="p" className="mt-0.5 text-xs text-neutral-400" defaultText="Always learning. Always building. Always creating.">{elements['about-education-2']?.content?.text?.split('\n')[1] || 'Always learning. Always building. Always creating.'}</EditableText>
                 </div>
               </div>
             </motion.div>

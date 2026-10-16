@@ -23,7 +23,7 @@ export const INITIAL_ELEMENTS: Record<string, EditableElement> = {
     parentId: 'hero-section',
     type: 'badge',
     content: {
-      text: 'AI-Driven Agency',
+      text: '16-Year-Old Developer & Graphic Designer',
     },
     typography: {
       fontSize: '12px',
@@ -43,8 +43,8 @@ export const INITIAL_ELEMENTS: Record<string, EditableElement> = {
     parentId: 'hero-section',
     type: 'heading',
     content: {
-      text: "I'm Nihal ON",
-      subtext: "Creative Designer & Technologist",
+      text: "Hi, I'm Nihal",
+      subtext: "16-Year-Old Developer & Graphic Designer from Kochi, Kerala",
     },
     typography: {
       fontSize: '48px',
@@ -65,7 +65,7 @@ export const INITIAL_ELEMENTS: Record<string, EditableElement> = {
     parentId: 'hero-section',
     type: 'text',
     content: {
-      text: 'From discovery to deployment, we plug into your stack to prototype, validate, and launch AI experiences your users actually love.',
+      text: 'A 16-year-old Developer & Graphic Designer from Kochi, Kerala, India, passionate about technology, creativity, and turning ideas into meaningful digital experiences by combining creative design with modern web technologies.',
     },
     typography: {
       fontSize: '16px',
@@ -80,13 +80,13 @@ export const INITIAL_ELEMENTS: Record<string, EditableElement> = {
   },
   'hero-btn-primary': {
     id: 'hero-btn-primary',
-    label: 'Explore Services CTA',
+    label: 'Explore Work CTA',
     section: 'hero',
     parentId: 'hero-section',
     type: 'button',
     content: {
-      text: 'Explore Services',
-      link: '#services',
+      text: 'Explore Work',
+      link: '#about',
     },
     typography: {
       fontSize: '14px',
@@ -109,13 +109,13 @@ export const INITIAL_ELEMENTS: Record<string, EditableElement> = {
   },
   'hero-btn-secondary': {
     id: 'hero-btn-secondary',
-    label: 'Download CV CTA',
+    label: 'Get In Touch CTA',
     section: 'hero',
     parentId: 'hero-section',
     type: 'button',
     content: {
-      text: 'Download CV',
-      link: '#resume',
+      text: 'Get In Touch',
+      link: '#contact',
     },
     typography: {
       fontSize: '14px',
@@ -142,7 +142,7 @@ export const INITIAL_ELEMENTS: Record<string, EditableElement> = {
     type: 'image',
     content: {
       imageUrl: aiSprintLeaderImage,
-      alt: 'Hero Model Portrait',
+      alt: 'Nihal — 16-Year-Old Developer & Graphic Designer Portrait',
     },
     appearance: {
       borderRadius: '24px',
@@ -156,7 +156,7 @@ export const INITIAL_ELEMENTS: Record<string, EditableElement> = {
     parentId: 'hero-section',
     type: 'text',
     content: {
-      text: 'We shipped our first copilot in 7 weeks and cut support tickets by 31%. The eval dashboards made every decision obvious.',
+      text: 'I believe age is no barrier to creativity, learning, or innovation. Every project is an opportunity to challenge myself, gain experience, and turn new ideas into something real.',
     },
     typography: {
       fontSize: '13px',
@@ -172,7 +172,7 @@ export const INITIAL_ELEMENTS: Record<string, EditableElement> = {
     parentId: 'hero-section',
     type: 'text',
     content: {
-      text: 'OUR GROWTH',
+      text: 'ALWAYS CREATING',
     },
     typography: {
       fontSize: '10px',
@@ -188,7 +188,7 @@ export const INITIAL_ELEMENTS: Record<string, EditableElement> = {
     parentId: 'hero-section',
     type: 'text',
     content: {
-      text: '150+',
+      text: '16 YRS',
     },
     typography: {
       fontSize: '64px',
@@ -204,7 +204,7 @@ export const INITIAL_ELEMENTS: Record<string, EditableElement> = {
     parentId: 'hero-section',
     type: 'text',
     content: {
-      text: 'Calendly • classpass • GitHub • Basecamp • attentive • GUMROAD',
+      text: 'React & TypeScript • UI/UX Design • Graphic Design • Interactive Systems • Glassmorphism • AI Tools',
     },
     typography: {
       fontSize: '13px',
@@ -296,7 +296,7 @@ export const INITIAL_ELEMENTS: Record<string, EditableElement> = {
     section: 'about',
     type: 'text',
     content: {
-      text: '6+ years\nof making things move.',
+      text: 'Age is no barrier\nto innovation.',
     },
     typography: {
       fontSize: '20px',
@@ -311,7 +311,7 @@ export const INITIAL_ELEMENTS: Record<string, EditableElement> = {
     section: 'about',
     type: 'text',
     content: {
-      text: 'Product systems,\nwebsites & AI tools.',
+      text: 'Web apps, UI/UX,\ngraphics & AI tools.',
     },
     typography: {
       fontSize: '20px',
@@ -326,7 +326,7 @@ export const INITIAL_ELEMENTS: Record<string, EditableElement> = {
     section: 'about',
     type: 'text',
     content: {
-      text: '150+ Projects completed\nAcross product, brand, and digital experience.',
+      text: 'Hands-on Projects Built\nSports fest result systems, interactive web platforms & visual identities.',
     },
     typography: {
       fontSize: '14px',
@@ -340,7 +340,7 @@ export const INITIAL_ELEMENTS: Record<string, EditableElement> = {
     section: 'about',
     type: 'text',
     content: {
-      text: '98% Client satisfaction\nBuilt through clarity, craft, and direct collaboration.',
+      text: '100% Core Philosophy\nAlways learning. Always building. Always creating.',
     },
     typography: {
       fontSize: '14px',
@@ -354,7 +354,7 @@ export const INITIAL_ELEMENTS: Record<string, EditableElement> = {
     section: 'about',
     type: 'heading',
     content: {
-      text: 'From visual craft to useful code.',
+      text: '16-Year-Old Developer & Graphic Designer',
     },
     typography: {
       fontSize: '20px',
@@ -369,7 +369,7 @@ export const INITIAL_ELEMENTS: Record<string, EditableElement> = {
     section: 'about',
     type: 'text',
     content: {
-      text: 'I am a creative technologist based in Kochi, combining editorial instincts with modern full-stack engineering.',
+      text: "Hi, I'm Nihal — a 16-year-old Developer & Graphic Designer from Kochi, Kerala, India, passionate about technology, creativity, and building things for the digital world.",
     },
     typography: {
       fontSize: '14px',
@@ -383,7 +383,7 @@ export const INITIAL_ELEMENTS: Record<string, EditableElement> = {
     section: 'about',
     type: 'text',
     content: {
-      text: 'Every project is shaped around less friction, stronger storytelling, and a product people want to return to.',
+      text: 'I enjoy turning ideas into meaningful digital experiences by combining creative design with modern web technologies. From developing interactive websites and web applications to designing graphics and experimenting with AI-powered tools, I’m always exploring new ways to bring ideas to life.',
     },
     typography: {
       fontSize: '14px',
@@ -412,7 +412,7 @@ export const INITIAL_ELEMENTS: Record<string, EditableElement> = {
     section: 'about',
     type: 'heading',
     content: {
-      text: 'Creative direction with technical depth.',
+      text: 'Creative design meets modern web technologies.',
     },
     typography: {
       fontSize: '24px',
@@ -427,7 +427,7 @@ export const INITIAL_ELEMENTS: Record<string, EditableElement> = {
     section: 'about',
     type: 'text',
     content: {
-      text: 'Lead Creative Technologist & Director\nNIHAL Creative Studio (2023 - PRESENT)',
+      text: 'Developer & Graphic Designer\nIndependent & Freelance Projects • Kochi, Kerala (2023 - PRESENT)',
     },
     visible: true,
   },
@@ -437,7 +437,7 @@ export const INITIAL_ELEMENTS: Record<string, EditableElement> = {
     section: 'about',
     type: 'text',
     content: {
-      text: 'Senior UI/UX Architect & Staff Engineer\nAetheria AI Labs (2021 - 2023)',
+      text: 'Interactive Dashboards & Web Systems\nSports Fest Result Management & Web Platforms (HANDS-ON)',
     },
     visible: true,
   },
@@ -447,7 +447,7 @@ export const INITIAL_ELEMENTS: Record<string, EditableElement> = {
     section: 'about',
     type: 'text',
     content: {
-      text: 'Bachelor Degree in Computer Science & Interactive Media\nUniversity of California, Berkeley (2018 - 2022)',
+      text: 'High School Student & Tech Enthusiast\nKochi, Kerala, India (FOUNDATIONS)',
     },
     visible: true,
   },
@@ -457,7 +457,7 @@ export const INITIAL_ELEMENTS: Record<string, EditableElement> = {
     section: 'about',
     type: 'text',
     content: {
-      text: 'Master Degree in Human-Computer Interaction\nStanford University Center for Design Research (2022 - 2024)',
+      text: 'Frontend, UI/UX, AI Tools & Game Graphics\nAlways learning. Always building. Always creating. (FOCUS)',
     },
     visible: true,
   },
@@ -467,7 +467,7 @@ export const INITIAL_ELEMENTS: Record<string, EditableElement> = {
     section: 'about',
     type: 'text',
     content: {
-      text: 'Stay with me\nProfiles',
+      text: 'Stay connected\nSocial Profiles',
     },
     visible: true,
   },
@@ -477,7 +477,7 @@ export const INITIAL_ELEMENTS: Record<string, EditableElement> = {
     section: 'about',
     type: 'heading',
     content: {
-      text: 'Bridging Imagination & Code',
+      text: 'Turning ideas into meaningful digital experiences.',
     },
     typography: {
       fontSize: '36px',
@@ -495,7 +495,7 @@ export const INITIAL_ELEMENTS: Record<string, EditableElement> = {
     section: 'about',
     type: 'text',
     content: {
-      text: 'Creative Technologist & Design Director with 6+ years transforming ambitious visions into award-winning digital experiences that feel distinctly premium.',
+      text: 'Nihal — a 16-year-old Developer & Graphic Designer from Kochi, Kerala, India. From developing interactive web apps to designing graphics and experimenting with AI tools, always exploring new ways to bring ideas to life.',
     },
     typography: {
       fontSize: '16px',

@@ -67,13 +67,13 @@ export default function Footer({
               id="footer-bio-h2"
               as="h2"
               className="font-syne text-xl sm:text-2xl font-extrabold text-white tracking-tight leading-snug"
-              defaultText="Nihal is independent creative director and solopreneur"
+              defaultText="Hi, I'm Nihal — 16-Year-Old Developer & Graphic Designer"
             />
             <EditableText
               id="footer-bio-p"
               as="p"
               className="mt-2 text-xs text-neutral-400 font-sans leading-relaxed"
-              defaultText="Crafting high-impact AI products, digital experiences, and brand identity systems for visionary founders worldwide."
+              defaultText="From Kochi, Kerala, India. Passionate about technology, creativity, and turning ideas into meaningful digital experiences. Always learning. Always building. Always creating."
             />
           </div>
 

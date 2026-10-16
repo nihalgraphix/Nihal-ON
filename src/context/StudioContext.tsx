@@ -103,15 +103,124 @@ interface StudioContextType {
   trackEvent: (type: 'pageview' | 'project_click' | 'contact_submit' | 'cv_download' | 'section_view', label?: string) => void;
 }
 
-const LOCAL_STORAGE_PUB_KEY = 'nihal_studio_pub_data_v4';
-const LOCAL_STORAGE_DRAFT_KEY = 'nihal_studio_draft_data_v4';
+const LOCAL_STORAGE_PUB_KEY = 'nihal_studio_pub_data_v5';
+const LOCAL_STORAGE_DRAFT_KEY = 'nihal_studio_draft_data_v5';
+
+function sanitizeStudioData(data: StudioData): StudioData {
+  if (!data || !data.elements) return data;
+  const elements = { ...data.elements };
+  
+  // Ensure hero model image is valid and not pointing to the old N logo
+  if (elements['hero-model-image']) {
+    const imgUrl = elements['hero-model-image'].content?.imageUrl;
+    if (!imgUrl || imgUrl.includes('regenerated_image_1785757234835') || imgUrl === 'none' || imgUrl === '') {
+      elements['hero-model-image'] = {
+        ...elements['hero-model-image'],
+        content: {
+          ...elements['hero-model-image'].content,
+          imageUrl: DEFAULT_STUDIO_DATA.elements['hero-model-image'].content?.imageUrl || '',
+          alt: 'Nihal — 16-Year-Old Developer & Graphic Designer Portrait',
+        },
+        visible: true,
+      };
+    }
+  }
+
+  // Migrate any old template placeholders
+  if (elements['hero-subtext']?.content?.text?.includes('From discovery to deployment')) {
+    elements['hero-subtext'] = {
+      ...elements['hero-subtext'],
+      content: { text: "A 16-year-old Developer & Graphic Designer from Kochi, Kerala, India, passionate about technology, creativity, and turning ideas into meaningful digital experiences by combining creative design with modern web technologies." }
+    };
+  }
+  if (elements['hero-badge']?.content?.text === 'AI-Driven Agency') {
+    elements['hero-badge'] = {
+      ...elements['hero-badge'],
+      content: { text: '16-Year-Old Developer & Graphic Designer' }
+    };
+  }
+  if (elements['hero-headline']?.content?.text === "I'm Nihal ON") {
+    elements['hero-headline'] = {
+      ...elements['hero-headline'],
+      content: { text: "Hi, I'm Nihal", subtext: "16-Year-Old Developer & Graphic Designer from Kochi, Kerala" }
+    };
+  }
+  if (elements['hero-quote']?.content?.text?.includes('We shipped our first copilot')) {
+    elements['hero-quote'] = {
+      ...elements['hero-quote'],
+      content: { text: "I believe age is no barrier to creativity, learning, or innovation. Every project is an opportunity to challenge myself, gain experience, and turn new ideas into something real." }
+    };
+  }
+  if (elements['hero-growth-label']?.content?.text === 'OUR GROWTH') {
+    elements['hero-growth-label'] = {
+      ...elements['hero-growth-label'],
+      content: { text: "ALWAYS CREATING" }
+    };
+  }
+  if (elements['hero-growth-value']?.content?.text === '150+') {
+    elements['hero-growth-value'] = {
+      ...elements['hero-growth-value'],
+      content: { text: "16 YRS" }
+    };
+  }
+  if (elements['about-heading']?.content?.text?.includes('Bridging Imagination') || elements['about-heading']?.content?.text?.includes('A small studio')) {
+    elements['about-heading'] = {
+      ...elements['about-heading'],
+      content: { text: "Turning ideas into meaningful digital experiences." }
+    };
+  }
+  if (elements['about-bio']?.content?.text?.includes('6+ years') || elements['about-bio']?.content?.text?.includes('Design direction, product thinking')) {
+    elements['about-bio'] = {
+      ...elements['about-bio'],
+      content: { text: "Nihal — a 16-year-old Developer & Graphic Designer from Kochi, Kerala, India. From developing interactive web apps to designing graphics and experimenting with AI tools, always exploring new ways to bring ideas to life." }
+    };
+  }
+  if (elements['about-credentials']?.content?.text?.includes('6+ years')) {
+    elements['about-credentials'] = {
+      ...elements['about-credentials'],
+      content: { text: "Age is no barrier\nto innovation." }
+    };
+  }
+  if (elements['about-selected-work']?.content?.text?.includes('Product systems')) {
+    elements['about-selected-work'] = {
+      ...elements['about-selected-work'],
+      content: { text: "Web apps, UI/UX,\ngraphics & AI tools." }
+    };
+  }
+  if (elements['about-story-title']?.content?.text?.includes('From visual craft')) {
+    elements['about-story-title'] = {
+      ...elements['about-story-title'],
+      content: { text: "16-Year-Old Developer & Graphic Designer" }
+    };
+  }
+  if (elements['about-education-1']?.content?.text?.includes('University of California')) {
+    elements['about-education-1'] = {
+      ...elements['about-education-1'],
+      content: { text: "High School Student & Tech Enthusiast\nKochi, Kerala, India (FOUNDATIONS)" }
+    };
+  }
+  if (elements['about-education-2']?.content?.text?.includes('Stanford University')) {
+    elements['about-education-2'] = {
+      ...elements['about-education-2'],
+      content: { text: "Frontend, UI/UX, AI Tools & Game Graphics\nAlways learning. Always building. Always creating. (FOCUS)" }
+    };
+  }
+  if (elements['footer-creator-bio']?.content?.text?.includes('Nihal is independent creative director')) {
+    elements['footer-creator-bio'] = {
+      ...elements['footer-creator-bio'],
+      content: { text: "Hi, I'm Nihal — 16-Year-Old Developer & Graphic Designer\nFrom Kochi, Kerala, India. Passionate about technology, creativity, and turning ideas into meaningful digital experiences." }
+    };
+  }
+
+  return { ...data, elements };
+}
 
 const getInitialPubData = (): StudioData => {
   try {
     const cached = localStorage.getItem(LOCAL_STORAGE_PUB_KEY);
     if (cached) {
       const parsed = JSON.parse(cached);
-      if (parsed && typeof parsed === 'object' && parsed.elements) return parsed;
+      if (parsed && typeof parsed === 'object' && parsed.elements) return sanitizeStudioData(parsed);
     }
   } catch (e) {
     // Fallback
@@ -124,7 +233,7 @@ const getInitialDraftData = (): StudioData => {
     const cached = localStorage.getItem(LOCAL_STORAGE_DRAFT_KEY);
     if (cached) {
       const parsed = JSON.parse(cached);
-      if (parsed && typeof parsed === 'object' && parsed.elements) return parsed;
+      if (parsed && typeof parsed === 'object' && parsed.elements) return sanitizeStudioData(parsed);
     }
   } catch (e) {
     // Fallback
@@ -298,6 +407,9 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
             };
           }
         }
+
+        basePub = sanitizeStudioData(basePub);
+        baseDraft = sanitizeStudioData(baseDraft);
 
         startTransition(() => {
           setPublishedData(basePub);

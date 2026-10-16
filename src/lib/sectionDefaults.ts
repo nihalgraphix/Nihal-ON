@@ -13,10 +13,10 @@ export const SECTION_DEFAULTS_META: Record<SectionId, SectionContentMeta> = {
   hero: {
     id: 'hero',
     name: 'Hero Header',
-    defaultBadge: 'Available For Q3/Q4 Projects',
-    defaultTitle: 'Crafting Spatial & High-Impact Digital Experiences',
-    defaultSubtitle: 'Principal UX Architect & Creative Technologist',
-    defaultDescription: 'Available for Q3/Q4 Enterprise Projects & Advisory',
+    defaultBadge: '16-Year-Old Developer & Graphic Designer',
+    defaultTitle: 'Hi, I\'m Nihal',
+    defaultSubtitle: 'Developer & Graphic Designer • Kochi, Kerala',
+    defaultDescription: 'A 16-year-old Developer & Graphic Designer from Kochi, Kerala, India, passionate about technology, creativity, and turning ideas into meaningful digital experiences by combining creative design with modern web technologies.',
   },
   marquee: {
     id: 'marquee',
@@ -29,10 +29,10 @@ export const SECTION_DEFAULTS_META: Record<SectionId, SectionContentMeta> = {
   about: {
     id: 'about',
     name: 'About & Self-Summary',
-    defaultBadge: 'About',
-    defaultTitle: 'Crafting Digital Legacies at the Intersection of Art & Code',
-    defaultSubtitle: 'Design Philosophy',
-    defaultDescription: 'With over 8 years at the vanguard of digital product architecture, I transform ambitious venture visions into award-winning interfaces.',
+    defaultBadge: 'About Me',
+    defaultTitle: 'Turning ideas into meaningful digital experiences.',
+    defaultSubtitle: 'Always Learning. Always Building. Always Creating.',
+    defaultDescription: 'Hi, I\'m Nihal — a 16-year-old Developer & Graphic Designer from Kochi, Kerala, India. From developing interactive websites and web applications to designing graphics and experimenting with AI-powered tools.',
   },
   projects: {
     id: 'projects',
@@ -48,7 +48,7 @@ export const SECTION_DEFAULTS_META: Record<SectionId, SectionContentMeta> = {
     defaultBadge: 'Core Capabilities',
     defaultTitle: 'Design & Engineering Services',
     defaultSubtitle: 'What I Deliver',
-    defaultDescription: 'Tailored execution for venture-backed founders, creative directors, and ambitious enterprises seeking Awwwards-grade digital presence.',
+    defaultDescription: 'Combining creative design with modern web technologies to build clean, functional, and visually appealing digital products.',
   },
   process: {
     id: 'process',
@@ -56,7 +56,7 @@ export const SECTION_DEFAULTS_META: Record<SectionId, SectionContentMeta> = {
     defaultBadge: 'Methodology',
     defaultTitle: 'An 8-Step Blueprint For Digital Excellence',
     defaultSubtitle: 'Structured Delivery',
-    defaultDescription: 'A transparent, predictable process refined over 150+ successful deployments worldwide.',
+    defaultDescription: 'A transparent, predictable process refined over successful project deployments.',
   },
   skills: {
     id: 'skills',
@@ -70,9 +70,9 @@ export const SECTION_DEFAULTS_META: Record<SectionId, SectionContentMeta> = {
     id: 'experience',
     name: 'Career Experience',
     defaultBadge: 'Career Trajectory',
-    defaultTitle: 'Professional Experience',
-    defaultSubtitle: 'Leadership Journey',
-    defaultDescription: 'Leading high-stakes creative direction and technical teams across top design agencies and venture-backed Silicon Valley startups.',
+    defaultTitle: 'Experience & Hands-on Work',
+    defaultSubtitle: 'Project Journey',
+    defaultDescription: 'Building interactive websites, sports fest result management systems, web applications, and graphic design.',
   },
   testimonials: {
     id: 'testimonials',

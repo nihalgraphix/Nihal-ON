@@ -121,7 +121,7 @@ export default function Services() {
             id="services-heading-desc"
             as="p"
             className="text-neutral-400 max-w-md text-sm font-sans leading-relaxed"
-            defaultText="Tailored execution for venture-backed founders, creative directors, and ambitious enterprises seeking Awwwards-grade digital presence."
+            defaultText="Combining creative design with modern web technologies to build clean, functional, and visually appealing digital products."
           />
         </motion.div>
 

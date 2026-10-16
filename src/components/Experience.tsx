@@ -38,7 +38,7 @@ export default function Experience() {
             id="experience-heading-desc"
             as="p"
             className="text-neutral-400 max-w-md text-sm font-sans leading-relaxed"
-            defaultText="Leading high-stakes creative direction and technical teams across top design agencies and venture-backed Silicon Valley startups."
+            defaultText="Turning ideas into meaningful digital experiences through hands-on development, interactive platforms, and creative design systems."
           />
         </motion.div>
 

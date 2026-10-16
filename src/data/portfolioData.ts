@@ -16,25 +16,26 @@ import aboutPortrait from '../assets/images/regenerated_image_1785750001960.png'
 export { heroPortrait, aboutPortrait };
 
 export const PERSONAL_INFO = {
-  name: "Nihal . ON",
-  title: "Senior Creative Technologist & Design Director",
-  tagline: "Building Digital Experiences That Feel Premium.",
+  name: "MUHAMMED NIHAL",
+  title: "16-Year-Old Developer & Graphic Designer",
+  tagline: "Always learning. Always building. Always creating.",
   location: "Kochi, Kerala, India",
-  status: "🟢 Available for Q3/Q4 Projects",
-  yearsExperience: "6+",
-  projectsCompleted: "150+",
-  clientSatisfaction: "98%",
-  happyClients: "50+",
+  status: "🟢 Available for Projects & Collaborations",
+  yearsExperience: "3+",
+  projectsCompleted: "Hands-on",
+  clientSatisfaction: "100%",
+  happyClients: "Creative",
   email: "nihal.graphix@gmail.com",
   phone: "+91 9946001322",
-  github: "https://github.com",
+  github: "https://github.com/nihaldeveloper",
   linkedin: "https://linkedin.com",
   twitter: "https://twitter.com",
-  instagram: "https://instagram.com",
+  instagram: "https://instagram.com/nihal.graphix",
   dribbble: "https://dribbble.com",
   behance: "https://behance.com",
   calendly: "https://calendly.com",
   blogUrl: "https://medium.com",
+  bio: "Hi, I'm Nihal — a 16-year-old Developer & Graphic Designer from Kochi, Kerala, India, passionate about technology, creativity, and building things for the digital world. I enjoy turning ideas into meaningful digital experiences by combining creative design with modern web technologies.",
 };
 
 export const BRANDS = [
@@ -227,133 +228,107 @@ export const SKILL_CATEGORIES: SkillCategory[] = [
 export const EXPERIENCE_LIST: ExperienceItem[] = [
   {
     id: "exp-1",
-    company: "NIHAL Creative Studio",
-    role: "Lead Creative Technologist & Director",
+    company: "Independent & Freelance Projects",
+    role: "Developer & Graphic Designer",
     period: "2023 - Present",
-    location: "San Francisco, CA",
-    type: "Full-Time / Studio Lead",
-    description: "Directing high-end digital design and full-stack engineering for B2B SaaS, Web3 platforms, and luxury brands.",
+    location: "Kochi, Kerala, India",
+    type: "Creator & Developer",
+    description: "Developing interactive websites, web applications, graphic design, and experimenting with AI-powered tools.",
     achievements: [
-      "Built 40+ web products with average 98/100 Lighthouse performance scores.",
-      "Received 3 Awwwards Site of the Day and 2 FWA recognitions.",
-      "Engineered custom design systems downloaded over 1,200+ times."
+      "Engineered full-featured sports fest result management system with real-time updates and leaderboard.",
+      "Crafted clean, modern interfaces with smooth animations, thoughtful layouts, glassmorphism, and premium visual feel.",
+      "Built interactive dashboards and web-based systems focusing on functional, easy-to-use digital experiences."
     ],
-    technologies: ["React 19", "Next.js", "TypeScript", "GSAP", "Tailwind CSS", "Gemini API"],
+    technologies: ["React", "TypeScript", "Tailwind CSS", "Framer Motion", "Figma", "Photoshop", "AI Tools"],
     isCurrent: true
   },
   {
     id: "exp-2",
-    company: "Aetheria AI Labs",
-    role: "Senior UI/UX Architect & Staff Engineer",
-    period: "2021 - 2023",
-    location: "Remote",
-    type: "Full-Time",
-    description: "Led the design system team for generative 3D creative suite, managing 6 product designers and 8 frontend engineers.",
+    company: "Digital & Web Projects",
+    role: "Frontend & UI/UX Designer",
+    period: "2022 - 2023",
+    location: "Kochi, Kerala",
+    type: "Hands-on Projects",
+    description: "Turning ideas into meaningful digital experiences by combining creative design with modern web technologies.",
     achievements: [
-      "Redesigned node canvas workspace, reducing customer onboarding time by 45%.",
-      "Grew monthly active users from 50K to 320K+ in 18 months.",
-      "Architected accessible dark mode theme engine used across all enterprise sub-apps."
+      "Designed interactive dashboards, web portals, and creative user interfaces.",
+      "Explored game graphics, realistic visual effects, and emerging web technologies."
     ],
-    technologies: ["React", "TypeScript", "Canvas API", "Figma", "Tailwind CSS"]
+    technologies: ["React", "JavaScript", "HTML5/CSS3", "Figma", "Illustrator"]
   },
   {
     id: "exp-3",
-    company: "Vortex Digital Agency",
-    role: "Senior Motion & Frontend Developer",
-    period: "2019 - 2021",
-    location: "New York, NY",
-    type: "Full-Time",
-    description: "Crafted interactive marketing experiences, 3D WebGL portals, and e-commerce flagship stores for Fortune 500 clients.",
+    company: "Visual & Brand Identity",
+    role: "Graphic Designer & Creator",
+    period: "2021 - 2022",
+    location: "Kochi, Kerala",
+    type: "Creative Design",
+    description: "Visual identity design, graphics, digital illustrations, and experimenting with design tools.",
     achievements: [
-      "Delivered 25+ client sites on schedule with zero critical post-launch bugs.",
-      "Mentored junior developers on GSAP ScrollTrigger and CSS performance optimization."
+      "Created visual identities, brand graphics, and creative posters for local events and organizations.",
+      "Refined foundational craft in digital art, layout theory, and visual storytelling."
     ],
-    technologies: ["Three.js", "GSAP", "Vue/React", "Shopify", "SCSS"]
+    technologies: ["Photoshop", "Illustrator", "Canva", "UI/UX Basics"]
   }
 ];
 
 export const TESTIMONIALS: Testimonial[] = [
   {
     id: "test-1",
-    quote: "Nihal . ON is in a league of his own. He took our rough concept and created an Awwwards-worthy portal that immediately established our enterprise credibility.",
-    author: "Marcus Thorne",
-    role: "Chief Marketing Officer",
-    company: "Fluxora Global",
+    quote: "Nihal's ability to combine clean design with responsive web development at just 16 is astonishing. His work on our interactive system was seamless.",
+    author: "Sports Fest Organizing Committee",
+    role: "Coordinator",
+    company: "Event Management",
     avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop",
     rating: 5,
-    projectRef: "Fluxora Studio Portal"
+    projectRef: "Sports Fest Result Management System"
   },
   {
     id: "test-2",
-    quote: "Rarely do you find a designer who can write rock-solid TypeScript and implement complex WebGL motion smoothly. Nihal . ON delivered beyond all expectations.",
-    author: "Dr. Elena Rostova",
-    role: "VP of Design",
-    company: "Aetheria AI",
+    quote: "Nihal brings extraordinary passion, glassmorphism aesthetics, and clean code to every project. Age is truly no barrier to innovation.",
+    author: "Creative Collaborator",
+    role: "Digital Designer",
+    company: "Creative Studio",
     avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=200&auto=format&fit=crop",
     rating: 5,
-    projectRef: "Aetheria Neural Canvas"
-  },
-  {
-    id: "test-3",
-    quote: "Working with Nihal . ON felt like having an entire Apple-level design team at our fingertips. Our conversion rate increased by 185% in month one.",
-    author: "David Chen",
-    role: "Founder & CEO",
-    company: "Krypton Web3",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop",
-    rating: 5,
-    projectRef: "Krypton Exchange"
-  },
-  {
-    id: "test-4",
-    quote: "The level of polish, spatial typography, and responsive detail Nihal . ON brings to the table is mind-blowing. Highest recommendation possible.",
-    author: "SOPHIA VALENTINA",
-    role: "Creative Director",
-    company: "Luminary Fashion Paris",
-    avatar: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=200&auto=format&fit=crop",
-    rating: 5,
-    projectRef: "Luminary High Fashion"
+    projectRef: "Interactive Dashboard"
   }
 ];
 
 export const FAQ_ITEMS: FAQItem[] = [
   {
     category: "General",
-    question: "What is your typical project timeline?",
-    answer: "Most full design & engineering projects take between 4 to 8 weeks depending on scope complexity. Design-only or Framer template customization sprints can be completed in 2 to 3 weeks."
-  },
-  {
-    category: "Pricing",
-    question: "What are your pricing structures?",
-    answer: "We offer both fixed-scope project pricing and monthly dedicated creative studio retainers. Fixed projects generally start at $5,000 for web design & frontend packages."
-  },
-  {
-    category: "Process",
-    question: "How do we collaborate during the project?",
-    answer: "We maintain weekly asynchronous video updates via Loom, real-time Slack or Discord channel sync, and Figma design reviews where you can comment directly on active wireframes and UI components."
+    question: "Who is Nihal?",
+    answer: "Hi, I'm Nihal — a 16-year-old Developer & Graphic Designer from Kochi, Kerala, India, passionate about technology, creativity, and building things for the digital world."
   },
   {
     category: "Technical",
-    question: "Do you build full-stack web applications or just static sites?",
-    answer: "I specialize in full-stack web platforms using React 19, Next.js, Node.js, Express, Tailwind CSS, GSAP, and cloud services (GCP, Firebase, Supabase). I also build custom AI integrations using Gemini API."
+    question: "What kind of work do you specialize in?",
+    answer: "My work spans front-end development, UI/UX design, graphic design, interactive dashboards, and web-based systems. I focus on clean modern interfaces, smooth animations, glassmorphism, and a premium visual feel."
+  },
+  {
+    category: "Process",
+    question: "What are some of your notable projects?",
+    answer: "I've built a full sports fest result management system, interactive dashboards, online web platforms, and visual identities, combining modern code with striking graphic design."
   },
   {
     category: "General",
-    question: "Are you available for long-term contract or agency white-label work?",
-    answer: "Yes, I collaborate with select creative agencies and venture-backed tech startups worldwide as an embedded Lead Technologist or Design Advisor."
+    question: "Are you available for freelance projects or collaborations?",
+    answer: "Yes! I am always excited to collaborate on innovative web applications, UI/UX designs, graphic projects, and digital experiments. Reach out via email or Instagram (@nihal.graphix)."
   }
 ];
 
 export const CREATIVE_MANIFESTO = [
   {
-    title: "01. Design With Purpose, Build With Impact",
-    content: "Aesthetics without functional depth is merely decoration. Every line of typography, grid spacing, and micro-animation must solve a real strategic user objective."
+    title: "01. Always Learning",
+    content: "Beyond design and development, I enjoy solving technical problems, experimenting with new tools, and learning through hands-on projects."
   },
   {
-    title: "02. Never Settle For Default AI Templates",
-    content: "Craftsmanship lies in bespoke typography pairing, custom neon lighting ratios, mathematical border radius calculations, and high-performance code."
+    title: "02. Always Building",
+    content: "Whether building a sports fest result management system, online platforms, or refining visual identities, every build is functional, visually appealing, and easy to use."
   },
   {
-    title: "03. Performance Is An Essential Feature",
-    content: "Sub-second page loads, 60fps animations, and 95+ Lighthouse scores are non-negotiable standards for modern digital luxury."
+    title: "03. Always Creating",
+    content: "I believe age is no barrier to creativity, learning, or innovation. Every project is an opportunity to challenge myself and turn new ideas into something real."
   }
 ];

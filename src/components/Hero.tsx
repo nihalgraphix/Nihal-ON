@@ -1,6 +1,6 @@
 import { motion } from 'motion/react';
 import { Sparkles, ArrowDown, ChevronRight, ChevronLeft } from 'lucide-react';
-import aiSprintLeaderImage from './image/3ebaca72-c048-4ad3-ace0-649046417171.png';
+import nihalHeroPhoto from './image/3ebaca72-c048-4ad3-ace0-649046417171.png';
 import { PERSONAL_INFO } from '../data/portfolioData';
 import { useStudio } from '../context/StudioContext';
 import EditableText from './EditableText';
@@ -21,8 +21,10 @@ export default function Hero({ onOpenResumeModal }: HeroProps) {
   const btn2El = elements['hero-btn-secondary'];
 
   const heroModelEl = elements['hero-model-image'];
-  const heroImageUrl = heroModelEl?.content?.imageUrl || aiSprintLeaderImage;
-  const isHeroModelVisible = heroModelEl?.visible !== false && heroImageUrl !== '' && heroImageUrl !== 'none';
+  const rawImageUrl = heroModelEl?.content?.imageUrl;
+  const isInvalidOrLogo = !rawImageUrl || rawImageUrl.includes('regenerated_image_1785757234835') || rawImageUrl === 'none' || rawImageUrl === '';
+  const heroImageUrl = isInvalidOrLogo ? nihalHeroPhoto : rawImageUrl;
+  const isHeroModelVisible = heroModelEl?.visible !== false;
 
   return (
     <section id="home" data-section="hero" className="relative pt-20 sm:pt-24 pb-10 sm:pb-14 lg:pb-16 bg-gradient-to-b from-[#FF5A1F] via-[#E84A10] to-[#C83600] w-full overflow-hidden rounded-b-[36px] sm:rounded-b-[48px] lg:rounded-b-[60px] shadow-2xl shadow-[#FF5A1F]/20 border-b border-white/10">
@@ -56,7 +58,7 @@ export default function Hero({ onOpenResumeModal }: HeroProps) {
                   className="inline-flex items-center gap-2 px-4 py-1.5 font-space shadow-lg cursor-pointer"
                 >
                   <Sparkles className="h-3.5 w-3.5 text-[#FF5A1F]" />
-                  <EditableText id="hero-badge-text" as="span" defaultText="AI-Driven Agency" />
+                  <EditableText id="hero-badge-text" as="span" defaultText="16-Year-Old Developer & Graphic Designer" />
                 </span>
               </motion.div>
             )}
@@ -78,7 +80,7 @@ export default function Hero({ onOpenResumeModal }: HeroProps) {
                   fontWeight: headlineEl?.typography?.fontWeight || '900',
                 }}
                 className="font-syne text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight leading-[1.02]"
-                defaultText="I'm Nihal ON"
+                defaultText="Hi, I'm Nihal"
               />
             </motion.div>
 
@@ -97,7 +99,7 @@ export default function Hero({ onOpenResumeModal }: HeroProps) {
                   fontSize: subtextEl?.typography?.fontSize || undefined,
                 }}
                 className="text-sm sm:text-base font-sans max-w-md leading-relaxed font-normal cursor-pointer"
-                defaultText="From discovery to deployment, we plug into your stack to prototype, validate, and launch AI experiences your users actually love."
+                defaultText="A 16-year-old Developer & Graphic Designer from Kochi, Kerala, India, passionate about technology, creativity, and turning ideas into meaningful digital experiences by combining creative design with modern web technologies."
               />
             </motion.div>
 
@@ -110,7 +112,7 @@ export default function Hero({ onOpenResumeModal }: HeroProps) {
             >
               <a
                 data-editable-id="hero-btn-primary"
-                href={btn1El?.content?.link || '#services'}
+                href={btn1El?.content?.link || '#about'}
                 style={{
                   backgroundColor: btn1El?.appearance?.backgroundColor || '#090909',
                   color: btn1El?.typography?.textColor || '#FFFFFF',
@@ -118,18 +120,12 @@ export default function Hero({ onOpenResumeModal }: HeroProps) {
                 }}
                 className="px-8 py-3.5 text-xs sm:text-sm font-bold shadow-2xl hover:bg-black hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer font-syne border border-white/10"
               >
-                {btn1El?.content?.text || 'Explore Services'}
+                {btn1El?.content?.text || 'Explore Work'}
               </a>
 
               <a
                 data-editable-id="hero-btn-secondary"
-                href={btn2El?.content?.link || '#resume'}
-                onClick={(e) => {
-                  if ((btn2El?.content?.link || '#resume') === '#resume') {
-                    e.preventDefault();
-                    onOpenResumeModal();
-                  }
-                }}
+                href={btn2El?.content?.link || '#contact'}
                 style={{
                   backgroundColor: btn2El?.appearance?.backgroundColor || '#FFFFFF',
                   color: btn2El?.typography?.textColor || '#000000',
@@ -137,12 +133,12 @@ export default function Hero({ onOpenResumeModal }: HeroProps) {
                 }}
                 className="px-8 py-3.5 text-xs sm:text-sm font-bold shadow-lg hover:bg-neutral-100 hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer font-syne"
               >
-                {btn2El?.content?.text || 'Download CV'}
+                {btn2El?.content?.text || 'Get In Touch'}
               </a>
             </motion.div>
           </div>
 
-          {/* Center Column: Hooded Model standing seamlessly directly on the orange canvas */}
+          {/* Center Column: Nihal's Portrait standing seamlessly directly on the orange canvas */}
           {isHeroModelVisible && (
             <div className="lg:col-span-4 relative flex items-end justify-center h-full my-2 lg:my-0 z-10 pointer-events-none">
               <motion.div
@@ -157,8 +153,14 @@ export default function Hero({ onOpenResumeModal }: HeroProps) {
                   className="relative w-full h-full flex items-end justify-center pointer-events-auto cursor-pointer"
                 >
                   <img
-                    src={heroImageUrl || aiSprintLeaderImage}
-                    alt={heroModelEl?.content?.alt || 'Hero Model Portrait'}
+                    src={heroImageUrl}
+                    alt={heroModelEl?.content?.alt || 'Nihal — 16-Year-Old Developer & Graphic Designer Portrait'}
+                    onError={(e) => {
+                      const target = e.currentTarget as HTMLImageElement;
+                      if (target.src !== nihalHeroPhoto) {
+                        target.src = nihalHeroPhoto;
+                      }
+                    }}
                     referrerPolicy="no-referrer"
                     fetchPriority="high"
                     loading="eager"
@@ -211,7 +213,7 @@ export default function Hero({ onOpenResumeModal }: HeroProps) {
                 id="hero-quote-text"
                 as="p"
                 className="text-xs sm:text-sm text-white/95 font-sans leading-relaxed"
-                defaultText="We shipped our first copilot in 7 weeks and cut support tickets by 31%. The eval dashboards made every decision obvious."
+                defaultText="I believe age is no barrier to creativity, learning, or innovation. Every project is an opportunity to challenge myself, gain experience, and turn new ideas into something real."
               />
             </motion.div>
 
@@ -237,7 +239,7 @@ export default function Hero({ onOpenResumeModal }: HeroProps) {
                   id="hero-growth-label-text"
                   as="span"
                   className="text-[10px] font-space font-extrabold uppercase tracking-widest text-white/80"
-                  defaultText="OUR GROWTH"
+                  defaultText="ALWAYS CREATING"
                 />
                 <div className="flex items-center gap-1 text-white/80">
                   <ChevronLeft className="h-3.5 w-3.5 cursor-pointer hover:text-white" />
@@ -256,7 +258,7 @@ export default function Hero({ onOpenResumeModal }: HeroProps) {
                   id="hero-growth-value-text"
                   as="h3"
                   className="font-syne text-5xl sm:text-7xl font-extrabold tracking-tight text-white leading-none"
-                  defaultText="150+"
+                  defaultText="16 YRS"
                 />
               </div>
             </motion.div>
@@ -286,12 +288,12 @@ export default function Hero({ onOpenResumeModal }: HeroProps) {
             </div>
           ) : (
             <div className="flex flex-wrap items-center justify-between gap-6 opacity-95 text-white font-syne text-xs sm:text-sm font-bold tracking-wider uppercase">
-              <span className="flex items-center gap-1.5"><span className="text-lg">●</span> Calendly</span>
-              <span className="flex items-center gap-1.5"><span className="text-lg">☁</span> classpass</span>
-              <span className="flex items-center gap-1.5"><span className="text-lg">⚙</span> GitHub</span>
-              <span className="flex items-center gap-1.5"><span className="text-lg">⚡</span> Basecamp</span>
-              <span className="flex items-center gap-1.5"><span className="text-lg">〰</span> attentive</span>
-              <span className="flex items-center gap-1.5"><span className="text-lg">★</span> GUMROAD</span>
+              <span className="flex items-center gap-1.5"><span className="text-lg">●</span> React & TypeScript</span>
+              <span className="flex items-center gap-1.5"><span className="text-lg">☁</span> UI/UX Design</span>
+              <span className="flex items-center gap-1.5"><span className="text-lg">⚙</span> Graphic Design</span>
+              <span className="flex items-center gap-1.5"><span className="text-lg">⚡</span> Interactive Systems</span>
+              <span className="flex items-center gap-1.5"><span className="text-lg">〰</span> Glassmorphism</span>
+              <span className="flex items-center gap-1.5"><span className="text-lg">★</span> AI Tools</span>
             </div>
           )}
         </div>
