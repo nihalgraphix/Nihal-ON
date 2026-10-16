@@ -100,11 +100,15 @@ interface StudioContextType {
   saveAllSectionSeo: (seoMap: SectionSeoMap) => Promise<void>;
 
   // Auth
+  loginCredentials: (username: string, pass: string) => Promise<{ success: boolean; error?: string }>;
   loginEmail: (email: string, pass: string) => Promise<{ success: boolean; error?: string }>;
   loginWithGoogle: () => Promise<{ success: boolean; error?: string }>;
   logout: () => Promise<void>;
   trackEvent: (type: 'pageview' | 'project_click' | 'contact_submit' | 'cv_download' | 'section_view', label?: string) => void;
 }
+
+export const ADMIN_USERNAME = 'nihalmunnusalmanizar2244';
+export const ADMIN_PASSWORD = 'nihalbilalsalmanizar001322';
 
 const LOCAL_STORAGE_PUB_KEY = 'nihal_studio_pub_data_v5';
 const LOCAL_STORAGE_DRAFT_KEY = 'nihal_studio_draft_data_v5';
@@ -1105,42 +1109,35 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
     setIsDirty(false);
   }, [pushUndoState, draftData]);
 
-  // Auth operations - Strictly restricted to nihal.graphix@gmail.com
-  const loginEmail = useCallback(async (email: string, pass: string): Promise<{ success: boolean; error?: string }> => {
-    const cleanEmail = email.toLowerCase().trim();
-    if (cleanEmail !== 'nihal.graphix@gmail.com') {
-      return { 
-        success: false, 
-        error: `Access Denied: The Admin Dashboard is only accessible with nihal.graphix@gmail.com. Account "${email}" is not authorized.` 
-      };
+  // Auth operations - Credentials (Username & Password)
+  const loginCredentials = useCallback(async (username: string, pass: string): Promise<{ success: boolean; error?: string }> => {
+    const cleanUser = username.trim();
+    const cleanPass = pass.trim();
+
+    if (cleanUser === ADMIN_USERNAME && cleanPass === ADMIN_PASSWORD) {
+      const adminUser = {
+        uid: 'admin-nihal-verified',
+        email: 'nihal.graphix@gmail.com',
+        displayName: 'Muhammed Nihal',
+        emailVerified: true,
+        isAnonymous: false,
+      } as unknown as User;
+
+      setUser(adminUser);
+      setIsAdmin(true);
+      localStorage.setItem('nihal_portfolio_admin_auth', 'true');
+      return { success: true };
     }
 
-    try {
-      const cred = await signInWithEmailAndPassword(auth, cleanEmail, pass || 'nihal123').catch(() => null);
-      if (cred && (cred.user.email || '').toLowerCase().trim() === 'nihal.graphix@gmail.com') {
-        setUser(cred.user);
-        setIsAdmin(true);
-        localStorage.setItem('nihal_portfolio_admin_auth', 'true');
-        return { success: true };
-      }
-    } catch {
-      // Fall through to authorized fallback for nihal.graphix@gmail.com
-    }
-
-    // Direct authorized session for owner nihal.graphix@gmail.com
-    const adminUser = {
-      uid: auth.currentUser?.uid || 'admin-nihal-graphix',
-      email: 'nihal.graphix@gmail.com',
-      displayName: 'Muhammed Nihal',
-      emailVerified: true,
-      isAnonymous: false,
-    } as unknown as User;
-
-    setUser(adminUser);
-    setIsAdmin(true);
-    localStorage.setItem('nihal_portfolio_admin_auth', 'true');
-    return { success: true };
+    return { 
+      success: false, 
+      error: 'Invalid username or password. Access Denied.' 
+    };
   }, []);
+
+  const loginEmail = useCallback(async (userOrEmail: string, pass: string): Promise<{ success: boolean; error?: string }> => {
+    return loginCredentials(userOrEmail, pass);
+  }, [loginCredentials]);
 
   const loginWithGoogle = useCallback(async (): Promise<{ success: boolean; error?: string }> => {
     try {
@@ -1289,6 +1286,7 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
         updateSkillCategories,
         updateSectionSeo,
         saveAllSectionSeo,
+        loginCredentials,
         loginEmail,
         loginWithGoogle,
         logout,
