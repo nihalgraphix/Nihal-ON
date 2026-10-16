@@ -407,14 +407,12 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
 
     async function loadData() {
       try {
-        const [pubRes, draftRes, textNodesRes, projectsRes, blogRes, galleryRes, settingsRes] = await Promise.allSettled([
+        const [pubRes, draftRes, projectsRes, blogRes, galleryRes] = await Promise.allSettled([
           fetchStudioData(false),
           fetchStudioData(true),
-          fetchFirestoreCollection<{ id: string; text: string }>('textNodes'),
           fetchFirestoreCollection<Project>('projects'),
           fetchFirestoreCollection<BlogPost>('blogPosts'),
           fetchFirestoreCollection<GalleryItem>('galleryItems'),
-          fetchFirestoreCollection('settings'),
         ]);
 
         if (!isMounted) return;
@@ -433,33 +431,7 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
           baseDraft = { ...baseDraft, projects: PROJECTS };
         }
 
-        // Merge textNodes if available
-        if (textNodesRes.status === 'fulfilled' && textNodesRes.value && typeof textNodesRes.value === 'object') {
-          const textNodes = textNodesRes.value;
-          const updatedElementsDraft = { ...(baseDraft?.elements || {}) };
-          const updatedElementsPub = { ...(basePub?.elements || {}) };
-
-          Object.entries(textNodes).forEach(([id, nodeData]) => {
-            if (nodeData && nodeData.text !== undefined) {
-              const existingDraft = updatedElementsDraft[id] || { id, label: id, section: 'text_node', type: 'text', visible: true };
-              updatedElementsDraft[id] = {
-                ...existingDraft,
-                content: { ...(existingDraft.content || {}), text: nodeData.text },
-              };
-
-              const existingPub = updatedElementsPub[id] || { id, label: id, section: 'text_node', type: 'text', visible: true };
-              updatedElementsPub[id] = {
-                ...existingPub,
-                content: { ...(existingPub.content || {}), text: nodeData.text },
-              };
-            }
-          });
-
-          baseDraft = { ...baseDraft, elements: updatedElementsDraft };
-          basePub = { ...basePub, elements: updatedElementsPub };
-        }
-
-        // Merge projects, blogPosts, galleryItems safely
+        // Merge projects, blogPosts, galleryItems safely from Firebase Firestore
         if (projectsRes.status === 'fulfilled' && projectsRes.value && typeof projectsRes.value === 'object') {
           const projectList = Object.values(projectsRes.value).filter(Boolean);
           if (projectList.length > 0) {
@@ -605,12 +577,6 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
       return nextData;
     });
     setIsDirty(true);
-
-    try {
-      setFirestoreDocument('textNodes', id, { id, text }).catch(() => {});
-    } catch (err) {
-      console.warn(`Firestore textNodes sync note for ${id}:`, err);
-    }
   }, [pushUndoState, cacheDraftData]);
 
   // Visual element manipulation
