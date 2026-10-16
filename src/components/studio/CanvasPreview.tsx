@@ -761,8 +761,8 @@ export default function CanvasPreview({ onToggleFloatLeft, onToggleFloatRight }:
                 </div>
               )}
 
-              {/* Inline Rich Text Edit Modal */}
-              {showInlineTextModal && selectedElement && (
+              {/* Inline Rich Text Edit Modal (Disabled) */}
+              {false && showInlineTextModal && selectedElement && (
                 <div className="fixed top-28 right-82 z-40 bg-[#17181B] border-2 border-[#FF5A1F] shadow-2xl rounded-xl p-4 text-xs w-[420px] space-y-3 animate-in fade-in">
                   <div className="flex items-center justify-between border-b border-[#2C2E34] pb-2">
                     <span className="font-mono text-white text-xs font-bold flex items-center gap-1.5">

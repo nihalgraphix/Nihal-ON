@@ -89,8 +89,8 @@ export default function AdminDashboard() {
     resetContentOnly,
   } = useCustomization();
 
-  // Primary mode: Interactive Web Preview Builder vs Detailed CMS Studio
-  const [viewMode, setViewMode] = useState<'builder' | 'studio'>('builder');
+  // Primary mode: CMS Studio Dashboard
+  const [viewMode, setViewMode] = useState<'builder' | 'studio'>('studio');
   const [activeTab, setActiveTab] = useState<'overview' | 'colors' | 'layout' | 'styling' | 'text' | 'socials' | 'projects' | 'blog' | 'gallery' | 'inbox' | 'media' | 'database'>('overview');
   const [analyticsRange, setAnalyticsRange] = useState<'today' | '7d' | '30d' | '90d'>('30d');
   const [mediaSearch, setMediaSearch] = useState('');
@@ -529,17 +529,7 @@ export default function AdminDashboard() {
                     <span>Colors & Glow</span>
                   </button>
 
-                  <button
-                    onClick={() => setActiveTab('layout')}
-                    className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-space font-semibold transition-all cursor-pointer ${
-                      activeTab === 'layout' 
-                        ? 'bg-white/10 text-white shadow-md' 
-                        : 'text-neutral-400 hover:text-white hover:bg-white/5'
-                    }`}
-                  >
-                    <Layout className="h-4 w-4" style={{ color: settings.accentColor }} />
-                    <span>Layout & Divs</span>
-                  </button>
+
 
                   <button
                     onClick={() => setActiveTab('styling')}
@@ -553,17 +543,7 @@ export default function AdminDashboard() {
                     <span>Typography & UI</span>
                   </button>
 
-                  <button
-                    onClick={() => setActiveTab('text')}
-                    className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-space font-semibold transition-all cursor-pointer ${
-                      activeTab === 'text' 
-                        ? 'bg-white/10 text-white shadow-md' 
-                        : 'text-neutral-400 hover:text-white hover:bg-white/5'
-                    }`}
-                  >
-                    <FileText className="h-4 w-4" style={{ color: settings.accentColor }} />
-                    <span>Headlines & Bio</span>
-                  </button>
+
 
                   <button
                     onClick={() => setActiveTab('socials')}
@@ -1605,8 +1585,8 @@ export default function AdminDashboard() {
                   </div>
                 )}
 
-                {/* TAB 3: TEXT & BIO CONTENT */}
-                {activeTab === 'text' && (
+                {/* TAB 3: TEXT & BIO CONTENT (DISABLED) */}
+                {false && (
                   <div className="space-y-8 max-w-4xl">
                     <div>
                       <h3 className="font-syne text-xl font-bold text-white">Text & Bio Content Editing</h3>

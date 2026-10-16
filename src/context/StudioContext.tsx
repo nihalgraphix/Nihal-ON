@@ -5,7 +5,7 @@ import { StudioData, EditableElement, ElementTypography, ElementAppearance, Elem
 import { DEFAULT_STUDIO_DATA } from '../data/defaultStudioData';
 import { DEFAULT_SECTION_SEO } from '../data/defaultSeoData';
 import { PROJECTS } from '../data/portfolioData';
-import { persistStudioData, fetchStudioData, deleteFirestoreDocument, setFirestoreDocument, fetchFirestoreCollection } from '../lib/firebaseStore';
+import { persistStudioData, fetchStudioData, deleteFirestoreDocument, setFirestoreDocument, fetchFirestoreCollection, revokeAllAdminSessionsFirestore, fetchAdminSessionRevocationTime } from '../lib/firebaseStore';
 import { Project, BlogPost, GalleryItem, SkillCategory } from '../types';
 
 export type StudioTab = 
@@ -75,6 +75,7 @@ interface StudioContextType {
   publish: () => Promise<void>;
   discardDraft: () => void;
   resetToDefault: () => Promise<void>;
+  resetAllTextToOriginal: () => Promise<void>;
   undo: () => void;
   redo: () => void;
   canUndo: boolean;
@@ -104,6 +105,7 @@ interface StudioContextType {
   loginEmail: (email: string, pass: string) => Promise<{ success: boolean; error?: string }>;
   loginWithGoogle: () => Promise<{ success: boolean; error?: string }>;
   logout: () => Promise<void>;
+  signOutAllDevices: () => Promise<void>;
   trackEvent: (type: 'pageview' | 'project_click' | 'contact_submit' | 'cv_download' | 'section_view', label?: string) => void;
 }
 
@@ -133,43 +135,67 @@ function sanitizeStudioData(data: StudioData): StudioData {
     }
   }
 
-  // Migrate any old template placeholders
-  if (elements['hero-subtext']?.content?.text?.includes('From discovery to deployment')) {
-    elements['hero-subtext'] = {
-      ...elements['hero-subtext'],
-      content: { text: "A 16-year-old Developer & Graphic Designer from Kochi, Kerala, India, passionate about technology, creativity, and turning ideas into meaningful digital experiences by combining creative design with modern web technologies." }
-    };
-  }
-  if (elements['hero-badge']?.content?.text === 'AI-Driven Agency') {
-    elements['hero-badge'] = {
-      ...elements['hero-badge'],
-      content: { text: '16-Year-Old Developer & Graphic Designer' }
-    };
-  }
-  if (elements['hero-headline']?.content?.text === "I'm Nihal ON") {
-    elements['hero-headline'] = {
-      ...elements['hero-headline'],
-      content: { text: "Hi, I'm Nihal", subtext: "16-Year-Old Developer & Graphic Designer from Kochi, Kerala" }
-    };
-  }
-  if (elements['hero-quote']?.content?.text?.includes('We shipped our first copilot')) {
-    elements['hero-quote'] = {
-      ...elements['hero-quote'],
-      content: { text: "I believe age is no barrier to creativity, learning, or innovation. Every project is an opportunity to challenge myself, gain experience, and turn new ideas into something real." }
-    };
-  }
-  if (elements['hero-growth-label']?.content?.text === 'OUR GROWTH') {
-    elements['hero-growth-label'] = {
-      ...elements['hero-growth-label'],
-      content: { text: "ALWAYS CREATING" }
-    };
-  }
-  if (elements['hero-growth-value']?.content?.text === '150+') {
-    elements['hero-growth-value'] = {
-      ...elements['hero-growth-value'],
-      content: { text: "16 YRS" }
-    };
-  }
+  // Force pristine original texts for all Hero section elements & text nodes
+  elements['hero-badge'] = {
+    ...elements['hero-badge'],
+    content: { ...(elements['hero-badge']?.content || {}), text: '16-Year-Old Developer & Graphic Designer' }
+  };
+  elements['hero-badge-text'] = {
+    ...elements['hero-badge-text'],
+    content: { ...(elements['hero-badge-text']?.content || {}), text: '16-Year-Old Developer & Graphic Designer' }
+  };
+  elements['hero-headline'] = {
+    ...elements['hero-headline'],
+    content: { text: "Hi, I'm Nihal", subtext: "16-Year-Old Developer & Graphic Designer from Kochi, Kerala" }
+  };
+  elements['hero-headline-text'] = {
+    ...elements['hero-headline-text'],
+    content: { text: "Hi, I'm Nihal" }
+  };
+  elements['hero-subtext'] = {
+    ...elements['hero-subtext'],
+    content: { text: "A 16-year-old Developer & Graphic Designer from Kochi, Kerala, India, passionate about technology, creativity, and turning ideas into meaningful digital experiences by combining creative design with modern web technologies." }
+  };
+  elements['hero-subtext-para'] = {
+    ...elements['hero-subtext-para'],
+    content: { text: "A 16-year-old Developer & Graphic Designer from Kochi, Kerala, India, passionate about technology, creativity, and turning ideas into meaningful digital experiences by combining creative design with modern web technologies." }
+  };
+  elements['hero-btn-primary'] = {
+    ...elements['hero-btn-primary'],
+    content: { text: 'Explore Work', link: '#about' }
+  };
+  elements['hero-btn-secondary'] = {
+    ...elements['hero-btn-secondary'],
+    content: { text: 'Get In Touch', link: '#contact' }
+  };
+  elements['hero-quote'] = {
+    ...elements['hero-quote'],
+    content: { text: "I believe age is no barrier to creativity, learning, or innovation. Every project is an opportunity to challenge myself, gain experience, and turn new ideas into something real." }
+  };
+  elements['hero-quote-text'] = {
+    ...elements['hero-quote-text'],
+    content: { text: "I believe age is no barrier to creativity, learning, or innovation. Every project is an opportunity to challenge myself, gain experience, and turn new ideas into something real." }
+  };
+  elements['hero-growth-label'] = {
+    ...elements['hero-growth-label'],
+    content: { text: "ALWAYS CREATING" }
+  };
+  elements['hero-growth-label-text'] = {
+    ...elements['hero-growth-label-text'],
+    content: { text: "ALWAYS CREATING" }
+  };
+  elements['hero-growth-value'] = {
+    ...elements['hero-growth-value'],
+    content: { text: "16 YRS" }
+  };
+  elements['hero-growth-value-text'] = {
+    ...elements['hero-growth-value-text'],
+    content: { text: "16 YRS" }
+  };
+  elements['hero-scroll-pill-text'] = {
+    ...elements['hero-scroll-pill-text'],
+    content: { text: "Scroll for more" }
+  };
   if (elements['about-heading']?.content?.text?.includes('Bridging Imagination') || elements['about-heading']?.content?.text?.includes('A small studio')) {
     elements['about-heading'] = {
       ...elements['about-heading'],
@@ -224,28 +250,14 @@ function sanitizeStudioData(data: StudioData): StudioData {
 
 const getInitialPubData = (): StudioData => {
   try {
-    const cached = localStorage.getItem(LOCAL_STORAGE_PUB_KEY);
-    if (cached) {
-      const parsed = JSON.parse(cached);
-      if (parsed && typeof parsed === 'object' && parsed.elements) return sanitizeStudioData(parsed);
-    }
-  } catch (e) {
-    // Fallback
-  }
+    localStorage.removeItem(LOCAL_STORAGE_PUB_KEY);
+    localStorage.removeItem(LOCAL_STORAGE_DRAFT_KEY);
+  } catch (e) {}
   return DEFAULT_STUDIO_DATA;
 };
 
 const getInitialDraftData = (): StudioData => {
-  try {
-    const cached = localStorage.getItem(LOCAL_STORAGE_DRAFT_KEY);
-    if (cached) {
-      const parsed = JSON.parse(cached);
-      if (parsed && typeof parsed === 'object' && parsed.elements) return sanitizeStudioData(parsed);
-    }
-  } catch (e) {
-    // Fallback
-  }
-  return getInitialPubData();
+  return DEFAULT_STUDIO_DATA;
 };
 
 const StudioContext = createContext<StudioContextType | null>(null);
@@ -318,40 +330,74 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
-  // Listen to Firebase Auth state - strictly restricted to nihal.graphix@gmail.com
+  // Periodic, Startup & Visibility check to enforce global device session revocation
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, (firebaseUser) => {
-      if (firebaseUser) {
-        setUser(firebaseUser);
-        const email = (firebaseUser.email || '').toLowerCase().trim();
-        if (email === 'nihal.graphix@gmail.com') {
-          setIsAdmin(true);
-          localStorage.setItem('nihal_portfolio_admin_auth', 'true');
-        } else if (!firebaseUser.isAnonymous && email !== '') {
-          // If signed in with an explicit different email account, revoke admin
-          setIsAdmin(false);
-          setIsStudioOpen(false);
-          localStorage.removeItem('nihal_portfolio_admin_auth');
+    let isMounted = true;
+
+    const verifySessionValidity = async () => {
+      const savedAuth = localStorage.getItem('nihal_portfolio_admin_auth');
+      if (savedAuth !== 'true') return;
+
+      const sessionTimeStr = localStorage.getItem('nihal_admin_session_time');
+      const sessionTime = sessionTimeStr ? parseInt(sessionTimeStr, 10) : 0;
+
+      try {
+        const [serverStatus, firestoreEpoch] = await Promise.allSettled([
+          fetch('/api/studio/auth/session-status').then((r) => r.json()).catch(() => null),
+          fetchAdminSessionRevocationTime().catch(() => 0),
+        ]);
+
+        const serverRevokedBefore = (serverStatus.status === 'fulfilled' && serverStatus.value?.revokedBefore) || 0;
+        const firestoreRevokedBefore = (firestoreEpoch.status === 'fulfilled' && firestoreEpoch.value) || 0;
+        const latestRevocationEpoch = Math.max(serverRevokedBefore, firestoreRevokedBefore);
+
+        // If a global sign-out was requested, or this session was created before the revocation time, invalidate immediately!
+        if (latestRevocationEpoch > 0 && sessionTime < latestRevocationEpoch) {
+          console.warn('Admin session was revoked globally across all devices. Logging out.');
+          if (isMounted) {
+            setIsAdmin(false);
+            setUser(null);
+            setIsStudioOpen(false);
+            localStorage.removeItem('nihal_portfolio_admin_auth');
+            localStorage.removeItem('nihal_admin_session_time');
+          }
         }
-      } else {
-        // Check for verified nihal.graphix@gmail.com session
-        const savedAuth = localStorage.getItem('nihal_portfolio_admin_auth');
-        if (savedAuth === 'true') {
-          setIsAdmin(true);
-          setUser((prev) => prev || ({
-            uid: 'admin-nihal-graphix',
-            email: 'nihal.graphix@gmail.com',
-            displayName: 'Muhammed Nihal',
-            emailVerified: true,
-            isAnonymous: false,
-          } as unknown as User));
-        } else {
-          setIsAdmin(false);
-          setUser(null);
-        }
+      } catch (err) {
+        // network resilience
       }
-    });
-    return () => unsub();
+    };
+
+    verifySessionValidity();
+    const interval = setInterval(verifySessionValidity, 8000);
+    window.addEventListener('focus', verifySessionValidity);
+    document.addEventListener('visibilitychange', verifySessionValidity);
+
+    return () => {
+      isMounted = false;
+      clearInterval(interval);
+      window.removeEventListener('focus', verifySessionValidity);
+      document.removeEventListener('visibilitychange', verifySessionValidity);
+    };
+  }, []);
+
+  // Restore authenticated session strictly from verified username/password session
+  useEffect(() => {
+    const savedAuth = localStorage.getItem('nihal_portfolio_admin_auth');
+    const sessionTimeStr = localStorage.getItem('nihal_admin_session_time');
+
+    if (savedAuth === 'true' && sessionTimeStr) {
+      setIsAdmin(true);
+      setUser({
+        uid: 'admin-nihal-verified',
+        email: ADMIN_USERNAME,
+        displayName: 'Muhammed Nihal (Admin)',
+        emailVerified: true,
+        isAnonymous: false,
+      } as unknown as User);
+    } else {
+      setIsAdmin(false);
+      setUser(null);
+    }
   }, []);
 
   // High-performance parallel initial data load
@@ -511,18 +557,27 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
     setRedoStack([]);
   }, []);
 
-  // Text Node Operations
+  // Text Node Operations - Always serves original default text
   const getTextNode = useCallback((id: string, defaultText: string = ''): string => {
+    // Explicit baseline overrides for hero text nodes
+    if (id === 'hero-headline-text' || id === 'hero-headline') return "Hi, I'm Nihal";
+    if (id === 'hero-badge-text' || id === 'hero-badge') return "16-Year-Old Developer & Graphic Designer";
+    if (id === 'hero-subtext-para' || id === 'hero-subtext') return "A 16-year-old Developer & Graphic Designer from Kochi, Kerala, India, passionate about technology, creativity, and turning ideas into meaningful digital experiences by combining creative design with modern web technologies.";
+    if (id === 'hero-quote-text' || id === 'hero-quote') return "I believe age is no barrier to creativity, learning, or innovation. Every project is an opportunity to challenge myself, gain experience, and turn new ideas into something real.";
+    if (id === 'hero-growth-label-text' || id === 'hero-growth-label') return "ALWAYS CREATING";
+    if (id === 'hero-growth-value-text' || id === 'hero-growth-value') return "16 YRS";
+    if (id === 'hero-scroll-pill-text') return "Scroll for more";
+
+    const origElem = DEFAULT_STUDIO_DATA?.elements?.[id];
+    if (origElem?.content?.text) {
+      return origElem.content.text;
+    }
     const elem = draftData?.elements?.[id];
-    if (elem?.content?.text !== undefined && elem?.content?.text !== null) {
+    if (elem?.content?.text) {
       return elem.content.text;
     }
-    const pubElem = publishedData?.elements?.[id];
-    if (pubElem?.content?.text !== undefined && pubElem?.content?.text !== null) {
-      return pubElem.content.text;
-    }
     return defaultText;
-  }, [draftData?.elements, publishedData?.elements]);
+  }, [draftData?.elements]);
 
   const updateTextNode = useCallback(async (id: string, text: string) => {
     setDraftData(prev => {
@@ -828,12 +883,37 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
     setIsDirty(false);
     setSaveStatus('saved');
     try {
+      localStorage.removeItem(LOCAL_STORAGE_PUB_KEY);
+      localStorage.removeItem(LOCAL_STORAGE_DRAFT_KEY);
+      localStorage.removeItem('portfolio_site_settings');
+      localStorage.removeItem('portfolio_projects');
+      localStorage.removeItem('portfolio_blog_posts');
+      localStorage.removeItem('portfolio_gallery_items');
+      localStorage.removeItem('nihal_portfolio_text_overrides');
+    } catch {}
+
+    try {
+      const textNodes = await fetchFirestoreCollection<{ id: string; text: string }>('textNodes');
+      if (textNodes && typeof textNodes === 'object') {
+        const deletePromises = Object.keys(textNodes).map(id => deleteFirestoreDocument('textNodes', id));
+        await Promise.allSettled(deletePromises);
+      }
+    } catch (err) {
+      console.warn('Could not clear Firestore textNodes collection:', err);
+    }
+
+    try {
       await persistStudioData(cleanDefault, true);
       await persistStudioData(cleanDefault, false);
     } catch (e) {
       console.error('Failed to reset studio data to defaults:', e);
     }
   }, []);
+
+  const resetAllTextToOriginal = useCallback(async () => {
+    await resetToDefault();
+    window.dispatchEvent(new CustomEvent('text-content-reset-to-original'));
+  }, [resetToDefault]);
 
   // Content collections
   const updateSiteSettings = useCallback((settings: Partial<SiteSettings>) => {
@@ -1115,10 +1195,11 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
     const cleanPass = pass.trim();
 
     if (cleanUser === ADMIN_USERNAME && cleanPass === ADMIN_PASSWORD) {
+      const now = Date.now();
       const adminUser = {
         uid: 'admin-nihal-verified',
-        email: 'nihal.graphix@gmail.com',
-        displayName: 'Muhammed Nihal',
+        email: ADMIN_USERNAME,
+        displayName: 'Muhammed Nihal (Admin)',
         emailVerified: true,
         isAnonymous: false,
       } as unknown as User;
@@ -1126,7 +1207,15 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
       setUser(adminUser);
       setIsAdmin(true);
       localStorage.setItem('nihal_portfolio_admin_auth', 'true');
+      localStorage.setItem('nihal_admin_session_time', now.toString());
       return { success: true };
+    }
+
+    if (cleanUser.toLowerCase() === 'nihal.graphix@gmail.com' || cleanPass.toLowerCase() === 'nihal.graphix@gmail.com') {
+      return {
+        success: false,
+        error: 'Google authentication has been replaced with Admin Username and Password. Please log in using username "nihalmunnusalmanizar2244" and your admin password.',
+      };
     }
 
     return { 
@@ -1140,47 +1229,10 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
   }, [loginCredentials]);
 
   const loginWithGoogle = useCallback(async (): Promise<{ success: boolean; error?: string }> => {
-    try {
-      const res = await googleSignIn();
-      if (res?.user) {
-        const userEmail = (res.user.email || '').toLowerCase().trim();
-        if (userEmail !== 'nihal.graphix@gmail.com') {
-          // If any other Gmail account signs in, it WON'T allow access to admin dashboard
-          await signOut(auth).catch(() => {});
-          await logoutGoogle().catch(() => {});
-          setUser(null);
-          setIsAdmin(false);
-          setIsStudioOpen(false);
-          localStorage.removeItem('nihal_portfolio_admin_auth');
-          return {
-            success: false,
-            error: `Access Denied: Account "${res.user.email}" is not authorized. The Admin Dashboard is strictly restricted to nihal.graphix@gmail.com.`
-          };
-        }
-
-        // Successfully authenticated as nihal.graphix@gmail.com
-        setUser(res.user);
-        setIsAdmin(true);
-        localStorage.setItem('nihal_portfolio_admin_auth', 'true');
-        return { success: true };
-      }
-      return { success: false, error: 'Google sign-in was cancelled or returned no account.' };
-    } catch (err: any) {
-      console.warn('Google Sign-in failed with error:', err);
-      // If popup fails due to browser policy or domain mismatch in preview, authorize nihal.graphix@gmail.com
-      const verifiedAdminUser = {
-        uid: auth.currentUser?.uid || 'admin-nihal-graphix',
-        email: 'nihal.graphix@gmail.com',
-        displayName: 'Muhammed Nihal',
-        emailVerified: true,
-        isAnonymous: false,
-      } as unknown as User;
-
-      setUser(verifiedAdminUser);
-      setIsAdmin(true);
-      localStorage.setItem('nihal_portfolio_admin_auth', 'true');
-      return { success: true };
-    }
+    return {
+      success: false,
+      error: 'Google authentication has been disabled. Please authenticate with username "nihalmunnusalmanizar2244" and your admin password.',
+    };
   }, []);
 
   const logout = useCallback(async () => {
@@ -1189,12 +1241,26 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
     } catch (e) {
       // ignore
     }
-    await signOut(auth);
+    await signOut(auth).catch(() => {});
     setUser(null);
     setIsAdmin(false);
     setIsStudioOpen(false);
     localStorage.removeItem('nihal_portfolio_admin_auth');
+    localStorage.removeItem('nihal_admin_session_time');
   }, []);
+
+  const signOutAllDevices = useCallback(async () => {
+    try {
+      await Promise.allSettled([
+        fetch('/api/studio/auth/revoke-all-devices', { method: 'POST' }),
+        revokeAllAdminSessionsFirestore(),
+      ]);
+    } catch (e) {
+      console.warn('Revocation note:', e);
+    }
+    await logout();
+    window.dispatchEvent(new CustomEvent('admin-signed-out-all-devices'));
+  }, [logout]);
 
   // Real Analytics Tracker (doesn't count when studio is open)
   const trackEvent = useCallback((type: 'pageview' | 'project_click' | 'contact_submit' | 'cv_download' | 'section_view', label?: string) => {
@@ -1265,6 +1331,7 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
         publish,
         discardDraft,
         resetToDefault,
+        resetAllTextToOriginal,
         undo,
         redo,
         canUndo: undoStack.length > 0,
@@ -1290,6 +1357,7 @@ export function StudioProvider({ children }: { children: React.ReactNode }) {
         loginEmail,
         loginWithGoogle,
         logout,
+        signOutAllDevices,
         trackEvent,
       }}
     >

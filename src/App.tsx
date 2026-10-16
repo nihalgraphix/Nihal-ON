@@ -40,27 +40,50 @@ function PortfolioMain() {
   const [aiModalOpen, setAiModalOpen] = useState<boolean>(false);
   const [resumeModalOpen, setResumeModalOpen] = useState<boolean>(false);
 
-  // Global Key Listener: 'Windows + Shift + A' to toggle Admin button, and deny Inspect / View Source
+  // Robust Defensive Layer: Strictly block all methods of source code viewing, inspection & dev tools
   useEffect(() => {
-    const handleGlobalKeyDown = (e: KeyboardEvent) => {
-      const keyLower = e.key?.toLowerCase();
+    const isInspectionShortcut = (e: KeyboardEvent): boolean => {
+      const key = e.key?.toLowerCase() || '';
+      const code = e.code?.toLowerCase() || '';
       const isCtrlOrMeta = e.ctrlKey || e.metaKey;
 
-      // 1. DENY Code Inspection & Source Viewing:
-      // Block F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C, Ctrl+U, Ctrl+S (and Mac Cmd equivalents)
-      if (
-        e.key === 'F12' ||
-        (isCtrlOrMeta && e.shiftKey && (keyLower === 'i' || keyLower === 'j' || keyLower === 'c')) ||
-        (isCtrlOrMeta && (keyLower === 'u' || keyLower === 's'))
-      ) {
+      // F12, Shift+F10, or ContextMenu key
+      if (e.key === 'F12' || (e.shiftKey && e.key === 'F10') || e.key === 'ContextMenu' || code === 'contextmenu') {
+        return true;
+      }
+
+      // Ctrl/Cmd + Shift + I/J/C/K/E/M/S (Inspect, Console, Element Picker, Network, Device Emulation, Debugger)
+      if (isCtrlOrMeta && e.shiftKey) {
+        if (['i', 'j', 'c', 'k', 'e', 'm', 's', 'keyi', 'keyj', 'keyc', 'keyk', 'keye', 'keym', 'keys'].includes(key) || ['keyi', 'keyj', 'keyc', 'keyk', 'keye', 'keym', 'keys'].includes(code)) {
+          return true;
+        }
+      }
+
+      // Ctrl/Cmd + U (View Source), Ctrl/Cmd + S (Save Page HTML), Ctrl/Cmd + P (Print Page)
+      if (isCtrlOrMeta && ['u', 's', 'p', 'keyu', 'keys', 'keyp'].includes(key)) {
+        return true;
+      }
+
+      // Alt + Cmd + I/J/C/U/S (Mac Developer Shortcuts)
+      if (e.altKey && e.metaKey && ['i', 'j', 'c', 'u', 's', 'keyi', 'keyj', 'keyc', 'keyu', 'keys'].includes(key)) {
+        return true;
+      }
+
+      return false;
+    };
+
+    const handleGlobalKeyDown = (e: KeyboardEvent) => {
+      // 1. Strictly block inspection and devtool shortcuts
+      if (isInspectionShortcut(e)) {
         e.preventDefault();
         e.stopPropagation();
+        e.stopImmediatePropagation();
         window.dispatchEvent(new CustomEvent('inspect-denied'));
         return false;
       }
 
-      // 2. 'Windows + Shift + A' Key Combination:
-      // Correctly toggles the visibility state of the admin floating button
+      // 2. 'Windows + Shift + A' Key Combination toggles admin button visibility
+      const keyLower = e.key?.toLowerCase();
       const isKeyA = keyLower === 'a' || e.code === 'KeyA';
       const hasShift = e.shiftKey;
       const hasWinOrMeta =
@@ -72,25 +95,51 @@ function PortfolioMain() {
       if (isKeyA && hasShift && hasModifier) {
         e.preventDefault();
         e.stopPropagation();
+        e.stopImmediatePropagation();
         toggleAdminButton();
       }
     };
 
-    const handleGlobalContextMenu = (e: MouseEvent) => {
-      // Completely remove default browser right-click across the entire page
-      e.preventDefault();
+    const handleGlobalKeyUp = (e: KeyboardEvent) => {
+      if (isInspectionShortcut(e)) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        return false;
+      }
     };
 
-    window.addEventListener('keydown', handleGlobalKeyDown, { capture: true });
-    document.addEventListener('keydown', handleGlobalKeyDown, { capture: true });
-    window.addEventListener('contextmenu', handleGlobalContextMenu, { capture: true });
-    document.addEventListener('contextmenu', handleGlobalContextMenu, { capture: true });
+    const handleGlobalContextMenu = (e: MouseEvent) => {
+      // Strictly prevent browser's native context menu across all elements
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      return false;
+    };
+
+    const handleGlobalDragStart = (e: DragEvent) => {
+      // Prevent dragging assets to view source or extract files
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    };
+
+    const targets = [window, document, document.documentElement, document.body].filter(Boolean);
+
+    targets.forEach((target) => {
+      target.addEventListener('keydown', handleGlobalKeyDown as EventListener, { capture: true });
+      target.addEventListener('keyup', handleGlobalKeyUp as EventListener, { capture: true });
+      target.addEventListener('contextmenu', handleGlobalContextMenu as EventListener, { capture: true });
+      target.addEventListener('dragstart', handleGlobalDragStart as EventListener, { capture: true });
+    });
 
     return () => {
-      window.removeEventListener('keydown', handleGlobalKeyDown, { capture: true });
-      document.removeEventListener('keydown', handleGlobalKeyDown, { capture: true });
-      window.removeEventListener('contextmenu', handleGlobalContextMenu, { capture: true });
-      document.removeEventListener('contextmenu', handleGlobalContextMenu, { capture: true });
+      targets.forEach((target) => {
+        target.removeEventListener('keydown', handleGlobalKeyDown as EventListener, { capture: true });
+        target.removeEventListener('keyup', handleGlobalKeyUp as EventListener, { capture: true });
+        target.removeEventListener('contextmenu', handleGlobalContextMenu as EventListener, { capture: true });
+        target.removeEventListener('dragstart', handleGlobalDragStart as EventListener, { capture: true });
+      });
     };
   }, [toggleAdminButton]);
 

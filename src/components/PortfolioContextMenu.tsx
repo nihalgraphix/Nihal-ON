@@ -34,18 +34,24 @@ export default function PortfolioContextMenu({
 
   const [copied, setCopied] = useState(false);
 
-  // 1. Remove default browser right-click globally
+  // 1. Strictly prevent default browser right-click menu globally
   useEffect(() => {
     const disableNativeContextMenu = (e: MouseEvent) => {
       e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      return false;
     };
 
-    window.addEventListener('contextmenu', disableNativeContextMenu, { capture: true });
-    document.addEventListener('contextmenu', disableNativeContextMenu, { capture: true });
+    const targets = [window, document, document.documentElement, document.body].filter(Boolean);
+    targets.forEach((target) => {
+      target.addEventListener('contextmenu', disableNativeContextMenu as EventListener, { capture: true });
+    });
 
     return () => {
-      window.removeEventListener('contextmenu', disableNativeContextMenu, { capture: true });
-      document.removeEventListener('contextmenu', disableNativeContextMenu, { capture: true });
+      targets.forEach((target) => {
+        target.removeEventListener('contextmenu', disableNativeContextMenu as EventListener, { capture: true });
+      });
     };
   }, []);
 

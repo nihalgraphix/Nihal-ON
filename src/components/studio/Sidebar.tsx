@@ -16,7 +16,8 @@ import {
   ChevronLeft,
   ChevronRight,
   BarChart3,
-  Share2
+  Share2,
+  ShieldAlert
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -25,7 +26,19 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ isCollapsed = false, onToggleCollapse }: SidebarProps) {
-  const { activeTab, setActiveTab, user, logout, closeStudio } = useStudio();
+  const { activeTab, setActiveTab, user, logout, signOutAllDevices, closeStudio } = useStudio();
+  const [revoking, setRevoking] = React.useState(false);
+
+  const handleSignOutAllDevices = async () => {
+    if (confirm('Sign out admin dashboard from every device? All open sessions on other computers, phones, and browsers will be immediately revoked.')) {
+      setRevoking(true);
+      try {
+        await signOutAllDevices();
+      } finally {
+        setRevoking(false);
+      }
+    }
+  };
 
   const navItem = (id: StudioTab, label: string, icon: React.ReactNode) => {
     const isActive = activeTab === id;
@@ -90,7 +103,6 @@ export default function Sidebar({ isCollapsed = false, onToggleCollapse }: Sideb
           )}
           <div className="space-y-0.5">
             {navItem('overview', 'Overview', <LayoutDashboard className="w-4 h-4" />)}
-            {navItem('editor', 'Editor', <MousePointer2 className="w-4 h-4" />)}
           </div>
         </div>
 
@@ -156,31 +168,51 @@ export default function Sidebar({ isCollapsed = false, onToggleCollapse }: Sideb
             >
               <LogOut className="w-4 h-4" />
             </button>
+            <button
+              onClick={handleSignOutAllDevices}
+              disabled={revoking}
+              className="p-1.5 rounded hover:bg-rose-500/20 text-rose-400 hover:text-rose-300 transition-colors cursor-pointer"
+              title="Sign Out From Every Device"
+            >
+              <ShieldAlert className="w-4 h-4" />
+            </button>
           </div>
         ) : (
-          <div className="flex items-center justify-between text-xs text-[#A1A1AA]">
-            <div className="truncate mr-2">
-              <p className="text-[11px] font-medium text-[#F4F4F5] truncate">
-                {user?.email || 'nihal.graphix@gmail.com'}
-              </p>
-              <p className="text-[10px] text-[#71717A]">Admin Studio</p>
+          <div className="space-y-2">
+            <div className="flex items-center justify-between text-xs text-[#A1A1AA]">
+              <div className="truncate mr-2">
+                <p className="text-[11px] font-medium text-[#F4F4F5] truncate font-mono">
+                  {user?.email || 'nihalmunnusalmanizar2244'}
+                </p>
+                <p className="text-[10px] text-[#71717A]">Admin Studio • Password Auth</p>
+              </div>
+              <div className="flex items-center gap-1 shrink-0">
+                <button
+                  onClick={closeStudio}
+                  className="p-1.5 rounded hover:bg-[#202126] text-[#71717A] hover:text-white transition-colors cursor-pointer"
+                  title="View Public Website"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  onClick={logout}
+                  className="p-1.5 rounded hover:bg-[#202126] text-[#71717A] hover:text-[#EF4444] transition-colors cursor-pointer"
+                  title="Sign Out (This Device)"
+                >
+                  <LogOut className="w-3.5 h-3.5" />
+                </button>
+              </div>
             </div>
-            <div className="flex items-center gap-1 shrink-0">
-              <button
-                onClick={closeStudio}
-                className="p-1.5 rounded hover:bg-[#202126] text-[#71717A] hover:text-white transition-colors cursor-pointer"
-                title="View Public Website"
-              >
-                <ExternalLink className="w-3.5 h-3.5" />
-              </button>
-              <button
-                onClick={logout}
-                className="p-1.5 rounded hover:bg-[#202126] text-[#71717A] hover:text-[#EF4444] transition-colors cursor-pointer"
-                title="Sign Out"
-              >
-                <LogOut className="w-3.5 h-3.5" />
-              </button>
-            </div>
+
+            <button
+              onClick={handleSignOutAllDevices}
+              disabled={revoking}
+              className="w-full flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/20 text-[10px] font-mono text-rose-400 hover:text-rose-300 transition-all cursor-pointer"
+              title="Revoke and sign out all admin sessions across all computers, phones, and devices"
+            >
+              <ShieldAlert className="w-3 h-3 shrink-0" />
+              <span>{revoking ? 'Revoking Everywhere...' : 'Sign Out All Devices'}</span>
+            </button>
           </div>
         )}
       </div>

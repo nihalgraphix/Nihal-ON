@@ -430,3 +430,34 @@ export async function uploadMediaAsset(fileDataUrl: string, filename: string, ti
 
   return mediaItem;
 }
+
+export async function revokeAllAdminSessionsFirestore(): Promise<number> {
+  const now = Date.now();
+  try {
+    await withTimeout(
+      setDoc(doc(db, 'settings', 'admin_session'), {
+        revokedBefore: now,
+        revokedAt: new Date().toISOString(),
+      }, { merge: true }),
+      3000
+    );
+  } catch (err) {
+    console.warn('Firestore session revocation write note:', err);
+  }
+  return now;
+}
+
+export async function fetchAdminSessionRevocationTime(): Promise<number> {
+  try {
+    const snap = await withTimeout(getDoc(doc(db, 'settings', 'admin_session')), 3000);
+    if (snap.exists()) {
+      const data = snap.data();
+      if (data && typeof data.revokedBefore === 'number') {
+        return data.revokedBefore;
+      }
+    }
+  } catch (err) {
+    // ignore
+  }
+  return 0;
+}

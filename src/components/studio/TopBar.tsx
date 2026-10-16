@@ -7,6 +7,7 @@ export default function TopBar() {
     saveStatus,
     publish,
     resetToDefault,
+    resetAllTextToOriginal,
     undo,
     redo,
     canUndo,
@@ -27,7 +28,7 @@ export default function TopBar() {
       setTimeout(() => setConfirmReset(false), 4000);
       return;
     }
-    await resetToDefault();
+    await resetAllTextToOriginal();
     setConfirmReset(false);
   };
 

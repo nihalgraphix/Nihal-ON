@@ -66,18 +66,18 @@ export const DEFAULT_SITE_SETTINGS: SiteSettings = {
   accentColor: '#FF5A1F',
   secondaryColor: '#FF7A00',
   themeMode: 'luxury-black',
-  siteTitle: 'Nihal . ON — Principal Designer & Creative Developer',
-  heroHeading: 'Crafting Spatial & High-Impact Digital Experiences',
-  heroSubheading: 'Principal UX Architect & Creative Technologist',
-  heroTagline: 'Available for Q3/Q4 Enterprise Projects & Advisory',
-  availabilityStatus: 'Available For Q3/Q4 Projects',
-  primaryCtaText: 'Explore Selected Works',
-  secondaryCtaText: 'Schedule Discovery Call',
-  aboutHeading: 'Crafting Digital Legacies at the Intersection of Art & Code',
-  aboutSubtitle: 'About',
-  aboutBio: 'With over 8 years at the vanguard of digital product architecture, I transform ambitious venture visions into award-winning interfaces. Guided by obsessive attention to micro-typography, fluid spring physics, and high-performance engineering.',
-  aboutYearsExperience: '8+',
-  aboutProjectsCount: '45+',
+  siteTitle: 'Nihal . ON — 16-Year-Old Developer & Graphic Designer',
+  heroHeading: "Hi, I'm Nihal",
+  heroSubheading: '16-Year-Old Developer & Graphic Designer from Kochi, Kerala',
+  heroTagline: '16-Year-Old Developer & Graphic Designer from Kochi, Kerala, India',
+  availabilityStatus: '16-Year-Old Developer & Graphic Designer',
+  primaryCtaText: 'Explore Work',
+  secondaryCtaText: 'Get In Touch',
+  aboutHeading: 'Turning ideas into meaningful digital experiences.',
+  aboutSubtitle: 'About Muhammed Nihal',
+  aboutBio: 'Nihal — a 16-year-old Developer & Graphic Designer from Kochi, Kerala, India. From developing interactive web apps to designing graphics and experimenting with AI tools, always exploring new ways to bring ideas to life.',
+  aboutYearsExperience: '16 YRS',
+  aboutProjectsCount: 'Hands-on',
   aboutClientSatisfaction: '100%',
   aboutImage: aboutPortrait || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=800&auto=format&fit=crop',
   authorName: PERSONAL_INFO.name,
@@ -95,10 +95,10 @@ export const DEFAULT_SITE_SETTINGS: SiteSettings = {
   navBrandText: 'Nihal . ON',
   footerCopyright: '© 2026 Nihal . ON — All Rights Reserved.',
   socialLinks: DEFAULT_SOCIAL_LINKS,
-  heroTestimonialText: 'We shipped our first copilot in 7 weeks and cut support tickets by 31%. The eval dashboards made every decision obvious.',
-  heroMetricNumber: '230K',
-  heroMetricLabel: 'OUR GROWTH',
-  watermarkText: 'ActionAi',
+  heroTestimonialText: 'I believe age is no barrier to creativity, learning, or innovation. Every project is an opportunity to challenge myself, gain experience, and turn new ideas into something real.',
+  heroMetricNumber: '16 YRS',
+  heroMetricLabel: 'ALWAYS CREATING',
+  watermarkText: 'Nihal ON',
   showAdminButton: true,
 };
 
@@ -155,36 +155,8 @@ const CustomizationContext = createContext<CustomizationContextType | undefined>
 export const CustomizationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [settings, setSettings] = useState<SiteSettings>(() => {
     try {
-      const saved = localStorage.getItem('portfolio_site_settings');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        return {
-          ...DEFAULT_SITE_SETTINGS,
-          ...parsed,
-          sectionsVisibility: {
-            ...DEFAULT_SITE_SETTINGS.sectionsVisibility,
-            ...(parsed.sectionsVisibility || {}),
-            hero: parsed.sectionsVisibility?.hero ?? true,
-          },
-          sectionsOrder: (() => {
-            const list = Array.isArray(parsed.sectionsOrder) && parsed.sectionsOrder.length > 0
-              ? parsed.sectionsOrder
-              : DEFAULT_SECTIONS_ORDER;
-            return list.includes('hero') ? list : ['hero', ...list];
-          })(),
-          sectionStyles: {
-            ...DEFAULT_SITE_SETTINGS.sectionStyles,
-            ...(parsed.sectionStyles || {}),
-          },
-          socialLinks: {
-            ...DEFAULT_SITE_SETTINGS.socialLinks,
-            ...(parsed.socialLinks || {}),
-          },
-        };
-      }
-    } catch {
-      // ignore
-    }
+      localStorage.removeItem('portfolio_site_settings');
+    } catch {}
     return DEFAULT_SITE_SETTINGS;
   });
   const [projects, setProjects] = useState<Project[]>(() => {

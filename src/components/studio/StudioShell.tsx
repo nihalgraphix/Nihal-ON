@@ -13,7 +13,6 @@ import ContactInbox from './ContactInbox';
 import DesignSystemView from './DesignSystemView';
 import SiteSettingsView from './SiteSettingsView';
 import SkillsManager from './SkillsManager';
-import TextContentManager from './TextContentManager';
 import SeoManager from './SeoManager';
 
 export default function StudioShell() {
@@ -61,7 +60,6 @@ export default function StudioShell() {
           {activeTab === 'blog' && <BlogManager />}
           {activeTab === 'gallery' && <GalleryManager />}
           {activeTab === 'skills' && <SkillsManager />}
-          {activeTab === 'text' && <TextContentManager />}
           {activeTab === 'media' && <MediaLibrary />}
           {activeTab === 'analytics' && <AnalyticsView />}
           {activeTab === 'inbox' && <ContactInbox />}

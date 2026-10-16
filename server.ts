@@ -179,6 +179,29 @@ async function startServer() {
   const STUDIO_REVISIONS_FILE = path.join(DATA_DIR, "studio_revisions.json");
   const STUDIO_MEDIA_FILE = path.join(DATA_DIR, "studio_media.json");
   const STUDIO_ANALYTICS_FILE = path.join(DATA_DIR, "studio_analytics.json");
+  const ADMIN_SESSION_FILE = path.join(DATA_DIR, "admin_session.json");
+
+  // Invalidate any session created before this exact timestamp (signing out all devices right now)
+  let adminSessionRevokedBefore = Date.now();
+  if (fs.existsSync(ADMIN_SESSION_FILE)) {
+    try {
+      const parsed = JSON.parse(fs.readFileSync(ADMIN_SESSION_FILE, "utf-8"));
+      if (parsed && typeof parsed.revokedBefore === "number") {
+        adminSessionRevokedBefore = Math.max(parsed.revokedBefore, adminSessionRevokedBefore);
+      }
+    } catch (e) {
+      console.error("Error reading admin_session.json:", e);
+    }
+  }
+
+  // Ensure persistent state is recorded
+  try {
+    fs.writeFileSync(
+      ADMIN_SESSION_FILE,
+      JSON.stringify({ revokedBefore: adminSessionRevokedBefore, updatedAt: new Date().toISOString() }, null, 2),
+      "utf-8"
+    );
+  } catch (e) {}
 
   const readJsonFile = (filePath: string, fallback: any = null) => {
     try {
@@ -200,6 +223,24 @@ async function startServer() {
       return false;
     }
   };
+
+  // Global Session Invalidation & Status
+  app.post("/api/studio/auth/revoke-all-devices", (_req, res) => {
+    adminSessionRevokedBefore = Date.now();
+    writeJsonFile(ADMIN_SESSION_FILE, {
+      revokedBefore: adminSessionRevokedBefore,
+      updatedAt: new Date().toISOString(),
+    });
+    return res.json({
+      success: true,
+      revokedBefore: adminSessionRevokedBefore,
+      message: "Admin sessions across all devices have been signed out."
+    });
+  });
+
+  app.get("/api/studio/auth/session-status", (_req, res) => {
+    return res.json({ revokedBefore: adminSessionRevokedBefore });
+  });
 
   // Get Published Studio Data
   app.get("/api/studio/data", (_req, res) => {
