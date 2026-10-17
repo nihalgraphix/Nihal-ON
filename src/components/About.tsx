@@ -75,25 +75,25 @@ const tabContent = {
         id="about-story-title"
         as="h3"
         className="font-syne text-xl font-bold text-white cursor-pointer"
-        defaultText="16-Year-Old Developer & Graphic Designer"
+        defaultText="Muhammed Nihal (Nihal ON) — Developer & Graphic Designer"
       >
-        16-Year-Old Developer & Graphic Designer
+        Muhammed Nihal (Nihal ON) — Developer & Graphic Designer
       </EditableText>
       <EditableText
         id="about-story-p1"
         as="p"
         className="text-sm leading-relaxed text-neutral-300 cursor-pointer"
-        defaultText="Hi, I'm Nihal — a 16-year-old Developer & Graphic Designer from Kochi, Kerala, India, passionate about technology, creativity, and building things for the digital world."
+        defaultText="Hi, I'm Muhammed Nihal, known as Nihal ON — a 16-year-old developer and graphic designer from Othalakkuzhy, Chakkaraparambu, Kochi, Kerala, India. I'm passionate about technology, creativity, and building things for the digital world."
       >
-        Hi, I'm Nihal — a 16-year-old Developer & Graphic Designer from Kochi, Kerala, India, passionate about technology, creativity, and building things for the digital world.
+        Hi, I'm Muhammed Nihal, known as Nihal ON — a 16-year-old developer and graphic designer from Othalakkuzhy, Chakkaraparambu, Kochi, Kerala, India. I'm passionate about technology, creativity, and building things for the digital world.
       </EditableText>
       <EditableText
         id="about-story-p2"
         as="p"
         className="text-sm leading-relaxed text-neutral-400 cursor-pointer"
-        defaultText="I enjoy turning ideas into meaningful digital experiences by combining creative design with modern web technologies. From developing interactive websites and web applications to designing graphics and experimenting with AI-powered tools, I’m always exploring new ways to bring ideas to life."
+        defaultText="I enjoy turning ideas into meaningful digital experiences by combining creative design with modern web technologies. I build interactive websites and web applications, create graphic designs, and experiment with AI-powered tools to bring ideas to life."
       >
-        I enjoy turning ideas into meaningful digital experiences by combining creative design with modern web technologies. From developing interactive websites and web applications to designing graphics and experimenting with AI-powered tools, I’m always exploring new ways to bring ideas to life.
+        I enjoy turning ideas into meaningful digital experiences by combining creative design with modern web technologies. I build interactive websites and web applications, create graphic designs, and experiment with AI-powered tools to bring ideas to life.
       </EditableText>
     </div>
   ),
@@ -320,7 +320,7 @@ export default function About({ onOpenResumeModal }: AboutProps) {
                     id="about-portrait-role"
                     as="p"
                     className="mb-1 text-[10px] uppercase tracking-[0.2em] text-neutral-400 font-medium"
-                    defaultText="16-Year-Old Developer & Graphic Designer"
+                    defaultText="Muhammed Nihal (Nihal ON) — Developer & Graphic Designer"
                   />
                   <EditableText
                     id="about-portrait-name"
@@ -482,19 +482,19 @@ export default function About({ onOpenResumeModal }: AboutProps) {
                         data-editable-id="about-story-title"
                         className="font-syne text-xl font-bold text-white cursor-pointer hover:text-[#FF5A1F] transition-colors"
                       >
-                        {elements['about-story-title']?.content?.text || '16-Year-Old Developer & Graphic Designer'}
+                        {elements['about-story-title']?.content?.text || 'Muhammed Nihal (Nihal ON) — Developer & Graphic Designer'}
                       </h3>
                       <p 
                         data-editable-id="about-story-p1"
                         className="text-sm leading-relaxed text-neutral-300 cursor-pointer"
                       >
-                        {elements['about-story-p1']?.content?.text || "Hi, I'm Nihal — a 16-year-old Developer & Graphic Designer from Kochi, Kerala, India, passionate about technology, creativity, and building things for the digital world."}
+                        {elements['about-story-p1']?.content?.text || "Hi, I'm Muhammed Nihal, known as Nihal ON — a 16-year-old developer and graphic designer from Othalakkuzhy, Chakkaraparambu, Kochi, Kerala, India. I'm passionate about technology, creativity, and building things for the digital world."}
                       </p>
                       <p 
                         data-editable-id="about-story-p2"
                         className="text-sm leading-relaxed text-neutral-400 cursor-pointer"
                       >
-                        {elements['about-story-p2']?.content?.text || "I enjoy turning ideas into meaningful digital experiences by combining creative design with modern web technologies. From developing interactive websites and web applications to designing graphics and experimenting with AI-powered tools, I’m always exploring new ways to bring ideas to life."}
+                        {elements['about-story-p2']?.content?.text || "I enjoy turning ideas into meaningful digital experiences by combining creative design with modern web technologies. I build interactive websites and web applications, create graphic designs, and experiment with AI-powered tools to bring ideas to life."}
                       </p>
                     </div>
                   ) : tabContent[activeTab]}
