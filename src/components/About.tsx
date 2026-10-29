@@ -83,9 +83,9 @@ const tabContent = {
         id="about-story-p1"
         as="p"
         className="text-sm leading-relaxed text-neutral-300 cursor-pointer"
-        defaultText="Hi, I'm Muhammed Nihal, known as Nihal ON — a 16-year-old developer and graphic designer from Othalakkuzhy, Chakkaraparambu, Kochi, Kerala, India. I'm passionate about technology, creativity, and building things for the digital world."
+        defaultText="Hi, I'm Muhammed Nihal, known as Nihal ON — a developer and graphic designer from Chakkaraparambu, Kochi, Kerala, India. Othalakkuzhy is my house name, not a place name. I'm passionate about technology, creativity, and building things for the digital world."
       >
-        Hi, I'm Muhammed Nihal, known as Nihal ON — a 16-year-old developer and graphic designer from Othalakkuzhy, Chakkaraparambu, Kochi, Kerala, India. I'm passionate about technology, creativity, and building things for the digital world.
+        Hi, I'm Muhammed Nihal, known as Nihal ON — a developer and graphic designer from Chakkaraparambu, Kochi, Kerala, India. Othalakkuzhy is my house name, not a place name. I'm passionate about technology, creativity, and building things for the digital world.
       </EditableText>
       <EditableText
         id="about-story-p2"
@@ -488,7 +488,7 @@ export default function About({ onOpenResumeModal }: AboutProps) {
                         data-editable-id="about-story-p1"
                         className="text-sm leading-relaxed text-neutral-300 cursor-pointer"
                       >
-                        {elements['about-story-p1']?.content?.text || "Hi, I'm Muhammed Nihal, known as Nihal ON — a 16-year-old developer and graphic designer from Othalakkuzhy, Chakkaraparambu, Kochi, Kerala, India. I'm passionate about technology, creativity, and building things for the digital world."}
+                        {elements['about-story-p1']?.content?.text || "Hi, I'm Muhammed Nihal, known as Nihal ON — a developer and graphic designer from Chakkaraparambu, Kochi, Kerala, India. Othalakkuzhy is my house name, not a place name. I'm passionate about technology, creativity, and building things for the digital world."}
                       </p>
                       <p 
                         data-editable-id="about-story-p2"
