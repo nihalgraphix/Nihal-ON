@@ -72,15 +72,16 @@ export default function SeoHeadSync() {
       || customSeoMap.global 
       || DEFAULT_SECTION_SEO.global;
 
-    const metaTitle = sectionSeo.metaTitle || 'Nihal . ON — Principal UX Architect & Creative Technologist';
-    const metaDesc = sectionSeo.metaDescription || 'Award-winning dark luxury portfolio of Nihal . ON. Crafting spatial digital experiences, high-performance web applications, and AI-driven interfaces.';
+    const metaTitle = sectionSeo.metaTitle || 'Nihal ON | Developer & Graphic Designer';
+    const metaDesc = sectionSeo.metaDescription || 'Official portfolio of Muhammed Nihal ON, known as Nihal ON. Developer and graphic designer from Kochi, Kerala, India.';
     const ogTitle = sectionSeo.ogTitle || metaTitle;
     const ogDesc = sectionSeo.ogDescription || metaDesc;
     const ogImage = sectionSeo.ogImage || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop';
     const ogType = sectionSeo.ogType || 'website';
     const twitterCard = sectionSeo.twitterCard || 'summary_large_image';
-    const keywords = sectionSeo.keywords || 'Nihal ON, Creative Developer, UX Architect, React 19, Next.js, Three.js, Portfolio';
-    const canonicalUrl = sectionSeo.canonicalUrl || `${window.location.origin}${window.location.pathname}${window.location.hash || ''}`;
+    const keywords = sectionSeo.keywords || 'Nihal ON, Muhammed Nihal ON, Nihal.ON, nihal2010, nihal.graphix, Developer, Graphic Designer, Kochi, Kerala';
+    // The homepage is the only canonical URL; hash fragments are not separate indexable pages.
+    const canonicalUrl = 'https://nihalon.vercel.app/';
 
     // 1. Title
     document.title = metaTitle;
@@ -119,7 +120,7 @@ export default function SeoHeadSync() {
     setMetaTag('property', 'og:image', ogImage);
     setMetaTag('property', 'og:type', ogType);
     setMetaTag('property', 'og:url', canonicalUrl);
-    setMetaTag('property', 'og:site_name', 'Nihal . ON');
+    setMetaTag('property', 'og:site_name', 'Nihal ON');
 
     // 4. Twitter / X Card
     setMetaTag('name', 'twitter:card', twitterCard);
@@ -149,9 +150,9 @@ export default function SeoHeadSync() {
       "image": ogImage,
       "author": {
         "@type": "Person",
-        "name": "Nihal . ON",
-        "jobTitle": "Principal UX Architect & Creative Technologist",
-        "url": "https://nihal-on.vercel.app/"
+        "name": "Muhammed Nihal ON",
+        "jobTitle": "Developer and Graphic Designer",
+        "url": "https://nihalon.vercel.app/"
       }
     };
 
