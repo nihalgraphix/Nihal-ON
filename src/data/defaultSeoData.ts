@@ -89,39 +89,39 @@ export const SECTION_METADATA_DEFINITIONS: Record<string, { label: string; route
 
 export const DEFAULT_SECTION_SEO: SectionSeoMap = {
   global: {
-    metaTitle: "Nihal . ON — Designer & Creative Developer",
-    metaDescription: "Award-winning dark luxury portfolio of Nihal . ON. Crafting spatial digital experiences, high-performance web applications, and AI-driven interfaces.",
-    ogTitle: "Nihal . ON — Principal UX Architect & Creative Technologist",
-    ogDescription: "Explore selected works, interactive case studies, design systems, and digital engineering by Nihal . ON.",
+    metaTitle: "Nihal ON | Developer & Graphic Designer",
+    metaDescription: "Official portfolio of Muhammed Nihal ON, known as Nihal ON. Developer and graphic designer from Kochi, Kerala, India. Explore web projects, creative design, and digital experiences.",
+    ogTitle: "Nihal ON | Developer & Graphic Designer",
+    ogDescription: "Explore the portfolio, web projects, and graphic design work of Muhammed Nihal ON from Kochi, Kerala, India.",
     ogImage: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop",
     ogType: "website",
     twitterCard: "summary_large_image",
     keywords: "Nihal on, muhaammed nihalon, nihal, on, nihal chakkaraparambu, nihal, othalakuzhy, nihal2010, nihal on 2010, nihaldeveloper, nihal.graphix, Creative Developer, UX Architect, React 19, Next.js, Three.js, Portfolio, AI Engineer",
-    canonicalUrl: "https://nihal-on.vercel.app/",
+    canonicalUrl: "https://nihalon.vercel.app/",
     structuredDataType: "WebApplication"
   },
   hero: {
-    metaTitle: "Nihal . ON ",
-    metaDescription: "From concept to deployment, building award-winning web products, fluid spring animations, and high-impact digital experiences.",
-    ogTitle: "Nihal . ON — Spatial & High-Impact Digital Experiences",
-    ogDescription: "Available for Q3/Q4 Enterprise Projects & Advisory. Discover cutting-edge frontend engineering and design systems.",
+    metaTitle: "Nihal ON | Developer & Graphic Designer",
+    metaDescription: "I am Muhammed Nihal ON, a developer and graphic designer from Kochi, Kerala, India. I create websites, digital experiences, and visual designs.",
+    ogTitle: "Nihal ON — Developer & Graphic Designer",
+    ogDescription: "Discover my web development projects, graphic design work, and creative digital experiments.",
     ogImage: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1200&auto=format&fit=crop",
     ogType: "website",
     twitterCard: "summary_large_image",
     keywords: "Nihal ON, Spatial UI, WebGL, Creative Engineering, Hero Section",
-    canonicalUrl: "https://nihal-on.vercel.app/#home",
+    canonicalUrl: "https://nihalon.vercel.app/#home",
     structuredDataType: "WebApplication"
   },
   about: {
-    metaTitle: "Nihal . ON",
-    metaDescription: "With over 8 years at the vanguard of digital product architecture, transforming ambitious visions into award-winning interfaces.",
-    ogTitle: "About Nihal . ON — Design & Engineering Craft",
-    ogDescription: "Discover Nihal's design philosophy, engineering stack, and milestones across top-tier digital agencies.",
+    metaTitle: "About Nihal ON | Developer & Graphic Designer",
+    metaDescription: "Learn about Muhammed Nihal ON, a developer and graphic designer from Kochi, Kerala, interested in technology, creativity, and digital experiences.",
+    ogTitle: "About Nihal ON",
+    ogDescription: "Meet Muhammed Nihal ON and explore his interests in web development, graphic design, and technology.",
     ogImage: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=1200&auto=format&fit=crop",
     ogType: "profile",
     twitterCard: "summary_large_image",
     keywords: "About Nihal, UX Philosophy, Creative Director, Full Stack Developer, Bio",
-    canonicalUrl: "https://nihal-on.vercel.app/#about",
+    canonicalUrl: "https://nihalon.vercel.app/#about",
     structuredDataType: "Person"
   },
   projects: {
@@ -133,7 +133,7 @@ export const DEFAULT_SECTION_SEO: SectionSeoMap = {
     ogType: "website",
     twitterCard: "summary_large_image",
     keywords: "Portfolio Projects, Case Studies, UI Design, React Web Apps, Three.js Demo",
-    canonicalUrl: "https://nihal-on.vercel.app/#projects",
+    canonicalUrl: "https://nihalon.vercel.app/#projects",
     structuredDataType: "ItemList"
   },
   services: {
@@ -145,7 +145,7 @@ export const DEFAULT_SECTION_SEO: SectionSeoMap = {
     ogType: "website",
     twitterCard: "summary_large_image",
     keywords: "Web Development Services, UI UX Consulting, Creative Technologist For Hire, Design Systems",
-    canonicalUrl: "https://nihal-on.vercel.app/#services",
+    canonicalUrl: "https://nihalon.vercel.app/#services",
     structuredDataType: "WebApplication"
   },
   process: {
@@ -157,7 +157,7 @@ export const DEFAULT_SECTION_SEO: SectionSeoMap = {
     ogType: "website",
     twitterCard: "summary_large_image",
     keywords: "Development Process, Agile Sprint, UI/UX Workflow, Software Architecture Blueprint",
-    canonicalUrl: "https://nihal-on.vercel.app/#process",
+    canonicalUrl: "https://nihalon.vercel.app/#process",
     structuredDataType: "CreativeWork"
   },
   skills: {
@@ -169,7 +169,7 @@ export const DEFAULT_SECTION_SEO: SectionSeoMap = {
     ogType: "website",
     twitterCard: "summary_large_image",
     keywords: "React 19, Next.js 15, TypeScript, Tailwind CSS, Three.js, GSAP, Technical Skills",
-    canonicalUrl: "https://nihal-on.vercel.app/#skills",
+    canonicalUrl: "https://nihalon.vercel.app/#skills",
     structuredDataType: "WebApplication"
   },
   experience: {
@@ -181,7 +181,7 @@ export const DEFAULT_SECTION_SEO: SectionSeoMap = {
     ogType: "profile",
     twitterCard: "summary_large_image",
     keywords: "Career History, Senior Frontend Engineer, Creative Technologist Experience, Resume",
-    canonicalUrl: "https://nihal-on.vercel.app/#experience",
+    canonicalUrl: "https://nihalon.vercel.app/#experience",
     structuredDataType: "Person"
   },
   testimonials: {
@@ -193,7 +193,7 @@ export const DEFAULT_SECTION_SEO: SectionSeoMap = {
     ogType: "website",
     twitterCard: "summary_large_image",
     keywords: "Client Testimonials, Reviews, Enterprise Recommendations, Nihal ON Feedback",
-    canonicalUrl: "https://nihal-on.vercel.app/#testimonials",
+    canonicalUrl: "https://nihalon.vercel.app/#testimonials",
     structuredDataType: "CreativeWork"
   },
   blog: {
@@ -205,7 +205,7 @@ export const DEFAULT_SECTION_SEO: SectionSeoMap = {
     ogType: "article",
     twitterCard: "summary_large_image",
     keywords: "Web Development Blog, Frontend Insights, React Articles, UX Engineering Essays",
-    canonicalUrl: "https://nihal-on.vercel.app/#blog",
+    canonicalUrl: "https://nihalon.vercel.app/#blog",
     structuredDataType: "ItemList"
   },
   gallery: {
@@ -217,7 +217,7 @@ export const DEFAULT_SECTION_SEO: SectionSeoMap = {
     ogType: "website",
     twitterCard: "summary_large_image",
     keywords: "Design Gallery, 3D Renders, Editorial Photography, Branding Visuals",
-    canonicalUrl: "https://nihal-on.vercel.app/#gallery",
+    canonicalUrl: "https://nihalon.vercel.app/#gallery",
     structuredDataType: "CreativeWork"
   },
   stats: {
@@ -229,7 +229,7 @@ export const DEFAULT_SECTION_SEO: SectionSeoMap = {
     ogType: "website",
     twitterCard: "summary_large_image",
     keywords: "Performance Stats, Lighthouse 98, Awards, Proven Track Record, Metrics",
-    canonicalUrl: "https://nihal-on.vercel.app/#stats",
+    canonicalUrl: "https://nihalon.vercel.app/#stats",
     structuredDataType: "CreativeWork"
   },
   faq: {
@@ -241,7 +241,7 @@ export const DEFAULT_SECTION_SEO: SectionSeoMap = {
     ogType: "website",
     twitterCard: "summary_large_image",
     keywords: "FAQ, Freelance Rates, Collaboration Terms, Tech Stack Questions, Availability",
-    canonicalUrl: "https://nihal-on.vercel.app/#faq",
+    canonicalUrl: "https://nihalon.vercel.app/#faq",
     structuredDataType: "FAQPage"
   },
   contact: {
@@ -253,7 +253,7 @@ export const DEFAULT_SECTION_SEO: SectionSeoMap = {
     ogType: "website",
     twitterCard: "summary_large_image",
     keywords: "Contact Nihal, Hire Creative Developer, Book Consultation, Project Inquiry",
-    canonicalUrl: "https://nihal-on.vercel.app/#contact",
+    canonicalUrl: "https://nihalon.vercel.app/#contact",
     structuredDataType: "ContactPage" as any
   }
 };
